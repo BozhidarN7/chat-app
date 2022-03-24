@@ -22,4 +22,8 @@
     <Folder Include="Models\Users\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ChatApp.Infrastructure\ChatApp.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
