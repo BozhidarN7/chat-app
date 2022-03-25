@@ -1,17 +1,18 @@
-﻿using ChatApp.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore;
+using ChatApp.Infrastructure.Data;
 
 namespace server.Extensions
 {
     public static class ApiServiceCollectionsExtensions
     {
 
-        public IServiceCollection AddApiDbContexts(this IServiceCollection serviceс,IConfiguration config)
+        public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("DefaultConnection");
-            serviceс.AddDbContext<ApplicationDbContext>(options =>
+            var connectionString = config.GetConnectionString("HomeConnection");
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            return serviceс;
+            return services;
         }
     }
 }
