@@ -4,19 +4,19 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:19090",
-      "sslPort": 44327
+      "applicationUrl": "http://localhost:17912",
+      "sslPort": 44325
     }
   },
   "profiles": {
-    "server": {
+    "ChatApp.WebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:7084;http://localhost:5084",
+      "applicationUrl": "https://localhost:7078;http://localhost:5078",
       "dotnetRunMessages": true
     },
     "IIS Express": {

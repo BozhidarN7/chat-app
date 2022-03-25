@@ -1,11 +1,11 @@
-using server.Extensions;
+using ChatApp.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddApiDbContexts(builder.Configuration);
-builder.Services.AddControllers();
 
+builder.Services.AddControllers();
+builder.Services.AddApiDbContexts(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

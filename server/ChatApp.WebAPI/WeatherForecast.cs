@@ -1,4 +1,4 @@
-namespace server
+namespace ChatApp.WebAPI
 {
     public class WeatherForecast
     {
