@@ -12,12 +12,13 @@ namespace ChatApp.Infrastructure.Data
 
         }
 
-        public DbSet<Message> Messages { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Seed();
         }
+        public DbSet<Message> Messages { get; set; }
 
     }
 }
