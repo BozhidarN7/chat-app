@@ -1,6 +1,6 @@
-﻿using ChatApp.WebAPI.Models;
-using ChatApp.WebAPI.Services;
-using Microsoft.AspNetCore.Http;
+﻿
+using ChatApp.Core.Contracts;
+using ChatApp.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -17,7 +17,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthCredentials credentials)
+        public async Task<IActionResult> Login([FromBody] LoginCredentialsModel credentials)
         {
             if (!ModelState.IsValid) return BadRequest();
 

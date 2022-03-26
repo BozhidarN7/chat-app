@@ -2,10 +2,11 @@
 using ChatApp.Infrastructure.Data;
 using ChatApp.Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
-using ChatApp.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ChatApp.Core.Contracts;
+using ChatApp.Core.Services;
 
 namespace ChatApp.WebAPI.Extensions
 {
@@ -37,7 +38,8 @@ namespace ChatApp.WebAPI.Extensions
                 options.User.RequireUniqueEmail = true;
             })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             //.AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
 
             return services;

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ChatApp.WebAPI.Models
+namespace ChatApp.Core.Models
 {
-    public class AuthCredentials
+    public class LoginCredentialsModel
     {
         [Required]
-        public string Username { get; set; }
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }

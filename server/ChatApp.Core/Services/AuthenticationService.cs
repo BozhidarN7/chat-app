@@ -1,14 +1,16 @@
-﻿using ChatApp.Infrastructure.Data.Identity;
-using ChatApp.WebAPI.Models;
+﻿using ChatApp.Core.Contracts;
+using ChatApp.Core.Models;
+using ChatApp.Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ChatApp.WebAPI.Services
+namespace ChatApp.Core.Services
 {
+
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -20,9 +22,9 @@ namespace ChatApp.WebAPI.Services
             this.userManager = userManager;
             this.config = config;
         }
-        public async Task<bool> ValidateCredentials(AuthCredentials credentials)
+        public async Task<bool> ValidateCredentials(LoginCredentialsModel credentials)
         {
-            user = await userManager.FindByNameAsync(credentials.Username);
+            user = await userManager.FindByEmailAsync(credentials.Email);
 
             return user != null && await userManager.CheckPasswordAsync(user, credentials.Password);
         }
@@ -62,3 +64,4 @@ namespace ChatApp.WebAPI.Services
         }
     }
 }
+

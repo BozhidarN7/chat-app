@@ -24,6 +24,7 @@ namespace ChatApp.Infrastructure.Data
                 UserName = "bozhidar",
                 NormalizedUserName = "bozhidar".ToUpper(),
                 Email = "test@abv.bg",
+                NormalizedEmail = "test@abv.bg".ToUpper(),
                 EmailConfirmed = true
             };
             user1.PasswordHash = ph.HashPassword(user1, "asdfasdf");
@@ -36,6 +37,7 @@ namespace ChatApp.Infrastructure.Data
                 UserName = "ivan",
                 NormalizedUserName = "ivan".ToUpper(),
                 Email = "test1@abv.bg",
+                NormalizedEmail = "test1@abv.bg".ToUpper(),
                 EmailConfirmed = true
             };
             user2.PasswordHash = ph.HashPassword(user2, "asdfasdf");
