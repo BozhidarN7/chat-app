@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/v1/auth")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -21,8 +21,19 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            if (!await _authenticationService.ValidateCredentials(credentials)) return Unauthorized();
+            if (!await _authenticationService.Login(credentials)) return Unauthorized();
 
+
+            return Ok(new { token = await _authenticationService.CreateToken() });
+
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterCredentialsModel credentials)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            if (! await _authenticationService.Register(credentials)) return BadRequest();
 
             return Ok(new { token = await _authenticationService.CreateToken() });
 

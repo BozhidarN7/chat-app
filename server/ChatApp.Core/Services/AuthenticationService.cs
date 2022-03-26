@@ -1,6 +1,7 @@
 ﻿using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
 using ChatApp.Infrastructure.Data.Identity;
+using ChatApp.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,18 +16,40 @@ namespace ChatApp.Core.Services
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration config;
+        private readonly IApplicationDbRepository repo;
         private ApplicationUser user;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration config)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration config, IApplicationDbRepository repo)
         {
             this.userManager = userManager;
             this.config = config;
+            this.repo = repo;
         }
-        public async Task<bool> ValidateCredentials(LoginCredentialsModel credentials)
+        public async Task<bool> Login(LoginCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
 
             return user != null && await userManager.CheckPasswordAsync(user, credentials.Password);
+        }
+        public async Task<bool> Register(RegisterCredentialsModel credentials)
+        {
+            PasswordHasher<ApplicationUser> ph = new PasswordHasher<ApplicationUser>();
+
+            user = new ApplicationUser
+            {
+                FirstName = credentials.FirstName,
+                LastName = credentials.LastName,
+                Email = credentials.Email,
+            };
+
+            user.PasswordHash = ph.HashPassword(user, credentials.Password);
+
+            await repo.AddAsync(user);
+
+            int res = await repo.SaveChangesAsync();
+
+            return res > 0 ? true : false;
+
         }
 
         public async Task<string> CreateToken()
@@ -50,7 +73,7 @@ namespace ChatApp.Core.Services
 
         private async Task<List<Claim>> GetClaims()
         {
-            List<Claim> claims = new List<Claim> { new Claim(ClaimTypes.Name, user.UserName) };
+            List<Claim> claims = new List<Claim> { new Claim(ClaimTypes.Email, user.Email) };
 
             IList<string> roles = await userManager.GetRolesAsync(user);
 
@@ -62,6 +85,7 @@ namespace ChatApp.Core.Services
             return claims;
 
         }
+
     }
 }
 
