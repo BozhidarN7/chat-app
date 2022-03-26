@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ChatApp.Core.Contracts;
 using ChatApp.Core.Services;
+using ChatApp.Infrastructure.Data.Repositories;
 
 namespace ChatApp.WebAPI.Extensions
 {
@@ -15,6 +16,7 @@ namespace ChatApp.WebAPI.Extensions
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
 
             return services;
         }
