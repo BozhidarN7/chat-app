@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApiDbContexts(builder.Configuration);
 builder.Services.AddApiIdentity();
+builder.Services.AddJwt(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddApiServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -3,6 +3,9 @@ using ChatApp.Infrastructure.Data;
 using ChatApp.Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using ChatApp.WebAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ChatApp.WebAPI.Extensions
 {
@@ -16,7 +19,7 @@ namespace ChatApp.WebAPI.Extensions
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("OfficeConnection");
+            var connectionString = config.GetConnectionString("HomeConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -35,9 +38,34 @@ namespace ChatApp.WebAPI.Extensions
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-                //.AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
+            //.AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
 
             return services;
-        } 
+        }
+
+        public static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration config)
+        {
+            IConfigurationSection jwtSettings =  config.GetSection("JwtSettings");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                        ValidAudience = jwtSettings.GetSection("Audience").Value,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Key").Value))
+                    };
+                });
+            return services;
+        }
     }
 }

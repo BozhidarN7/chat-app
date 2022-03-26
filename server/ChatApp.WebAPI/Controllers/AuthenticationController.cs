@@ -21,10 +21,10 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            if (await _authenticationService.ValidateCredentials(credentials)) return Unauthorized();
+            if (!await _authenticationService.ValidateCredentials(credentials)) return Unauthorized();
 
 
-            return Ok(new { message = "success" });
+            return Ok(new { token = await _authenticationService.CreateToken() });
 
         }
     }
