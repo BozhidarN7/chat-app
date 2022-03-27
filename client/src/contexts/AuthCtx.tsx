@@ -9,6 +9,7 @@ interface AuthCtxInterface {
     token: string;
     signUp: any;
     signIn: any;
+    logout: any;
 }
 
 const AuthCtx = React.createContext<AuthCtxInterface>({} as AuthCtxInterface);
@@ -63,6 +64,13 @@ export const AuthProvider = ({ children }: Props) => {
         return outputData.message;
     };
 
+    const logout = () => {
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
+        setCurrentUser({} as CurrentUser);
+        setToken('');
+    };
+
     const setDataInLocalStorage = (userData: CurrentUser, token: string) => {
         localStorage.setItem('userInfo', JSON.stringify({ email: userData.email, id: userData.id }));
         localStorage.setItem('token', token);
@@ -73,6 +81,7 @@ export const AuthProvider = ({ children }: Props) => {
         token,
         signUp,
         signIn,
+        logout,
     };
     return <AuthCtx.Provider value={value}>{!isAuthLoading && children}</AuthCtx.Provider>;
 };
