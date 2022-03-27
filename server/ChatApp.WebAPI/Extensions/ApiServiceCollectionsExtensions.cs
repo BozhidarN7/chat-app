@@ -49,7 +49,7 @@ namespace ChatApp.WebAPI.Extensions
 
         public static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration config)
         {
-            IConfigurationSection jwtSettings =  config.GetSection("JwtSettings");
+            IConfigurationSection jwtSettings = config.GetSection("JwtSettings");
 
             services.AddAuthentication(options =>
             {
@@ -69,6 +69,21 @@ namespace ChatApp.WebAPI.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Key").Value))
                     };
                 });
+            return services;
+        }
+
+        public static IServiceCollection AddCorsPolicies(this IServiceCollection services, IConfiguration config)
+        {
+            IConfigurationSection cors = config.GetSection("CorsOrigins");
+            services.AddCors(options =>
+            {
+                options.AddPolicy(cors.GetSection("Allowed").Value, builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000/");
+                    builder.AllowAnyOrigin();
+                });
+            });
+
             return services;
         }
     }

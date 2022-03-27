@@ -38,5 +38,11 @@ namespace ChatApp.WebAPI.Controllers
             return Ok(new { token = await _authenticationService.CreateToken() });
 
         }
+
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            return Ok(new { message = "successs" });
+        }
     }
 }

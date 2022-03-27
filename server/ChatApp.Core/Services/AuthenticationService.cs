@@ -65,7 +65,7 @@ namespace ChatApp.Core.Services
                 issuer: jwtSettings.GetSection("Issuer").Value,
                 audience: jwtSettings.GetSection("Audience").Value,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: signCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
