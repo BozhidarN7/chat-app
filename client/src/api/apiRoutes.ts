@@ -5,8 +5,13 @@ const authRoutes = {
     loginURL: () => `${baseUrl}/auth/login`,
 };
 
+const users = {
+    getUserURL: (id: string) => `${baseUrl}/users/${id}`,
+};
+
 const routes = {
     ...authRoutes,
+    ...users,
 };
 
 export default routes;

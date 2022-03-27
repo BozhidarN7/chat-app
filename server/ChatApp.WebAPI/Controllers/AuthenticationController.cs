@@ -1,6 +1,8 @@
 ﻿
 using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
+using ChatApp.Core.Models.OutputDTOs;
+using ChatApp.Infrastructure.Data.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -21,10 +23,27 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            if (!await _authenticationService.Login(credentials)) return Unauthorized();
+            (ApplicationUser user, bool isSuccessful) = await _authenticationService.Login(credentials);
+
+            if (!isSuccessful) return Unauthorized();
 
 
-            return Ok(new { token = await _authenticationService.CreateToken() });
+            return Ok(new
+            {
+                success = true,
+                message = "User login successfully",
+                data = new
+                {
+                    user = new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    },
+                    token = await _authenticationService.CreateToken()
+                }
+            });
 
         }
 
@@ -33,9 +52,26 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            if (! await _authenticationService.Register(credentials)) return BadRequest();
+            (ApplicationUser user, bool isSuccessful) = await _authenticationService.Register(credentials);
 
-            return Ok(new { token = await _authenticationService.CreateToken() });
+            if (!isSuccessful) return BadRequest();
+
+            return Ok(new
+            {
+                success = true,
+                message = "User register successfully",
+                data = new
+                {
+                    user = new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    },
+                    token = await _authenticationService.CreateToken()
+                }
+            });
 
         }
 

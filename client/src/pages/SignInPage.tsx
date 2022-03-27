@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import Avatar from '@mui/material/Avatar';
@@ -23,6 +23,8 @@ import { useAuth } from 'contexts/AuthCtx';
 import Copyright from 'components/common/Copyright';
 
 const SignInPage = () => {
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] = useState(false);
 
     const { signIn } = useAuth();
@@ -38,7 +40,11 @@ const SignInPage = () => {
             return;
         }
 
-        await signIn({ email, password });
+        const message = await signIn({ email, password });
+
+        toast.success(message);
+
+        navigate('/');
     };
 
     return (

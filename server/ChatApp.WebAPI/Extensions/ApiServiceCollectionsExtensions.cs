@@ -17,6 +17,7 @@ namespace ChatApp.WebAPI.Extensions
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

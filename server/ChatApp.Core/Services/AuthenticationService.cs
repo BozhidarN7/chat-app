@@ -25,13 +25,13 @@ namespace ChatApp.Core.Services
             this.config = config;
             this.repo = repo;
         }
-        public async Task<bool> Login(LoginCredentialsModel credentials)
+        public async Task<(ApplicationUser, bool)> Login(LoginCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
 
-            return user != null && await userManager.CheckPasswordAsync(user, credentials.Password);
+            return (user, user != null && await userManager.CheckPasswordAsync(user, credentials.Password));
         }
-        public async Task<bool> Register(RegisterCredentialsModel credentials)
+        public async Task<(ApplicationUser, bool)> Register(RegisterCredentialsModel credentials)
         {
             PasswordHasher<ApplicationUser> ph = new PasswordHasher<ApplicationUser>();
 
@@ -49,7 +49,7 @@ namespace ChatApp.Core.Services
 
             int res = await repo.SaveChangesAsync();
 
-            return res > 0 ? true : false;
+            return (user, res > 0 ? true : false);
 
         }
 
