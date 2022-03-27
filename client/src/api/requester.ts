@@ -5,6 +5,7 @@ export const request = async (url: string, options: any) => {
         if (!url || !options?.method) {
             throw new Error('Bad request');
         }
+        console.log(url);
         const response = await fetch(url, options);
 
         if (!response.ok) {
@@ -24,7 +25,9 @@ export const getOptions = async (method = 'get', body: any = undefined) => {
 
     const options: any = {
         method,
-        headers: {},
+        headers: {
+            // Origin: 'http://localhost:3000/',
+        },
     };
 
     // if (idToken) {
