@@ -1,9 +1,11 @@
-import { RegisterUser } from 'interfaces/userInterfaces';
 import React, { useContext } from 'react';
-import { registerUser } from 'services/authService';
+
+import { RegisterUser, LoginUser } from 'interfaces/userInterfaces';
+import { registerUser, loginUser } from 'services/authService';
 
 interface AuthCtxInterface {
     signUp: any;
+    signIn: any;
 }
 
 const AuthCtx = React.createContext<AuthCtxInterface>({} as AuthCtxInterface);
@@ -21,8 +23,13 @@ export const AuthProvider = ({ children }: Props) => {
         const token = await registerUser(data);
         console.log(token);
     };
+    const signIn = async (data: LoginUser) => {
+        const token = await loginUser(data);
+        console.log(token);
+    };
     const value = {
         signUp,
+        signIn,
     };
     return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 };

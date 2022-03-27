@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -18,18 +19,26 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
+import { useAuth } from 'contexts/AuthCtx';
 import Copyright from 'components/common/Copyright';
 
 const SignInPage = () => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const { signIn } = useAuth();
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const email = data.get('email');
+        const password = data.get('password');
+
+        if (!email || !password) {
+            toast.info('Please fill the form');
+            return;
+        }
+
+        await signIn({ email, password });
     };
 
     return (
@@ -48,12 +57,7 @@ const SignInPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{ mt: 1 }}
-                >
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
                         required
@@ -76,16 +80,8 @@ const SignInPage = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() =>
-                                            setShowPassword((prev) => !prev)
-                                        }
-                                    >
-                                        {showPassword ? (
-                                            <VisibilityOffIcon />
-                                        ) : (
-                                            <VisibilityIcon />
-                                        )}
+                                    <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+                                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                     </IconButton>
                                 </InputAdornment>
                             ),
@@ -95,12 +91,7 @@ const SignInPage = () => {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
+                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                         Sign In
                     </Button>
                     <Grid container>
@@ -110,11 +101,7 @@ const SignInPage = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link
-                                component={RouterLink}
-                                to="/register"
-                                variant="body2"
-                            >
+                            <Link component={RouterLink} to="/register" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>

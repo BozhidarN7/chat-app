@@ -5,7 +5,7 @@ export const request = async (url: string, options: any) => {
         if (!url || !options?.method) {
             throw new Error('Bad request');
         }
-        console.log(url);
+
         const response = await fetch(url, options);
 
         if (!response.ok) {

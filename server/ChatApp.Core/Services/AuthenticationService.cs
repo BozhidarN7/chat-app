@@ -40,6 +40,7 @@ namespace ChatApp.Core.Services
                 FirstName = credentials.FirstName,
                 LastName = credentials.LastName,
                 Email = credentials.Email,
+                NormalizedEmail = credentials.Email.ToUpperInvariant()
             };
 
             user.PasswordHash = ph.HashPassword(user, credentials.Password);
