@@ -85,7 +85,8 @@ namespace ChatApp.WebAPI.Extensions
                     .AllowAnyHeader();
                     builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .AllowCredentials();
                 });
             });
 
