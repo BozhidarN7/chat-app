@@ -20,5 +20,7 @@ namespace ChatApp.Infrastructure.Data
         }
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<FriendShip> Friendships { get; set; }
+
     }
 }

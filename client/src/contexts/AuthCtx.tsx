@@ -1,6 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import { RegisterUser, LoginUser, CurrentUser } from 'interfaces/userInterfaces';
+import {
+    RegisterUser,
+    LoginUser,
+    CurrentUser,
+} from 'interfaces/userInterfaces';
 import { registerUser, loginUser } from 'services/authService';
 import { getUser } from 'services/userService';
 
@@ -42,6 +46,8 @@ export const AuthProvider = ({ children }: Props) => {
                 setCurrentUser(res.data.user);
                 setIsAuthLoading(false);
             });
+        } else {
+            setIsAuthLoading(false);
         }
     }, []);
 
@@ -72,7 +78,10 @@ export const AuthProvider = ({ children }: Props) => {
     };
 
     const setDataInLocalStorage = (userData: CurrentUser, token: string) => {
-        localStorage.setItem('userInfo', JSON.stringify({ email: userData.email, id: userData.id }));
+        localStorage.setItem(
+            'userInfo',
+            JSON.stringify({ email: userData.email, id: userData.id })
+        );
         localStorage.setItem('token', token);
     };
 
@@ -83,5 +92,9 @@ export const AuthProvider = ({ children }: Props) => {
         signIn,
         logout,
     };
-    return <AuthCtx.Provider value={value}>{!isAuthLoading && children}</AuthCtx.Provider>;
+    return (
+        <AuthCtx.Provider value={value}>
+            {!isAuthLoading && children}
+        </AuthCtx.Provider>
+    );
 };

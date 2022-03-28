@@ -11,11 +11,15 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import { ChatProvider } from 'contexts/ChatCtx';
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <BrowserRouter>
-                <App />
+                <ChatProvider>
+                    <App />
+                </ChatProvider>
             </BrowserRouter>
         </Provider>
     </React.StrictMode>,

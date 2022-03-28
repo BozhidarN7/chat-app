@@ -31,7 +31,6 @@ export const getOptions = async (method = 'get', body: any = undefined) => {
     };
 
     if (token) {
-        console.log('here');
         options.headers['Authorization'] = `Bearer ${token}`;
     }
 

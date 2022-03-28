@@ -23,7 +23,7 @@ namespace ChatApp.WebAPI.Extensions
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("HomeConnection");
+            var connectionString = config.GetConnectionString("OfficeConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -80,12 +80,9 @@ namespace ChatApp.WebAPI.Extensions
             {
                 options.AddPolicy(cors.GetSection("Allowed").Value, builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000/")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                    builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
+                    builder.WithOrigins("http://localhost:3000")
                     .AllowAnyHeader()
+                    .AllowAnyMethod()
                     .AllowCredentials();
                 });
             });

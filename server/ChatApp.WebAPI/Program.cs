@@ -1,4 +1,5 @@
 using ChatApp.WebAPI.Extensions;
+using ChatApp.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,9 @@ builder.Services.AddApiDbContexts(builder.Configuration);
 builder.Services.AddApiIdentity();
 builder.Services.AddJwt(builder.Configuration);
 builder.Services.AddCorsPolicies(builder.Configuration);
-builder.Services.AddControllers();
 builder.Services.AddApiServices();
+builder.Services.AddControllers();
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,8 +29,17 @@ app.UseHttpsRedirection();
 
 app.UseCors(builder.Configuration.GetSection("CorsOrigins:Allowed").Value);
 
+
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/api/v1/chat");
+});
 
 app.MapControllers();
 

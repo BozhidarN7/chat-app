@@ -10,5 +10,6 @@ namespace ChatApp.Core.Contracts
     public interface IUserService
     {
         Task<(ApplicationUser, bool)> GetUser(string id);
+        Task<IEnumerable<ApplicationUser>> GetAllUsers();
     }
 }

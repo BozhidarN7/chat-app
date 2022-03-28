@@ -4,6 +4,7 @@ using ChatApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220328123645_ApplicationUserExtended")]
+    partial class ApplicationUserExtended
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,27 +23,6 @@ namespace ChatApp.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ChatApp.Infrastructure.Data.FriendShip", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserReceiveId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserSendId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserSendId");
-
-                    b.ToTable("Friendships");
-                });
 
             modelBuilder.Entity("ChatApp.Infrastructure.Data.Identity.ApplicationUser", b =>
                 {
@@ -128,7 +109,7 @@ namespace ChatApp.Infrastructure.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "da222f28-7523-486a-9030-7781e33c1bf5",
+                            ConcurrencyStamp = "8aa39e2d-f333-420b-8174-18b84f2dbd59",
                             Email = "test@abv.bg",
                             EmailConfirmed = true,
                             FirstName = "Bozhidar",
@@ -136,10 +117,10 @@ namespace ChatApp.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@ABV.BG",
                             NormalizedUserName = "BOZHIDAR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGcfggEIZP5FCdGMaBRbeh9fnSytWIRhXEoS4ysLwe+FVFARgxWt1CzPbPubkS3cmw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM8SLrhsZwRiS2SDeEqiDQ4L0kySxNgPLGQKnP+ip+qcG8a77rYV+XmHXD6N+exazg==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "2c8b87c5-f663-4c13-aa31-3004b337a7e2",
+                            SecurityStamp = "46c306d1-2eaa-4d58-8e8f-85c46e6dcae0",
                             TwoFactorEnabled = false,
                             UserName = "bozhidar"
                         },
@@ -147,7 +128,7 @@ namespace ChatApp.Infrastructure.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e290202e-c298-44de-b42b-165f5141dd82",
+                            ConcurrencyStamp = "d93a20cf-7b94-4be7-b0a4-698e1328060b",
                             Email = "test1@abv.bg",
                             EmailConfirmed = true,
                             FirstName = "Ivan",
@@ -155,10 +136,10 @@ namespace ChatApp.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST1@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECzMKexWVSSq6j9dt3Y6QcFdiuBu8xZhXLYgQ41EIpuhA0dTnvPQ4C0ynfzh1FR4qA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKEykPIeVCIR9+V0yXhSJUPPJMsFlNfjimQXmXHN0hHu0PzXuvUryeHqO8cfXjL3Tw==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "97917717-44d7-46c9-9105-416c2c7c6f18",
+                            SecurityStamp = "2648585a-2f35-404b-a240-2ce54d63ed26",
                             TwoFactorEnabled = false,
                             UserName = "ivan"
                         });
@@ -213,14 +194,14 @@ namespace ChatApp.Infrastructure.Migrations
                         new
                         {
                             Id = "admin_role",
-                            ConcurrencyStamp = "5fbd9ef3-6738-4368-8ece-9701753206a2",
+                            ConcurrencyStamp = "f1f39b7a-ddf2-4afe-96d0-f88c5118031d",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "user_role",
-                            ConcurrencyStamp = "6078c4ba-fef2-412f-9581-afd24245bc68",
+                            ConcurrencyStamp = "2a38564f-102f-4072-99df-a6eae6b331b1",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -344,17 +325,6 @@ namespace ChatApp.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ChatApp.Infrastructure.Data.FriendShip", b =>
-                {
-                    b.HasOne("ChatApp.Infrastructure.Data.Identity.ApplicationUser", "UserSend")
-                        .WithMany("FriendShips")
-                        .HasForeignKey("UserSendId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserSend");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -404,11 +374,6 @@ namespace ChatApp.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ChatApp.Infrastructure.Data.Identity.ApplicationUser", b =>
-                {
-                    b.Navigation("FriendShips");
                 });
 #pragma warning restore 612, 618
         }

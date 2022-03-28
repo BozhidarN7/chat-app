@@ -7,6 +7,7 @@ const authRoutes = {
 
 const users = {
     getUserURL: (id: string) => `${baseUrl}/users/${id}`,
+    getAllUsersURL: () => `${baseUrl}/users`,
 };
 
 const routes = {

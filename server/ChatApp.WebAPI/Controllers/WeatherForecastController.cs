@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChatApp.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/WeatherForecast")]
+    [Route("api/v1/WeatherForecast")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

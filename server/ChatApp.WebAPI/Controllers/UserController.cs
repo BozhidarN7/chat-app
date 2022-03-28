@@ -1,6 +1,7 @@
 ﻿using ChatApp.Core.Contracts;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +39,29 @@ namespace ChatApp.WebAPI.Controllers
                         Email = user.Email
                     },
                 }
+            });
+        }
+
+        [HttpGet, Authorize]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            IEnumerable<ApplicationUser> users = await userService.GetAllUsers();
+
+            return Ok(new
+            {
+                success = true,
+                message = "Data received successfully",
+                data = new
+                {
+                    users = users.Select(user => new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    })
+                }
+
             });
         }
     }
