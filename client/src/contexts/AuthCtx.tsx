@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: Props) => {
 
         setCurrentUser(outputData.data.user);
         setToken(outputData.data.token);
-        setDataInLocalStorage(outputData.data.user, token);
+        setDataInLocalStorage(outputData.data.user, outputData.data.token);
 
         return outputData.message;
     };
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: Props) => {
 
         setCurrentUser(outputData.data.user);
         setToken(outputData.data.token);
-        setDataInLocalStorage(outputData.data.user, token);
+        setDataInLocalStorage(outputData.data.user, outputData.data.token);
 
         return outputData.message;
     };

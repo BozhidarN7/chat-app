@@ -21,7 +21,7 @@ export const request = async (url: string, options: any) => {
 };
 
 export const getOptions = async (method = 'get', body: any = undefined) => {
-    // const idToken = await getUserToken();
+    const token = localStorage.getItem('token');
 
     const options: any = {
         method,
@@ -30,9 +30,10 @@ export const getOptions = async (method = 'get', body: any = undefined) => {
         },
     };
 
-    // if (idToken) {
-    //     options.headers['X-Authorization'] = idToken;
-    // }
+    if (token) {
+        console.log('here');
+        options.headers['Authorization'] = `Bearer ${token}`;
+    }
 
     if (body) {
         options.headers['Content-Type'] = 'application/json';
