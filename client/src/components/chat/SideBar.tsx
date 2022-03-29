@@ -14,12 +14,18 @@ import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { getFriends } from 'services/userService';
 
-const SideBar = () => {
+type Props = {
+    openChatSpace: boolean;
+    openChatSpaceHandler: () => void;
+};
+
+const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     const testChats = [
         {
             id: 1,
             primary: 'Martin Stefanov',
-            secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
+            secondary:
+                "I'll be in the neighbourhood this week. Let's grab a bite to eat",
         },
     ];
     const theme = useTheme();
@@ -30,26 +36,29 @@ const SideBar = () => {
 
     useEffect(() => {
         getFriends(currentUser.id).then((data) => {
-            console.log(data);
             setChats(data.data.users);
         });
     }, [currentUser.id, refetch]);
 
     connection?.on('ReceiveMessage', (message) => {
-        console.log(message);
         setRefetch((prev) => !prev);
     });
 
     return (
         <>
             <Paper square sx={{ height: '100%' }}>
-                <Typography variant="h5" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    component="div"
+                    sx={{ p: 2, pb: 0 }}
+                >
                     Chats
                 </Typography>
                 <SearchField />
                 <List sx={{ mb: 2 }}>
                     <React.Fragment>
-                        <ListItem button>
+                        <ListItem button onClick={openChatSpaceHandler}>
                             <ListItemAvatar>
                                 <Avatar
                                     alt="Profile Picture"
@@ -65,7 +74,7 @@ const SideBar = () => {
                     </React.Fragment>
                     {chats.map((chat: any) => (
                         <React.Fragment key={chat.id}>
-                            <ListItem button>
+                            <ListItem button onClick={openChatSpaceHandler}>
                                 <ListItemAvatar>
                                     <Avatar
                                         alt="Profile Picture"
