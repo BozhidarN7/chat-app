@@ -3,8 +3,10 @@ import React, { useContext, useState } from 'react';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
+    messages: string[];
     saveConnection: any;
     sendMessage: any;
+    joinChatRoom: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -18,10 +20,28 @@ type Props = {
 };
 
 export const ChatProvider = ({ children }: Props) => {
+    const [messages, setMessages] = useState<string[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
 
     const saveConnection = (connection: HubConnection) => {
         setConnection(connection);
+    };
+
+    const joinChatRoom = async (roomId: string) => {
+        const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+
+        await connection?.invoke('OpenChatRoom', {
+            roomId,
+            fullName: `${currentUser.firstName} ${currentUser.lastName}`,
+        });
+
+        connection?.on(
+            'ReceiveMessage',
+            (fullName: string, message: string) => {
+                console.log('here');
+                setMessages((prev) => [...prev, message]);
+            }
+        );
     };
 
     const sendMessage = async (roomId: string, message: string) => {
@@ -39,8 +59,10 @@ export const ChatProvider = ({ children }: Props) => {
 
     const value = {
         connection,
+        messages,
         saveConnection,
         sendMessage,
+        joinChatRoom,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

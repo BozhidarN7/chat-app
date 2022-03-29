@@ -19,6 +19,7 @@ const MessageInput = ({ roomId }: Props) => {
 
     const sendMessageHandler = () => {
         sendMessage(roomId, message);
+        setMessage('');
     };
 
     return (

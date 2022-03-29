@@ -1,12 +1,15 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Message from 'components/chat/Message';
+import { useChat } from 'contexts/ChatCtx';
 
 type Props = {
     openChatSpace: boolean;
 };
 
 const MessagesZone = ({ openChatSpace }: Props) => {
+    const { messages } = useChat();
+    console.log(messages);
     return openChatSpace ? (
         <>
             <Box
@@ -18,7 +21,9 @@ const MessagesZone = ({ openChatSpace }: Props) => {
                     overflowY: 'scroll',
                 }}
             >
-                <Message />
+                {messages.map((message, index) => (
+                    <Message message={message} key={index} />
+                ))}
             </Box>
         </>
     ) : (
