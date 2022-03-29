@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
-    messages: string[];
+    messages: message[];
     saveConnection: any;
     sendMessage: any;
     joinChatRoom: any;
@@ -19,8 +19,13 @@ type Props = {
     children: React.ReactNode[] | React.ReactNode;
 };
 
+type message = {
+    message: string;
+    senderName: string;
+};
+
 export const ChatProvider = ({ children }: Props) => {
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<message[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
 
     const saveConnection = (connection: HubConnection) => {
@@ -38,8 +43,10 @@ export const ChatProvider = ({ children }: Props) => {
         connection?.on(
             'ReceiveMessage',
             (fullName: string, message: string) => {
-                console.log('here');
-                setMessages((prev) => [...prev, message]);
+                setMessages((prev) => [
+                    ...prev,
+                    { message, senderName: fullName },
+                ]);
             }
         );
     };

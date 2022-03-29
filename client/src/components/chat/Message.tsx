@@ -1,15 +1,28 @@
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 
+import { useAuth } from 'contexts/AuthCtx';
+
 type Props = {
     message: string;
+    senderName: string;
 };
 
-const Message = ({ message }: Props) => {
+const Message = ({ message, senderName }: Props) => {
     const theme = useTheme();
-    console.log(message);
+    const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+    console.log(currentUser.fullName);
+    console.log(senderName);
+
+    const isLocalUser = currentUser.fullName.trim() === senderName.trim();
+    console.log(isLocalUser);
+
     return (
-        <Box sx={{ alignSelf: 'center' }}>
+        <Box
+            sx={{
+                alignSelf: isLocalUser ? 'flex-end' : 'center',
+            }}
+        >
             <Box
                 sx={{
                     display: 'inline-block',
@@ -21,7 +34,9 @@ const Message = ({ message }: Props) => {
                     borderRadius: 3,
                     boxShadow: 2,
                     color: 'white',
-                    backgroundColor: `${theme.palette.primary.light}`,
+                    backgroundColor: isLocalUser
+                        ? `${theme.palette.primary.light}`
+                        : `${theme.palette.secondary.light}`,
                 }}
             >
                 {message}

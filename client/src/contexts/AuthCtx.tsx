@@ -85,6 +85,7 @@ export const AuthProvider = ({ children }: Props) => {
                 id: userData.id,
                 firstName: userData.firstName,
                 lastName: userData.lastName,
+                fullName: `${userData.firstName} ${userData.lastName}`,
             })
         );
         localStorage.setItem('token', token);

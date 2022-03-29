@@ -22,7 +22,11 @@ const MessagesZone = ({ openChatSpace }: Props) => {
                 }}
             >
                 {messages.map((message, index) => (
-                    <Message message={message} key={index} />
+                    <Message
+                        senderName={message.senderName}
+                        message={message.message}
+                        key={index}
+                    />
                 ))}
             </Box>
         </>
