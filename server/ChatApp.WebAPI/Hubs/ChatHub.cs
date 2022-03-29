@@ -60,13 +60,15 @@ namespace ChatApp.WebAPI.Hubs
             await repo.SaveChangesAsync();
 
             await Clients.All.SendAsync("ReceiveInvitation", $"{fullName}");
-        }
 
+        }
         public async Task OpenChatRoom(UserConnection userConnection)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
 
             // TODO Send the previous messages
+            List<Message> messages = await repo.All<Message>().Where(m => m.RoomId == Guid.Parse(userConnection.RoomId)).ToListAsync();
+            await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", messages);
         }
 
         public async Task SendMessage(UserConnection userConnection, string message)

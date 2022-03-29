@@ -49,6 +49,12 @@ export const ChatProvider = ({ children }: Props) => {
                 ]);
             }
         );
+
+        connection?.on('PreviousConversation', (messages) => {
+            console.log('here');
+            console.log(messages);
+            // setMessages(prev => )
+        });
     };
 
     const sendMessage = async (roomId: string, message: string) => {
