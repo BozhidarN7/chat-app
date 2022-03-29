@@ -80,7 +80,12 @@ export const AuthProvider = ({ children }: Props) => {
     const setDataInLocalStorage = (userData: CurrentUser, token: string) => {
         localStorage.setItem(
             'userInfo',
-            JSON.stringify({ email: userData.email, id: userData.id })
+            JSON.stringify({
+                email: userData.email,
+                id: userData.id,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+            })
         );
         localStorage.setItem('token', token);
     };

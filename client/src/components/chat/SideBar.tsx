@@ -16,7 +16,7 @@ import { getFriends } from 'services/userService';
 
 type Props = {
     openChatSpace: boolean;
-    openChatSpaceHandler: () => void;
+    openChatSpaceHandler: (roomId: string) => void;
 };
 
 const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
@@ -58,7 +58,10 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                 <SearchField />
                 <List sx={{ mb: 2 }}>
                     <React.Fragment>
-                        <ListItem button onClick={openChatSpaceHandler}>
+                        <ListItem
+                            button
+                            onClick={openChatSpaceHandler.bind(null, '')}
+                        >
                             <ListItemAvatar>
                                 <Avatar
                                     alt="Profile Picture"
@@ -74,7 +77,13 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                     </React.Fragment>
                     {chats.map((chat: any) => (
                         <React.Fragment key={chat.id}>
-                            <ListItem button onClick={openChatSpaceHandler}>
+                            <ListItem
+                                button
+                                onClick={openChatSpaceHandler.bind(
+                                    null,
+                                    chat.roomId
+                                )}
+                            >
                                 <ListItemAvatar>
                                     <Avatar
                                         alt="Profile Picture"

@@ -9,8 +9,10 @@ import MessageInput from 'components/chat/MessageInput';
 
 const HomePage = () => {
     const [openChatSpace, setOpenChatSpace] = useState(false);
+    const [roomId, setRoomId] = useState<string>();
 
-    const openChatSpaceHandler = () => {
+    const openChatSpaceHandler = (roomId: string) => {
+        setRoomId(roomId);
         setOpenChatSpace(true);
     };
 
@@ -24,9 +26,9 @@ const HomePage = () => {
                         openChatSpaceHandler={openChatSpaceHandler}
                     />
                 </Grid>
-                <Grid item xs={true}>
+                <Grid item sx={{ height: '100vh' }} xs={true}>
                     <MessagesZone openChatSpace={openChatSpace} />
-                    <MessageInput />
+                    <MessageInput roomId={roomId} />
                 </Grid>
             </Grid>
         </>

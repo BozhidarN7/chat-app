@@ -1,14 +1,44 @@
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import SendIcon from '@mui/icons-material/Send';
 
-const MessageInput = () => {
+import { useChat } from 'contexts/ChatCtx';
+
+type Props = {
+    roomId: string | undefined;
+};
+
+const MessageInput = ({ roomId }: Props) => {
+    const [message, setMessage] = useState<string>('');
+
+    const { sendMessage } = useChat();
+
+    const sendMessageHandler = () => {
+        sendMessage(roomId, message);
+    };
+
     return (
-        <Box sx={{ position: 'fixed', top: 'auto', bottom: 0, width: '100%' }}>
+        <Box sx={{ position: 'fixed', bottom: 0, width: '75%' }}>
             <TextField
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
                 fullWidth
                 autoFocus={true}
                 placeholder="Type a message..."
                 multiline={true}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={sendMessageHandler}>
+                                <SendIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
             />
         </Box>
     );
