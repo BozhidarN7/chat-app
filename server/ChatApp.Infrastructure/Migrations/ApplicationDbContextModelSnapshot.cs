@@ -40,7 +40,7 @@ namespace ChatApp.Infrastructure.Migrations
 
                     b.HasIndex("UserSendId");
 
-                    b.ToTable("Friendships");
+                    b.ToTable("Friendships", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Infrastructure.Data.Identity.ApplicationUser", b =>
@@ -180,7 +180,7 @@ namespace ChatApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

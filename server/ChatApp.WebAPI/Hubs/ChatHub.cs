@@ -22,15 +22,19 @@ namespace ChatApp.WebAPI.Hubs
 
         public async Task AddToFriends(string fullName,string senderId)
         {
-            //List<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
-            //ApplicationUser user = users.FirstOrDefault(u => $"{u.FirstName} {u.LastName}" == fullName);
+            List<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
+            ApplicationUser invitedUser = users.FirstOrDefault(u => $"{u.FirstName} {u.LastName}" == fullName);
+            ApplicationUser senderUser = users.FirstOrDefault(u => u.Id == senderId);
 
-            //FriendShip friendShip = new FriendShip();
-            //friendShip.UserSendId = senderId;
-            //friendShip.UserReceiveId = user.Id;
+            FriendShip friendShip = new FriendShip();
+            friendShip.UserSendId = senderId;
+            friendShip.UserReceiveId = invitedUser.Id;
 
-            //await repo.AddAsync(friendShip);
-            //await repo.SaveChangesAsync();
+            //invitedUser.FriendShips.Add(friendShip);
+            //senderUser.FriendShips.Add(friendShip);
+
+            await repo.AddAsync(friendShip);
+            await repo.SaveChangesAsync();
 
             await Clients.All.SendAsync("ReceiveMessage", $"Hello {fullName}");
         }

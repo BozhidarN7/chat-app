@@ -1,14 +1,9 @@
 ﻿using ChatApp.Core.Contracts;
-using ChatApp.Infrastructure.Data.Common;
 using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.Infrastructure.Data.Repositories;
+using ChatApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatApp.Core.Services
 {
@@ -35,6 +30,25 @@ namespace ChatApp.Core.Services
             IEnumerable<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
 
             return users;
+        }
+        public async Task<IEnumerable<ApplicationUser>> GetFriends(string id)
+        {
+            IEnumerable<FriendShip> friendShips = await repo.All<FriendShip>()
+                .Where(fs => fs.UserReceiveId == id || fs.UserSendId == id)
+                .ToListAsync();
+
+            List<string> friendsIds = friendShips.Select(fs =>
+            {
+                if (fs.UserSendId != id)
+                {
+                    return fs.UserSendId;
+                }
+                return fs.UserReceiveId;
+            })
+                .ToList();
+
+            return await repo.All<ApplicationUser>().Where(u => friendsIds.Contains(u.Id)).ToListAsync();
+
         }
     }
 }

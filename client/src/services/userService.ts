@@ -8,3 +8,7 @@ export const getUser = async (id: string) => {
 export const getAllUsers = async () => {
     return await requester.get(routes.getAllUsersURL());
 };
+
+export const getFriends = async (id: string) => {
+    return await requester.get(routes.getFriendsURL(id));
+};

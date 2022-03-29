@@ -64,5 +64,27 @@ namespace ChatApp.WebAPI.Controllers
 
             });
         }
+        [HttpGet("{id}/friends"), Authorize]
+        public async Task<IActionResult> GetFriends(string id)
+        {
+            IEnumerable<ApplicationUser> users = await userService.GetFriends(id);
+
+            return Ok(new
+            {
+                success = true,
+                message = "Data received successfully",
+                data = new
+                {
+                    users = users.Select(user => new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    })
+                }
+
+            });
+        }
     }
 }

@@ -8,6 +8,7 @@ const authRoutes = {
 const users = {
     getUserURL: (id: string) => `${baseUrl}/users/${id}`,
     getAllUsersURL: () => `${baseUrl}/users`,
+    getFriendsURL: (id: string) => `${baseUrl}/users/${id}/friends`,
 };
 
 const routes = {
