@@ -4,6 +4,7 @@ using ChatApp.Infrastructure.Data.Repositories;
 using ChatApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ChatApp.Core.Models.OutputDTOs;
 
 namespace ChatApp.Core.Services
 {
@@ -31,7 +32,7 @@ namespace ChatApp.Core.Services
 
             return users;
         }
-        public async Task<IEnumerable<ApplicationUser>> GetFriends(string id)
+        public async Task<IEnumerable<FriendsDTO>> GetFriends(string id)
         {
             IEnumerable<FriendShip> friendShips = await repo.All<FriendShip>()
                 .Where(fs => fs.UserReceiveId == id || fs.UserSendId == id)
@@ -47,7 +48,21 @@ namespace ChatApp.Core.Services
             })
                 .ToList();
 
-            return await repo.All<ApplicationUser>().Where(u => friendsIds.Contains(u.Id)).ToListAsync();
+
+            List<ApplicationUser> friends = await repo.All<ApplicationUser>().ToListAsync();
+                
+            return 
+                friends
+                .Where(u => friendsIds.Contains(u.Id))
+                .Select(u => new FriendsDTO
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    RoomId = friendShips.FirstOrDefault(fs => fs.UserSendId == u.Id && fs.UserReceiveId == id
+                    || fs.UserSendId == id && fs.UserReceiveId == u.Id).RoomId
+                });
 
         }
     }

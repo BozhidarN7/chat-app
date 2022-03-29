@@ -67,7 +67,7 @@ namespace ChatApp.WebAPI.Controllers
         [HttpGet("{id}/friends"), Authorize]
         public async Task<IActionResult> GetFriends(string id)
         {
-            IEnumerable<ApplicationUser> users = await userService.GetFriends(id);
+            IEnumerable<FriendsDTO> users = await userService.GetFriends(id);
 
             return Ok(new
             {
@@ -75,12 +75,13 @@ namespace ChatApp.WebAPI.Controllers
                 message = "Data received successfully",
                 data = new
                 {
-                    users = users.Select(user => new UserDTO
+                    users = users.Select(user => new FriendsDTO
                     {
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email
+                        Email = user.Email,
+                        RoomId = user.RoomId
                     })
                 }
 

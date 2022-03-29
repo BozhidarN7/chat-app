@@ -40,7 +40,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
         });
     }, [currentUser.id, refetch]);
 
-    connection?.on('ReceiveMessage', (message) => {
+    connection?.on('ReceiveInvitation', (username) => {
         setRefetch((prev) => !prev);
     });
 

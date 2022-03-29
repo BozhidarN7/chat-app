@@ -7,7 +7,6 @@ const MessageInput = () => {
             <TextField
                 fullWidth
                 autoFocus={true}
-                // label="Multiline Placeholder"
                 placeholder="Type a message..."
                 multiline={true}
             />

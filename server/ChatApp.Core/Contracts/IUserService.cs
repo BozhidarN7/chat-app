@@ -1,16 +1,14 @@
-﻿using ChatApp.Infrastructure.Data.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChatApp.Core.Models.OutputDTOs;
+using ChatApp.Infrastructure.Data.Identity;
 
 namespace ChatApp.Core.Contracts
 {
     public interface IUserService
     {
         Task<(ApplicationUser, bool)> GetUser(string id);
+
         Task<IEnumerable<ApplicationUser>> GetAllUsers();
-        Task<IEnumerable<ApplicationUser>> GetFriends(string id);
+
+        Task<IEnumerable<FriendsDTO>> GetFriends(string id);
     }
 }

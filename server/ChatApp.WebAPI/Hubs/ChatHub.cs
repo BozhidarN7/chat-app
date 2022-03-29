@@ -1,4 +1,5 @@
-﻿using ChatApp.Infrastructure.Data;
+﻿using ChatApp.Core.Models;
+using ChatApp.Infrastructure.Data;
 using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.SignalR;
@@ -30,13 +31,23 @@ namespace ChatApp.WebAPI.Hubs
             friendShip.UserSendId = senderId;
             friendShip.UserReceiveId = invitedUser.Id;
 
-            //invitedUser.FriendShips.Add(friendShip);
-            //senderUser.FriendShips.Add(friendShip);
 
             await repo.AddAsync(friendShip);
             await repo.SaveChangesAsync();
 
-            await Clients.All.SendAsync("ReceiveMessage", $"Hello {fullName}");
+            await Clients.All.SendAsync("ReceiveInvitation", $"{fullName}");
+        }
+
+        public async Task OpenChatRoom(UserConnection userConnection)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
+
+            // TODO Send the previous messages
+        }
+
+        public async Task SendMessage(UserConnection userConnection, string message)
+        {
+            await Clients.Group(userConnection.RoomId).SendAsync("ReceiveMessage", userConnection.FullName, message);
         }
     }
 }
