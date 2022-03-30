@@ -23,26 +23,16 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            (ApplicationUser user, bool isSuccessful) = await _authenticationService.Login(credentials);
+            LoggedUerDTO user = await _authenticationService.Login(credentials);
 
-            if (!isSuccessful) return Unauthorized();
+            if (user == null) return Unauthorized();
 
 
             return Ok(new
             {
                 success = true,
                 message = "User login successfully",
-                data = new
-                {
-                    user = new UserDTO
-                    {
-                        Id = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email
-                    },
-                    token = await _authenticationService.CreateToken()
-                }
+                data = user
             });
 
         }
@@ -52,9 +42,9 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            (ApplicationUser user, bool isSuccessful) = await _authenticationService.Register(credentials);
+            ApplicationUser user = await _authenticationService.Register(credentials);
 
-            if (!isSuccessful) return BadRequest();
+            if (user == null) return BadRequest();
 
             return Ok(new
             {
@@ -68,11 +58,31 @@ namespace ChatApp.WebAPI.Controllers
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Email = user.Email
-                    },
-                    token = await _authenticationService.CreateToken()
+                    }
                 }
             });
 
+        }
+
+        [HttpPost]
+        [Route("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] TokenModel tokenModel)
+        {
+            if (!ModelState.IsValid || tokenModel == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            TokenModel newTokenModel = await _authenticationService.CreateNewToken(tokenModel);
+
+            if (newTokenModel == null) return BadRequest("Invalid access token or refresh token");
+
+            return Ok(new
+            {
+                success = true,
+                message = "Token updated successfully",
+                data = tokenModel
+            });
         }
 
         [HttpGet("test")]

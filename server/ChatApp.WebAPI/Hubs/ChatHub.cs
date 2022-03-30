@@ -62,7 +62,7 @@ namespace ChatApp.WebAPI.Hubs
             await Clients.All.SendAsync("ReceiveInvitation", $"{fullName}");
 
         }
-        public async Task OpenChatRoom(UserConnection userConnection)
+        public async Task OpenChatRoom(UserConnectionModel userConnection)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
 
@@ -71,7 +71,7 @@ namespace ChatApp.WebAPI.Hubs
             await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", messages);
         }
 
-        public async Task SendMessage(UserConnection userConnection, string message)
+        public async Task SendMessage(UserConnectionModel userConnection, string message)
         {
             List<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
             ApplicationUser user = users.FirstOrDefault(u => $"{u.FirstName} {u.LastName}" == userConnection.FullName);

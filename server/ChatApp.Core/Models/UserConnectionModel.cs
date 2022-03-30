@@ -1,6 +1,6 @@
 ﻿namespace ChatApp.Core.Models
 {
-    public class UserConnection
+    public class UserConnectionModel
     {
         public string FullName { get; set; }
         

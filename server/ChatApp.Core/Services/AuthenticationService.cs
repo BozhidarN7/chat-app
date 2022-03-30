@@ -1,5 +1,6 @@
 ﻿using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
+using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ChatApp.Core.Services
@@ -25,14 +27,46 @@ namespace ChatApp.Core.Services
             this.config = config;
             this.repo = repo;
         }
-        public async Task<(ApplicationUser, bool)> Login(LoginCredentialsModel credentials)
+        public async Task<LoggedUerDTO> Login(LoginCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
 
-            return (user, user != null && await userManager.CheckPasswordAsync(user, credentials.Password));
+            if (user != null && await userManager.CheckPasswordAsync(user, credentials.Password))
+            {
+                JwtSecurityToken token = await CreateToken();
+                string refreshfreshToken = GenerateRefreshToken();
+
+                _ = int.TryParse(config["JwtSettings:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+
+                user.RefreshToken = refreshfreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+
+                await userManager.UpdateAsync(user);
+
+                return new LoggedUerDTO
+                {
+                    User = new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    },
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    RefreshToken = refreshfreshToken,
+                    Expiration = token.ValidTo
+                };
+            }
+
+            return null;
         }
-        public async Task<(ApplicationUser, bool)> Register(RegisterCredentialsModel credentials)
+        public async Task<ApplicationUser> Register(RegisterCredentialsModel credentials)
         {
+            user = await userManager.FindByEmailAsync(credentials.Email);
+            if (user != null)
+            {
+                return null;
+            }
             PasswordHasher<ApplicationUser> ph = new PasswordHasher<ApplicationUser>();
 
             user = new ApplicationUser
@@ -40,7 +74,8 @@ namespace ChatApp.Core.Services
                 FirstName = credentials.FirstName,
                 LastName = credentials.LastName,
                 Email = credentials.Email,
-                NormalizedEmail = credentials.Email.ToUpperInvariant()
+                NormalizedEmail = credentials.Email.ToUpperInvariant(),
+                SecurityStamp = Guid.NewGuid().ToString(),
             };
 
             user.PasswordHash = ph.HashPassword(user, credentials.Password);
@@ -49,11 +84,57 @@ namespace ChatApp.Core.Services
 
             int res = await repo.SaveChangesAsync();
 
-            return (user, res > 0 ? true : false);
+            if (res > 0)
+            {
+                return user;
+            }
+            return null;
 
         }
+        public async Task<TokenModel> CreateNewToken(TokenModel tokenModel)
+        {
+            string? accessToken = tokenModel.AccessToken;
+            string? refreshToken = tokenModel.RefreshToken;
 
-        public async Task<string> CreateToken()
+            ClaimsPrincipal principal = GetPrincipalFromExpiredToken(accessToken);
+
+            if (principal == null)
+            {
+                return null;
+            }
+
+            foreach (Claim claim in principal.Claims)
+            {
+                string type = claim.Type;
+                string value = claim.Value;
+            }
+
+            string email = principal.Claims
+                .FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")
+                .Value;
+
+            user = await userManager.FindByEmailAsync(email);
+
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return null;
+            }
+
+            JwtSecurityToken newAccessToken = await CreateToken();
+            string newRefreshToken = GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            await userManager.UpdateAsync(user);
+
+            return new TokenModel
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+                RefreshToken = newRefreshToken
+            };
+        }
+
+
+        private async Task<JwtSecurityToken> CreateToken()
         {
             IConfigurationSection jwtSettings = config.GetSection("JwtSettings");
 
@@ -62,19 +143,24 @@ namespace ChatApp.Core.Services
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Key").Value));
             SigningCredentials signCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            _ = int.TryParse(config["JwtSettings:TokenValidityInMinutes"], out int tokenValidityInMinutes);
+
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: jwtSettings.GetSection("Issuer").Value,
                 audience: jwtSettings.GetSection("Audience").Value,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
                 signingCredentials: signCredentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return token;
         }
 
         private async Task<List<Claim>> GetClaims()
         {
-            List<Claim> claims = new List<Claim> { new Claim(ClaimTypes.Email, user.Email) };
+            List<Claim> claims = new List<Claim> {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
             IList<string> roles = await userManager.GetRolesAsync(user);
 
@@ -84,9 +170,35 @@ namespace ChatApp.Core.Services
             }
 
             return claims;
-
         }
 
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string? token)
+        {
+            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"])),
+                ValidateLifetime = false
+            };
+
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
+        }
+        private static string GenerateRefreshToken()
+        {
+            byte[] randomNumber = new byte[64];
+            using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+
+            return Convert.ToBase64String(randomNumber);
+        }
     }
 }
 
