@@ -14,5 +14,7 @@ namespace ChatApp.Core.Contracts
 
         public Task<TokenModel> CreateNewToken(TokenModel tokenModel);
 
+        public Task<bool> RevokeUserRefreshToken(string id);
+
     }
 }

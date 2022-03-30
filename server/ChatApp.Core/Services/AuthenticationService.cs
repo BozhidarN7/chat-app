@@ -133,6 +133,17 @@ namespace ChatApp.Core.Services
             };
         }
 
+        public async Task<bool> RevokeUserRefreshToken(string id)
+        {
+            user = await userManager.FindByIdAsync(id);
+
+            if (user == null) return false;
+
+            user.RefreshToken = null;
+            await userManager.UpdateAsync(user);
+
+            return true;
+        }
 
         private async Task<JwtSecurityToken> CreateToken()
         {

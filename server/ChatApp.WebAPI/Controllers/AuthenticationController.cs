@@ -3,6 +3,7 @@ using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -63,7 +64,15 @@ namespace ChatApp.WebAPI.Controllers
             });
         }
 
-        //[HttpPost("revoke/{id}")]
+        [HttpPost("revoke/{id}"), Authorize]
+        public async Task<IActionResult> Revoke([FromQuery] string id)
+        {
+            bool isSuccessful = await _authenticationService.RevokeUserRefreshToken(id);
+
+            if (!isSuccessful) return BadRequest("Invalid user id");
+
+            return NoContent();
+        }
 
         [HttpPost]
         [Route("refresh-token")]
