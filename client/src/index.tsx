@@ -12,14 +12,17 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import { ChatProvider } from 'contexts/ChatCtx';
+import { AuthProvider } from 'contexts/AuthCtx';
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <BrowserRouter>
-                <ChatProvider>
-                    <App />
-                </ChatProvider>
+                <AuthProvider>
+                    <ChatProvider>
+                        <App />
+                    </ChatProvider>
+                </AuthProvider>
             </BrowserRouter>
         </Provider>
     </React.StrictMode>,

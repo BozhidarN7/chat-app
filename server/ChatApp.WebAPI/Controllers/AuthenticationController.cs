@@ -61,8 +61,9 @@ namespace ChatApp.WebAPI.Controllers
                     }
                 }
             });
-
         }
+
+        //[HttpPost("revoke/{id}")]
 
         [HttpPost]
         [Route("refresh-token")]

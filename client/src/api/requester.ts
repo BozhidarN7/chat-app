@@ -1,5 +1,7 @@
 import { toast } from 'react-toastify';
 
+import inMemoryJwtService from 'services/inMemoryJwtService';
+
 export const request = async (url: string, options: any) => {
     try {
         if (!url || !options?.method) {
@@ -21,7 +23,7 @@ export const request = async (url: string, options: any) => {
 };
 
 export const getOptions = async (method = 'get', body: any = undefined) => {
-    const token = localStorage.getItem('token');
+    const token = inMemoryJwtService.getToken();
 
     const options: any = {
         method,

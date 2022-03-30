@@ -16,4 +16,10 @@ export interface CurrentUser {
     firstName: string;
     lastName: string;
     email: string;
+    fullName: string;
+}
+
+export interface Token {
+    accessToken: string;
+    refreshToken: string;
 }

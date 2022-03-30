@@ -41,9 +41,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <ToastContainer />
-            <AuthProvider>
-                <AppRouter />
-            </AuthProvider>
+            <AppRouter />
         </ThemeProvider>
     );
 }

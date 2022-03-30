@@ -3,6 +3,7 @@ const baseUrl = 'https://localhost:44325/api/v1';
 const authRoutes = {
     registerURL: () => `${baseUrl}/auth/register`,
     loginURL: () => `${baseUrl}/auth/login`,
+    refreshTokenURL: () => `${baseUrl}/auth/refresh-token`,
 };
 
 const users = {

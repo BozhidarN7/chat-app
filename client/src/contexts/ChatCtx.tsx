@@ -1,6 +1,7 @@
 import { HubConnection } from '@microsoft/signalr';
 import React, { useContext, useState } from 'react';
 
+import { useAuth } from 'contexts/AuthCtx';
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
     messages: message[];
@@ -28,13 +29,13 @@ export const ChatProvider = ({ children }: Props) => {
     const [messages, setMessages] = useState<message[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
 
+    const { currentUser } = useAuth();
+
     const saveConnection = (connection: HubConnection) => {
         setConnection(connection);
     };
 
     const joinChatRoom = async (roomId: string) => {
-        const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
-
         await connection?.invoke('OpenChatRoom', {
             roomId,
             fullName: `${currentUser.firstName} ${currentUser.lastName}`,
@@ -58,8 +59,6 @@ export const ChatProvider = ({ children }: Props) => {
     };
 
     const sendMessage = async (roomId: string, message: string) => {
-        const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
-
         await connection?.invoke(
             'SendMessage',
             {

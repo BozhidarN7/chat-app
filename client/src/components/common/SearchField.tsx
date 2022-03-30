@@ -21,7 +21,11 @@ const SearchField = () => {
     }, []);
 
     const selectUserHandler = async (e: React.SyntheticEvent) => {
-        await connection?.invoke('AddToFriends', e.currentTarget.textContent, currentUser.id);
+        await connection?.invoke(
+            'AddToFriends',
+            e.currentTarget.textContent,
+            currentUser.id
+        );
     };
 
     return (
@@ -36,7 +40,9 @@ const SearchField = () => {
                 };
             })}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Find people" />}
+            renderInput={(params) => (
+                <TextField {...params} label="Find people" />
+            )}
         />
     );
 };
