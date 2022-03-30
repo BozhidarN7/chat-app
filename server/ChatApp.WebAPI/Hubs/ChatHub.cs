@@ -80,6 +80,7 @@ namespace ChatApp.WebAPI.Hubs
                 Text = message,
                 RoomId = Guid.Parse(userConnection.RoomId),
                 UserId = user.Id,
+                DateAndTime = DateTime.Now
             };
 
             await repo.AddAsync(newMessage);
