@@ -129,7 +129,8 @@ namespace ChatApp.Core.Services
             return new TokenModel
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
-                RefreshToken = newRefreshToken
+                RefreshToken = newRefreshToken,
+                Expiration = newAccessToken.ValidTo
             };
         }
 

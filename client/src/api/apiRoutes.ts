@@ -4,6 +4,7 @@ const authRoutes = {
     registerURL: () => `${baseUrl}/auth/register`,
     loginURL: () => `${baseUrl}/auth/login`,
     refreshTokenURL: () => `${baseUrl}/auth/refresh-token`,
+    revokeRefreshTokenURL: (id: string) => `${baseUrl}/auth/revoke/${id}`,
 };
 
 const users = {

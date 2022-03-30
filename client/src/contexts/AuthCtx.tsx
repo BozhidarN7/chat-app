@@ -5,7 +5,11 @@ import {
     LoginUser,
     CurrentUser,
 } from 'interfaces/userInterfaces';
-import { registerUser, loginUser } from 'services/authService';
+import {
+    registerUser,
+    loginUser,
+    revokeRefreshToken,
+} from 'services/authService';
 import { getUser } from 'services/userService';
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
@@ -36,7 +40,7 @@ type TokenProps = {
 export const AuthProvider = ({ children }: Props) => {
     const [currentUser, setCurrentUser] = useState({} as CurrentUser);
     const [token, setToken] = useState<TokenProps>({} as TokenProps);
-    const [isAuthLoading, setIsAuthLoading] = useState(true);
+    const [isUserLogged, setIsUserLogged] = useState(false);
 
     // useEffect(() => {
     //     const userInfo = localStorage.getItem('userInfo');
@@ -85,6 +89,7 @@ export const AuthProvider = ({ children }: Props) => {
         });
         console.log('here');
         console.log(res);
+        setIsUserLogged(true);
 
         // setDataInLocalStorage(outputData.data.user, outputData.data.token);
 
@@ -94,8 +99,13 @@ export const AuthProvider = ({ children }: Props) => {
     const logout = () => {
         // localStorage.removeItem('userInfo');
         // localStorage.removeItem('token');
+        revokeRefreshToken(currentUser.id);
+        inMemoryJwtService.deleteToken();
+        setIsUserLogged(false);
         setCurrentUser({} as CurrentUser);
         setToken({} as TokenProps);
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('refreshToken');
     };
 
     // const setDataInLocalStorage = (userData: CurrentUser, token: string) => {

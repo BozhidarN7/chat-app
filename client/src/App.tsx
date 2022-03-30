@@ -9,8 +9,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import 'react-toastify/dist/ReactToastify.css';
 
 import AppRouter from 'AppRouter';
-import { AuthProvider } from 'contexts/AuthCtx';
 import { useChat } from 'contexts/ChatCtx';
+import { refreshToken } from 'services/authService';
+import inMemoryJwtService from 'services/inMemoryJwtService';
 
 function App() {
     const { saveConnection } = useChat();
@@ -26,6 +27,15 @@ function App() {
             await connection.start();
             saveConnection(connection);
         })();
+    }, []);
+
+    useEffect(() => {
+        refreshToken({
+            accessToken: sessionStorage.getItem('token')!,
+            refreshToken: sessionStorage.getItem('refreshToken')!,
+        }).then((data) => {
+            inMemoryJwtService.setToken(data.data);
+        });
     }, []);
 
     const theme = useMemo(

@@ -10,6 +10,10 @@ export const loginUser = async (data: LoginUser) => {
     return await requester.post(routes.loginURL(), data);
 };
 
+export const revokeRefreshToken = async (id: string) => {
+    return await requester.post(routes.revokeRefreshTokenURL(id), undefined);
+};
+
 export const refreshToken = async (data: Token) => {
     return await requester.post(routes.refreshTokenURL(), data);
 };

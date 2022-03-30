@@ -13,6 +13,12 @@ const inMemoryJwtManager = () => {
     let refreshTimeoutId: number;
     const storageKey = 'logout';
 
+    window.addEventListener('storage', (event) => {
+        if (event.key === storageKey) {
+            token = null;
+        }
+    });
+
     const refreshTokenHandler = () => {
         const delay = new Date(expiration).getTime() - new Date().getTime();
         const timeoutTrigger = delay - 5000;
@@ -39,6 +45,8 @@ const inMemoryJwtManager = () => {
         expiration = data.expiration;
 
         refreshTokenHandler();
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('refreshToken', refreshToken);
 
         return true;
     };
