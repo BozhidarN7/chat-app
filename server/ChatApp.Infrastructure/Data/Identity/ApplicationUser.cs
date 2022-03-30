@@ -8,6 +8,7 @@ namespace ChatApp.Infrastructure.Data.Identity
         public ApplicationUser()
         {
             FriendShips = new HashSet<FriendShip>();
+            UsersRooms = new HashSet<UsersRooms>();
         }
 
         [Required]
@@ -23,5 +24,7 @@ namespace ChatApp.Infrastructure.Data.Identity
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         public ICollection<FriendShip> FriendShips { get; set; }
+
+        public ICollection<UsersRooms> UsersRooms { get; set; }
     }
 }
