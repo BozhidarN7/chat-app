@@ -11,8 +11,8 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import { ChatProvider } from 'contexts/ChatCtx';
 import { AuthProvider } from 'contexts/AuthCtx';
+import { ChatProvider } from 'contexts/ChatCtx';
 
 ReactDOM.render(
     <React.StrictMode>

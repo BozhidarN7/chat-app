@@ -8,9 +8,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import AppRouter from 'AppRouter';
+import AppRouter from 'routes/AppRouter';
 import { useChat } from 'contexts/ChatCtx';
-import { refreshToken } from 'services/authService';
+import { refreshToken as refreshTokenHandler } from 'services/authService';
+
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
 function App() {
@@ -29,14 +30,19 @@ function App() {
         })();
     }, []);
 
-    useEffect(() => {
-        refreshToken({
-            accessToken: sessionStorage.getItem('token')!,
-            refreshToken: sessionStorage.getItem('refreshToken')!,
-        }).then((data) => {
-            inMemoryJwtService.setToken(data.data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     const accessToken = localStorage.getItem('token');
+    //     const refreshToken = localStorage.getItem('refreshToken');
+
+    //     if (accessToken && refreshToken) {
+    //         refreshTokenHandler({
+    //             accessToken,
+    //             refreshToken,
+    //         }).then((data: any) => {
+    //             inMemoryJwtService.setToken(data.data);
+    //         });
+    //     }
+    // }, []);
 
     const theme = useMemo(
         () =>

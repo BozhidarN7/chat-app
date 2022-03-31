@@ -45,14 +45,16 @@ const inMemoryJwtManager = () => {
         expiration = data.expiration;
 
         refreshTokenHandler();
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('expiration', expiration.toString());
 
         return true;
     };
 
     const deleteToken = () => {
         token = null;
+        refreshToken = null;
         abortRefreshToken();
         localStorage.setItem(storageKey, Date.now().toString());
         return true;

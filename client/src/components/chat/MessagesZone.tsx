@@ -9,7 +9,6 @@ type Props = {
 
 const MessagesZone = ({ openChatSpace }: Props) => {
     const { messages } = useChat();
-    console.log(messages);
     return openChatSpace ? (
         <>
             <Box

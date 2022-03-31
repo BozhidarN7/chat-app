@@ -11,11 +11,8 @@ type Props = {
 const Message = ({ message, senderName }: Props) => {
     const theme = useTheme();
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
-    console.log(currentUser.fullName);
-    console.log(senderName);
 
     const isLocalUser = currentUser.fullName.trim() === senderName.trim();
-    console.log(isLocalUser);
 
     return (
         <Box

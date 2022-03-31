@@ -8,7 +8,7 @@ export const get = async (url: string) => {
 };
 
 export const post = async (url: string, data: any) => {
-    if (!url || !data) throw new Error('Invalid params in crud.post()');
+    if (!url) throw new Error('Invalid params in crud.post()');
 
     const options = await getOptions('post', data);
     return await request(url, options);

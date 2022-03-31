@@ -14,7 +14,7 @@ import { getUser } from 'services/userService';
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
 interface AuthCtxInterface {
-    currentUser: CurrentUser;
+    currentUser: CurrentUser | null;
     token: TokenProps;
     signUp: any;
     signIn: any;
@@ -38,29 +38,31 @@ type TokenProps = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-    const [currentUser, setCurrentUser] = useState({} as CurrentUser);
+    const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
     const [token, setToken] = useState<TokenProps>({} as TokenProps);
-    const [isUserLogged, setIsUserLogged] = useState(false);
+    const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-    // useEffect(() => {
-    //     const userInfo = localStorage.getItem('userInfo');
+    useEffect(() => {
+        const userInfo = localStorage.getItem('userInfo');
+        const token = localStorage.getItem('token');
+        const refreshToken = localStorage.getItem('refreshToken');
+        const expiration = localStorage.getItem('expiration');
 
-    //     if (userInfo) {
-    //         const userInfoData = JSON.parse(userInfo);
-    //         getUser(userInfoData.id).then((res) => {
-    //             const token = localStorage.getItem('token');
-
-    //             if (token) {
-    //                 setToken(token);
-    //             }
-
-    //             setCurrentUser(res.data.user);
-    //             setIsAuthLoading(false);
-    //         });
-    //     } else {
-    //         setIsAuthLoading(false);
-    //     }
-    // }, []);
+        if (userInfo && token && refreshToken && expiration) {
+            const userInfoData = JSON.parse(userInfo);
+            getUser(userInfoData.id).then((res) => {
+                setCurrentUser(res.data.user);
+                setIsAuthLoading(false);
+                inMemoryJwtService.setToken({
+                    token,
+                    refreshToken,
+                    expiration: new Date(expiration),
+                });
+            });
+        } else {
+            setIsAuthLoading(false);
+        }
+    }, []);
 
     const signUp = async (inputData: RegisterUser) => {
         const outputData = await registerUser(inputData);
@@ -87,40 +89,38 @@ export const AuthProvider = ({ children }: Props) => {
             refreshToken: outputData.data.refreshToken,
             expiration: outputData.data.expiration,
         });
-        console.log('here');
-        console.log(res);
-        setIsUserLogged(true);
 
-        // setDataInLocalStorage(outputData.data.user, outputData.data.token);
+        setDataInLocalStorage(outputData.data.user);
 
         return outputData.message;
     };
 
     const logout = () => {
-        // localStorage.removeItem('userInfo');
-        // localStorage.removeItem('token');
+        if (!currentUser) {
+            return;
+        }
+
         revokeRefreshToken(currentUser.id);
         inMemoryJwtService.deleteToken();
-        setIsUserLogged(false);
-        setCurrentUser({} as CurrentUser);
+        setCurrentUser(null);
         setToken({} as TokenProps);
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('refreshToken');
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
     };
 
-    // const setDataInLocalStorage = (userData: CurrentUser, token: string) => {
-    //     localStorage.setItem(
-    //         'userInfo',
-    //         JSON.stringify({
-    //             email: userData.email,
-    //             id: userData.id,
-    //             firstName: userData.firstName,
-    //             lastName: userData.lastName,
-    //             fullName: `${userData.firstName} ${userData.lastName}`,
-    //         })
-    //     );
-    //     localStorage.setItem('token', token);
-    // };
+    const setDataInLocalStorage = (userData: CurrentUser) => {
+        localStorage.setItem(
+            'userInfo',
+            JSON.stringify({
+                email: userData.email,
+                id: userData.id,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                fullName: `${userData.firstName} ${userData.lastName}`,
+            })
+        );
+    };
 
     const value = {
         currentUser,
@@ -129,5 +129,9 @@ export const AuthProvider = ({ children }: Props) => {
         signIn,
         logout,
     };
-    return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
+    return (
+        <AuthCtx.Provider value={value}>
+            {!isAuthLoading && children}
+        </AuthCtx.Provider>
+    );
 };

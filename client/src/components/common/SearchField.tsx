@@ -18,13 +18,16 @@ const SearchField = () => {
         getAllUsers().then((data) => {
             setUsers(data.data.users);
         });
+        return () => {
+            setUsers([]);
+        };
     }, []);
 
     const selectUserHandler = async (e: React.SyntheticEvent) => {
         await connection?.invoke(
             'AddToFriends',
             e.currentTarget.textContent,
-            currentUser.id
+            currentUser?.id
         );
     };
 

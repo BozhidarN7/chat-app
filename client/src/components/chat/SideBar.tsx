@@ -35,10 +35,13 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     const [refetch, setRefetch] = useState(true);
 
     useEffect(() => {
-        getFriends(currentUser.id).then((data) => {
+        getFriends(currentUser?.id!).then((data) => {
             setChats(data.data.users);
         });
-    }, [currentUser.id, refetch]);
+        return () => {
+            setChats([]);
+        };
+    }, [currentUser?.id, refetch]);
 
     connection?.on('ReceiveInvitation', (username) => {
         setRefetch((prev) => !prev);

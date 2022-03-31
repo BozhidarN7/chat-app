@@ -65,7 +65,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("revoke/{id}"), Authorize]
-        public async Task<IActionResult> Revoke([FromQuery] string id)
+        public async Task<IActionResult> Revoke(string id)
         {
             bool isSuccessful = await _authenticationService.RevokeUserRefreshToken(id);
 

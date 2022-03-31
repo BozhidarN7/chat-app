@@ -38,7 +38,7 @@ export const ChatProvider = ({ children }: Props) => {
     const joinChatRoom = async (roomId: string) => {
         await connection?.invoke('OpenChatRoom', {
             roomId,
-            fullName: `${currentUser.firstName} ${currentUser.lastName}`,
+            fullName: `${currentUser?.firstName} ${currentUser?.lastName}`,
         });
 
         connection?.on(
@@ -52,8 +52,6 @@ export const ChatProvider = ({ children }: Props) => {
         );
 
         connection?.on('PreviousConversation', (messages) => {
-            console.log('here');
-            console.log(messages);
             // setMessages(prev => )
         });
     };
@@ -63,7 +61,7 @@ export const ChatProvider = ({ children }: Props) => {
             'SendMessage',
             {
                 roomId,
-                fullName: `${currentUser.firstName} ${currentUser.lastName}`,
+                fullName: `${currentUser?.firstName} ${currentUser?.lastName}`,
             },
             message
         );

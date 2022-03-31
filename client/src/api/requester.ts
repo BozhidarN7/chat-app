@@ -23,8 +23,7 @@ export const request = async (url: string, options: any) => {
 };
 
 export const getOptions = async (method = 'get', body: any = undefined) => {
-    const token = inMemoryJwtService.getToken();
-
+    const token = localStorage.getItem('token');
     const options: any = {
         method,
         headers: {
