@@ -26,17 +26,20 @@ const SignInPage = () => {
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
+    const [disableSubmitBtn, setDisableSubmitBtn] = useState(false);
 
     const { signIn } = useAuth();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setDisableSubmitBtn(true);
         const data = new FormData(event.currentTarget);
         const email = data.get('email');
         const password = data.get('password');
 
         if (!email || !password) {
             toast.info('Please fill the form');
+            setDisableSubmitBtn(false);
             return;
         }
 
@@ -63,7 +66,12 @@ const SignInPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    sx={{ mt: 1 }}
+                >
                     <TextField
                         margin="normal"
                         required
@@ -86,8 +94,16 @@ const SignInPage = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton onClick={() => setShowPassword((prev) => !prev)}>
-                                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                    <IconButton
+                                        onClick={() =>
+                                            setShowPassword((prev) => !prev)
+                                        }
+                                    >
+                                        {showPassword ? (
+                                            <VisibilityOffIcon />
+                                        ) : (
+                                            <VisibilityIcon />
+                                        )}
                                     </IconButton>
                                 </InputAdornment>
                             ),
@@ -97,7 +113,13 @@ const SignInPage = () => {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        disabled={disableSubmitBtn}
+                        sx={{ mt: 3, mb: 2 }}
+                    >
                         Sign In
                     </Button>
                     <Grid container>
@@ -107,7 +129,11 @@ const SignInPage = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link component={RouterLink} to="/register" variant="body2">
+                            <Link
+                                component={RouterLink}
+                                to="/register"
+                                variant="body2"
+                            >
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
