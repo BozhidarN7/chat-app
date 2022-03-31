@@ -1,8 +1,10 @@
+import { useRef } from 'react';
 import { MutableRefObject } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import Box from '@mui/material/Box';
 import MatchingUsers from 'components/chat/MatchingUsers';
 
 import 'components/chat/MatchingUsers.css';
@@ -53,6 +55,8 @@ type Props = {
 };
 
 const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
+    const matchingUsersRef = useRef(null);
+
     return (
         <>
             <Search>
@@ -71,8 +75,9 @@ const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
                 timeout={300}
                 unmountOnExit
                 classNames="alert"
+                nodeRef={matchingUsersRef}
             >
-                <MatchingUsers />
+                <MatchingUsers matchingUsersRef={matchingUsersRef} />
             </CSSTransition>
         </>
     );
