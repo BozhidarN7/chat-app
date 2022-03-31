@@ -1,6 +1,11 @@
+import { MutableRefObject } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import MatchingUsers from 'components/chat/MatchingUsers';
+
+import 'components/chat/MatchingUsers.css';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -42,17 +47,34 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const SearchFieldCustom = () => {
+type Props = {
+    addFriendClicked: boolean;
+    searchFieldRef: MutableRefObject<HTMLInputElement | undefined>;
+};
+
+const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
     return (
-        <Search>
-            <SearchIconWrapper>
-                <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-            />
-        </Search>
+        <>
+            <Search>
+                <SearchIconWrapper>
+                    <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                    inputRef={searchFieldRef}
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                />
+            </Search>
+
+            <CSSTransition
+                in={addFriendClicked}
+                timeout={300}
+                unmountOnExit
+                classNames="alert"
+            >
+                <MatchingUsers />
+            </CSSTransition>
+        </>
     );
 };
 

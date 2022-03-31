@@ -28,7 +28,7 @@ const MessageInput = ({ roomId }: Props) => {
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
                 fullWidth
-                autoFocus={true}
+                // autoFocus={true}
                 placeholder="Type a message..."
                 multiline={true}
                 InputProps={{

@@ -1,14 +1,26 @@
 import IconButton from '@mui/material/IconButton';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { SxProps, Theme } from '@mui/material';
 
 type Props = {
-    styles: any;
+    styles: SxProps<Theme>;
+    addFriendClicked: boolean;
+    addFriendHandler: () => void;
 };
 
-const AddButton = ({ styles }: Props) => {
+const AddButton = ({ styles, addFriendHandler, addFriendClicked }: Props) => {
     return (
-        <IconButton color="secondary" sx={{ ...styles, ml: 'auto' }}>
-            <AddCircleOutlinedIcon sx={{ fontSize: 40 }} />
+        <IconButton
+            onClick={() => addFriendHandler()}
+            color="secondary"
+            sx={{ ...styles }}
+        >
+            {!addFriendClicked ? (
+                <AddCircleOutlinedIcon sx={{ fontSize: 40 }} />
+            ) : (
+                <CloseOutlinedIcon sx={{ fontSize: 40 }} />
+            )}
         </IconButton>
     );
 };

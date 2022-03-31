@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
@@ -36,6 +36,16 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     const { connection } = useChat();
     const [chats, setChats] = useState([]);
     const [refetch, setRefetch] = useState(true);
+    const [addFriendClicked, setAddFriendClicked] = useState(false);
+    const searchFieldRef = useRef<HTMLInputElement>();
+
+    const addFriendHandler = () => {
+        setAddFriendClicked((prev) => !prev);
+
+        if (searchFieldRef.current && addFriendClicked) {
+            searchFieldRef.current.focus();
+        }
+    };
 
     useEffect(() => {
         getFriends(currentUser?.id!).then((data) => {
@@ -65,11 +75,17 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                         </Typography>
                     </Grid>
                     <Grid item container xs={6}>
-                        <AddButton styles={{}} />
+                        <AddButton
+                            styles={{ ml: 'auto' }}
+                            addFriendClicked={addFriendClicked}
+                            addFriendHandler={addFriendHandler}
+                        />
                     </Grid>
                 </Grid>
-                {/* <SearchField /> */}
-                <SearchFieldCustom />
+                <SearchFieldCustom
+                    addFriendClicked={addFriendClicked}
+                    searchFieldRef={searchFieldRef}
+                />
                 <List sx={{ mb: 2 }}>
                     <React.Fragment>
                         <ListItem
