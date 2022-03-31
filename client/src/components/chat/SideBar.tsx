@@ -6,6 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
 
 import { useTheme } from '@mui/material/styles';
 
@@ -13,6 +14,8 @@ import SearchField from 'components/common/SearchField';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { getFriends } from 'services/userService';
+import SearchFieldCustom from 'components/common/SearrchFieldCustom';
+import AddButton from 'components/common/AddButton';
 
 type Props = {
     openChatSpace: boolean;
@@ -50,15 +53,23 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     return (
         <>
             <Paper square sx={{ height: '100%' }}>
-                <Typography
-                    variant="h5"
-                    gutterBottom
-                    component="div"
-                    sx={{ p: 2, pb: 0 }}
-                >
-                    Chats
-                </Typography>
-                <SearchField />
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Typography
+                            variant="h5"
+                            gutterBottom
+                            component="div"
+                            sx={{ p: 2, pb: 0 }}
+                        >
+                            Chats
+                        </Typography>
+                    </Grid>
+                    <Grid item container xs={6}>
+                        <AddButton styles={{}} />
+                    </Grid>
+                </Grid>
+                {/* <SearchField /> */}
+                <SearchFieldCustom />
                 <List sx={{ mb: 2 }}>
                     <React.Fragment>
                         <ListItem
