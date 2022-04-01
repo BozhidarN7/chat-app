@@ -8,13 +8,16 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
 
+import { User } from 'interfaces/userInterfaces';
+
 type Props = {
     matchingUsersRef: RefObject<HTMLUListElement>;
+    matchedUsers: User[];
 };
 
-const MatchingUsers = ({ matchingUsersRef }: Props) => {
+const MatchingUsers = ({ matchingUsersRef, matchedUsers }: Props) => {
     const theme = useTheme();
-
+    console.log(matchedUsers);
     return (
         <List
             ref={matchingUsersRef}
@@ -29,7 +32,21 @@ const MatchingUsers = ({ matchingUsersRef }: Props) => {
                 overflowY: 'scroll',
             }}
         >
-            {[0, 1, 2, 3, 4, 5, 6].map((value) => {
+            {matchedUsers.map((u) => {
+                const labelId = `checkbox-list-secondary-label-${u.id}`;
+                return (
+                    <ListItem key={u.id} disablePadding>
+                        <ListItemButton>
+                            <ListItemAvatar>
+                                <Avatar alt={`${u.fullName}`} />
+                            </ListItemAvatar>
+                            <ListItemText id={labelId} primary={u.fullName} />
+                        </ListItemButton>
+                    </ListItem>
+                );
+            })}
+
+            {/* {[0, 1, 2, 3, 4, 5, 6].map((value) => {
                 const labelId = `checkbox-list-secondary-label-${value}`;
                 return (
                     <ListItem key={value} disablePadding>
@@ -49,7 +66,7 @@ const MatchingUsers = ({ matchingUsersRef }: Props) => {
                         </ListItemButton>
                     </ListItem>
                 );
-            })}
+            })} */}
         </List>
     );
 };

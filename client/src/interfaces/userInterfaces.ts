@@ -11,7 +11,7 @@ export interface LoginUser {
     password: string;
 }
 
-export interface CurrentUser {
+export interface User {
     id: string;
     firstName: string;
     lastName: string;

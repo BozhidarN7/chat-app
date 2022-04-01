@@ -1,10 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import {
-    RegisterUser,
-    LoginUser,
-    CurrentUser,
-} from 'interfaces/userInterfaces';
+import { RegisterUser, LoginUser, User } from 'interfaces/userInterfaces';
 import {
     registerUser,
     loginUser,
@@ -14,7 +10,7 @@ import { getUser } from 'services/userService';
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
 interface AuthCtxInterface {
-    currentUser: CurrentUser | null;
+    currentUser: User | null;
     token: TokenProps;
     signUp: any;
     signIn: any;
@@ -38,7 +34,7 @@ type TokenProps = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-    const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [token, setToken] = useState<TokenProps>({} as TokenProps);
     const [isAuthLoading, setIsAuthLoading] = useState(true);
 
@@ -109,7 +105,7 @@ export const AuthProvider = ({ children }: Props) => {
         localStorage.removeItem('refreshToken');
     };
 
-    const setDataInLocalStorage = (userData: CurrentUser) => {
+    const setDataInLocalStorage = (userData: User) => {
         localStorage.setItem(
             'userInfo',
             JSON.stringify({

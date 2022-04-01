@@ -1,11 +1,22 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import {
+    configureStore,
+    ThunkAction,
+    Action,
+    getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 
 import chatsReducer from 'features/chatsSlice';
+import usersReducer from 'features/usersSlice';
+import { apiSlice } from 'features/api/apiSlice';
 
 export const store = configureStore({
     reducer: {
         chats: chatsReducer,
+        users: usersReducer,
+        [apiSlice.reducerPath]: apiSlice.reducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

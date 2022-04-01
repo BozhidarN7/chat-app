@@ -36,7 +36,8 @@ namespace ChatApp.WebAPI.Controllers
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email
+                        FullName = user.FullName,
+                        Email = user.Email,
                     },
                 }
             });
@@ -58,7 +59,8 @@ namespace ChatApp.WebAPI.Controllers
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email
+                        Email = user.Email,
+                        FullName = user.FullName
                     })
                 }
 
@@ -81,6 +83,7 @@ namespace ChatApp.WebAPI.Controllers
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Email = user.Email,
+                        FullName = user.FullName,
                         RoomId = user.RoomId
                     })
                 }

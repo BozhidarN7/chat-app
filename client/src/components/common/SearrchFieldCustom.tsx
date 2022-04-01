@@ -1,13 +1,14 @@
-import { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { MutableRefObject } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import Box from '@mui/material/Box';
 import MatchingUsers from 'components/chat/MatchingUsers';
 
 import 'components/chat/MatchingUsers.css';
+import { debounceGetMatchedUsers, getMatchedUsers } from 'services/userService';
+import { User } from 'interfaces/userInterfaces';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -55,7 +56,17 @@ type Props = {
 };
 
 const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
+    const [searchValue, setSearchField] = useState('');
+    const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
     const matchingUsersRef = useRef(null);
+
+    const searchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const currentSearch = e.target.value;
+        setSearchField(currentSearch);
+        let currentMatchedUsers: User[] = [];
+        await debounceGetMatchedUsers(currentMatchedUsers, currentSearch);
+        setMatchedUsers(currentMatchedUsers);
+    };
 
     return (
         <>
@@ -64,6 +75,8 @@ const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
                     <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
+                    value={searchValue}
+                    onChange={searchHandler}
                     inputRef={searchFieldRef}
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
@@ -77,7 +90,10 @@ const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
                 classNames="alert"
                 nodeRef={matchingUsersRef}
             >
-                <MatchingUsers matchingUsersRef={matchingUsersRef} />
+                <MatchingUsers
+                    matchingUsersRef={matchingUsersRef}
+                    matchedUsers={matchedUsers}
+                />
             </CSSTransition>
         </>
     );

@@ -42,7 +42,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     const addFriendHandler = () => {
         setAddFriendClicked((prev) => !prev);
 
-        if (searchFieldRef.current && addFriendClicked) {
+        if (searchFieldRef.current && !addFriendClicked) {
             searchFieldRef.current.focus();
         }
     };

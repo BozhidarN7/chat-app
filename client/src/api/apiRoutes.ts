@@ -1,4 +1,4 @@
-const baseUrl = 'https://localhost:44325/api/v1';
+export const baseUrl = 'https://localhost:44325/api/v1';
 
 const authRoutes = {
     registerURL: () => `${baseUrl}/auth/register`,
@@ -9,7 +9,13 @@ const authRoutes = {
 
 const users = {
     getUserURL: (id: string) => `${baseUrl}/users/${id}`,
-    getAllUsersURL: () => `${baseUrl}/users`,
+    getAllUsersURL: (query: string | undefined = undefined) => {
+        if (query) {
+            return `${baseUrl}/users?fullName=${query}`;
+        }
+
+        return `${baseUrl}/users`;
+    },
     getFriendsURL: (id: string) => `${baseUrl}/users/${id}/friends`,
 };
 

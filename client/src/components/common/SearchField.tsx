@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { CurrentUser } from 'interfaces/userInterfaces';
+import { User } from 'interfaces/userInterfaces';
 import { getAllUsers } from 'services/userService';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 
 const SearchField = () => {
-    const [users, setUsers] = useState<CurrentUser[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
 
     const { connection } = useChat();
     const { currentUser } = useAuth();
