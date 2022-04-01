@@ -1,5 +1,6 @@
 using ChatApp.WebAPI.Extensions;
 using ChatApp.WebAPI.Hubs;
+using ChatApp.WebAPI.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,10 @@ builder.Services.AddApiIdentity();
 builder.Services.AddJwt(builder.Configuration);
 builder.Services.AddCorsPolicies(builder.Configuration);
 builder.Services.AddApiServices();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.ModelBinderProviders.Insert(0, new QueryStringModelBinderProvider());
+});
 builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
