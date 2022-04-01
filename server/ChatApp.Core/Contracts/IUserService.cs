@@ -7,7 +7,7 @@ namespace ChatApp.Core.Contracts
     {
         Task<(ApplicationUser, bool)> GetUser(string id);
 
-        Task<IEnumerable<ApplicationUser>> GetAllUsers();
+        Task<IEnumerable<ApplicationUser>> GetAllUsers(string fullName);
 
         Task<IEnumerable<FriendsDTO>> GetFriends(string id);
     }

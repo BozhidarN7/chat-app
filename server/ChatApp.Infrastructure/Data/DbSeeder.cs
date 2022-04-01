@@ -42,7 +42,35 @@ namespace ChatApp.Infrastructure.Data
             };
             user2.PasswordHash = ph.HashPassword(user2, "asdfasdf");
 
-            modelBuilder.Entity<ApplicationUser>().HasData(user1, user2);
+            string[] names = new string[] {
+                "Boris Stamatov",
+                "Georgi Stoynov",
+                "Momchil Ivanov",
+                "Atanas Marinov",
+                "Ivet Nikolova",
+                "Ani Mincheva",
+                "Desislava Genova"
+            };
+            List<ApplicationUser> users = new List<ApplicationUser>();
+            for (int i = 0; i < names.Length; i++)
+            {
+                ApplicationUser user = new ApplicationUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    FirstName = names[i].Split(" ")[0],
+                    LastName = names[i].Split(" ")[1],
+                    FullName = names[i],
+                    Email = $"test{i + 3}@abv.bg",
+                    NormalizedEmail = $"test{i + 3}@abv.bg".ToUpperInvariant(),
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+                user.PasswordHash = ph.HashPassword(user, "asdfasdf");
+                users.Add(user);
+            }
+            users.Add(user1);
+            users.Add(user2);
+
+            modelBuilder.Entity<ApplicationUser>().HasData(users);
         }
 
         private static void SeedRoles(ModelBuilder modelBuilder)

@@ -76,6 +76,7 @@ namespace ChatApp.Core.Services
                 Email = credentials.Email,
                 NormalizedEmail = credentials.Email.ToUpperInvariant(),
                 SecurityStamp = Guid.NewGuid().ToString(),
+                FullName = $"{credentials.FirstName} {credentials.LastName}"
             };
 
             user.PasswordHash = ph.HashPassword(user, credentials.Password);

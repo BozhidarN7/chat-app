@@ -26,11 +26,17 @@ namespace ChatApp.Core.Services
             return (user, user != null ? true : false);
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsers(string fullName)
         {
-            IEnumerable<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
+            if (fullName != "")
+            {
+                return await repo.All<ApplicationUser>()
+                    .Where(u => u.FullName.Contains(fullName))
+                    .ToListAsync();
+            }
+            return await repo.All<ApplicationUser>().ToListAsync();
 
-            return users;
+
         }
         public async Task<IEnumerable<FriendsDTO>> GetFriends(string id)
         {
@@ -50,8 +56,8 @@ namespace ChatApp.Core.Services
 
 
             List<ApplicationUser> friends = await repo.All<ApplicationUser>().ToListAsync();
-                
-            return 
+
+            return
                 friends
                 .Where(u => friendsIds.Contains(u.Id))
                 .Select(u => new FriendsDTO

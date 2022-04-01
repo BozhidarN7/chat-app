@@ -4,6 +4,7 @@ using ChatApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220401143033_AddedFullNameToApplicationUser")]
+    partial class AddedFullNameToApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,135 +135,9 @@ namespace ChatApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2488c88d-af83-48de-ac2b-5fc7da11a879",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c87ce6f6-443e-4012-b264-a1d63a212e26",
-                            Email = "test3@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Boris",
-                            FullName = "Boris Stamatov",
-                            LastName = "Stamatov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST3@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOCjgjUICy8+K9FJ3t3LNSeokndVkr0PgK1Uh4sCj76fZczcv3t4BSxy8QK0x9au8A==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "d4fe23af-0408-4c79-9f51-20e36f5ba6fd",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "e9a9c5a3-68f5-4dfd-ba69-3fea8aea1c2d",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "23bbdeca-5ad9-4423-827f-ccc1b7d502d3",
-                            Email = "test4@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Georgi",
-                            FullName = "Georgi Stoynov",
-                            LastName = "Stoynov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST4@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPB/scUZhJ7PwWM8jD2j+KYOlTjdbCO9hucBWZ1lDC+K52lxk8TIYxADo7B6DIWQ8A==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "f6612a15-1d28-41b0-9368-3b0e0f7668db",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "07cce3a4-17ef-49b8-89a8-9087e3b0d2a5",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "10ab48d1-6eab-4471-b13d-be9aa9e10ed1",
-                            Email = "test5@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Momchil",
-                            FullName = "Momchil Ivanov",
-                            LastName = "Ivanov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST5@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMT+JHHve5J6uBrs4ZNdJJbkoo60VT4MoC7QSYazzOrw0OmCXlC/MnleioPOAQGREA==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "7ade6c34-fe77-448a-bf51-bd883809103e",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "5b9dc696-c906-4aad-b2c6-e03552dae31a",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "2bbce539-6791-402e-985a-34654734505e",
-                            Email = "test6@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Atanas",
-                            FullName = "Atanas Marinov",
-                            LastName = "Marinov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST6@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEP7bmEAwdFyPUMvN+aFRKPtPNe6mqX9n4xtWnRKkhn+tyKKqLJ0EgpoFQGyhZ2e0nQ==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "12485cf4-21dd-4cad-bc93-21c147ae01ce",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "dad8db26-ab2b-49ba-945d-7caff76c4798",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "967bb2ad-8c5a-491a-8407-76576e7b674c",
-                            Email = "test7@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Ivet",
-                            FullName = "Ivet Nikolova",
-                            LastName = "Nikolova",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST7@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAELHPnlJlr86pqyhysXh9popUft6u5KYaCyDb2bdQcaSCH3SLN3dATogXRKZKjAStAw==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "df5a66f1-37d6-44a3-8a3b-30fa78430d57",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "0e32b8f5-b9bd-4705-a678-6e1dab7b9f24",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "11846e88-88b4-45d7-aecb-d097cbc8c4e0",
-                            Email = "test8@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Ani",
-                            FullName = "Ani Mincheva",
-                            LastName = "Mincheva",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST8@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAw5JAx8EslwfCcyeNuJ1VRtrFbQw7KD8pI+L89b/fKW6CBeQ+LriEM6HMwfw3YNPg==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "7a38c09b-13a6-4818-b9ae-1639b85d85b5",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "474cbefd-4291-4fd8-85df-2790e616101b",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "59407313-7c1e-4e4c-afde-164baad826de",
-                            Email = "test9@abv.bg",
-                            EmailConfirmed = false,
-                            FirstName = "Desislava",
-                            FullName = "Desislava Genova",
-                            LastName = "Genova",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TEST9@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGbzWWlPtPLD4bu4pERBxIXZ/cENuD/YjKRK58AsaoDG6Od/6HbjQ8DWcrmFnt7Lfg==",
-                            PhoneNumberConfirmed = false,
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "36008ae0-b7f6-4fe8-8328-8a5955c270d1",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5638daa1-3c12-4cbf-984b-c36b60e4e7e4",
+                            ConcurrencyStamp = "7ca80919-fc4c-4ce9-bc83-9796a6c3abfd",
                             Email = "test@abv.bg",
                             EmailConfirmed = true,
                             FirstName = "Bozhidar",
@@ -269,10 +145,10 @@ namespace ChatApp.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@ABV.BG",
                             NormalizedUserName = "BOZHIDAR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG+974uTtMjSVFiQQKnBzuDH5YSqwkxa6WM4lwVeYjYpts9qd+rlDChTTWWbsqUEow==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPKaPnUESGJubNyI4TUPFHS1ByXCajWlSSiSBRzC2YX52cRUdlL02OPRuuBks9ytwQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "73d92470-3bd7-472d-880c-b8ddc2279dfc",
+                            SecurityStamp = "fabe2c88-65f4-42c3-9bb1-c327ca4370e1",
                             TwoFactorEnabled = false,
                             UserName = "bozhidar"
                         },
@@ -280,7 +156,7 @@ namespace ChatApp.Infrastructure.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "399be32b-3afd-43ee-9e62-7f4423853570",
+                            ConcurrencyStamp = "a454c478-4012-4952-8ff5-240ca101c4a7",
                             Email = "test1@abv.bg",
                             EmailConfirmed = true,
                             FirstName = "Ivan",
@@ -288,10 +164,10 @@ namespace ChatApp.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST1@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBN8OeeUr4NvLkKUX+22gL+DvRo72Rpaxsv7HJ+Zo0iIEwUz8HPCICjkU1KRTM00bQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEECDLklsCXoyY9xGu5s1rnJSbF8U65Ldvx5XAaQ7qUM96xz+9px+JgPyqRiktM7ajQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "7edba5d8-4a29-4fe9-b70b-a110b0fc9a58",
+                            SecurityStamp = "efdd4e8c-728d-465e-b3e9-ff4c43415a2b",
                             TwoFactorEnabled = false,
                             UserName = "ivan"
                         });
@@ -383,14 +259,14 @@ namespace ChatApp.Infrastructure.Migrations
                         new
                         {
                             Id = "admin_role",
-                            ConcurrencyStamp = "2d821221-0ae0-4e4e-96bd-2bb4da4b951f",
+                            ConcurrencyStamp = "419727f5-90cd-454d-aad8-6bfc82a7ec53",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "user_role",
-                            ConcurrencyStamp = "764138aa-3ec5-4981-94ed-5d85ef921ec4",
+                            ConcurrencyStamp = "19240cba-5885-43bd-9c90-232c96edbdf5",
                             Name = "user",
                             NormalizedName = "USER"
                         });

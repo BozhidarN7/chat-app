@@ -19,6 +19,8 @@ namespace ChatApp.Infrastructure.Data.Identity
         [StringLength(80)]
         public string LastName { get; set; }
 
+        public string? FullName { get; set; }
+
         public string? RefreshToken { get; set; }
 
         public DateTime RefreshTokenExpiryTime { get; set; }

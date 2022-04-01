@@ -1,8 +1,8 @@
 ﻿using ChatApp.Core.Contracts;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
+using ChatApp.WebAPI.ModelBinders;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -43,9 +43,9 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet, Authorize]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([ModelBinder(BinderType = typeof(QueryStringModelBinder))] string fullName = "")
         {
-            IEnumerable<ApplicationUser> users = await userService.GetAllUsers();
+            IEnumerable<ApplicationUser> users = await userService.GetAllUsers(fullName);
 
             return Ok(new
             {

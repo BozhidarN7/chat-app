@@ -14,7 +14,7 @@ namespace ChatApp.WebAPI.ModelBinders
             var model = string.Empty;
             if (bindingContext.ValueProvider.GetValue(modelName).FirstOrDefault() != null)
             {
-                model = bindingContext.ValueProvider.GetValue(modelName).FirstOrDefault();
+                model = bindingContext.ValueProvider.GetValue(modelName).FirstOrDefault().Replace("\"","");
             }
             else
             {
