@@ -7,19 +7,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import MatchingUsers from 'components/chat/MatchingUsers';
 
 import 'components/chat/MatchingUsers.css';
-import { debounceGetMatchedUsers, getMatchedUsers } from 'services/userService';
+import { debounceGetMatchedUsers } from 'services/userService';
 import { User } from 'interfaces/userInterfaces';
 
 const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.primary.light, 0.15),
+    'position': 'relative',
+    'borderRadius': theme.shape.borderRadius,
+    'backgroundColor': alpha(theme.palette.primary.light, 0.15),
     '&:hover': {
         backgroundColor: alpha(theme.palette.primary.light, 0.25),
     },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
+    'marginRight': theme.spacing(2),
+    'marginLeft': 0,
+    'width': '100%',
     [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(2),
         width: 'auto',
@@ -37,7 +37,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
+    'color': 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
@@ -55,7 +55,7 @@ type Props = {
     searchFieldRef: MutableRefObject<HTMLInputElement | undefined>;
 };
 
-const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
+const SearchField = ({ addFriendClicked, searchFieldRef }: Props) => {
     const [searchValue, setSearchField] = useState('');
     const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
     const matchingUsersRef = useRef(null);
@@ -90,13 +90,10 @@ const SearchFieldCustom = ({ addFriendClicked, searchFieldRef }: Props) => {
                 classNames="alert"
                 nodeRef={matchingUsersRef}
             >
-                <MatchingUsers
-                    matchingUsersRef={matchingUsersRef}
-                    matchedUsers={matchedUsers}
-                />
+                <MatchingUsers matchingUsersRef={matchingUsersRef} matchedUsers={matchedUsers} />
             </CSSTransition>
         </>
     );
 };
 
-export default SearchFieldCustom;
+export default SearchField;

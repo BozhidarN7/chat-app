@@ -10,11 +10,10 @@ import Grid from '@mui/material/Grid';
 
 import { useTheme } from '@mui/material/styles';
 
-import SearchField from 'components/common/SearchField';
+import SearchField from 'components/common/SearrchField';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { getFriends } from 'services/userService';
-import SearchFieldCustom from 'components/common/SearrchFieldCustom';
 import AddButton from 'components/common/AddButton';
 
 type Props = {
@@ -27,8 +26,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
         {
             id: 1,
             primary: 'Martin Stefanov',
-            secondary:
-                "I'll be in the neighbourhood this week. Let's grab a bite to eat",
+            secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
         },
     ];
     const theme = useTheme();
@@ -65,12 +63,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
             <Paper square sx={{ height: '100%' }}>
                 <Grid container>
                     <Grid item xs={6}>
-                        <Typography
-                            variant="h5"
-                            gutterBottom
-                            component="div"
-                            sx={{ p: 2, pb: 0 }}
-                        >
+                        <Typography variant="h5" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
                             Chats
                         </Typography>
                     </Grid>
@@ -82,16 +75,10 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                         />
                     </Grid>
                 </Grid>
-                <SearchFieldCustom
-                    addFriendClicked={addFriendClicked}
-                    searchFieldRef={searchFieldRef}
-                />
+                <SearchField addFriendClicked={addFriendClicked} searchFieldRef={searchFieldRef} />
                 <List sx={{ mb: 2 }}>
                     <React.Fragment>
-                        <ListItem
-                            button
-                            onClick={openChatSpaceHandler.bind(null, '')}
-                        >
+                        <ListItem button onClick={openChatSpaceHandler.bind(null, '')}>
                             <ListItemAvatar>
                                 <Avatar
                                     alt="Profile Picture"
@@ -107,13 +94,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                     </React.Fragment>
                     {chats.map((chat: any) => (
                         <React.Fragment key={chat.id}>
-                            <ListItem
-                                button
-                                onClick={openChatSpaceHandler.bind(
-                                    null,
-                                    chat.roomId
-                                )}
-                            >
+                            <ListItem button onClick={openChatSpaceHandler.bind(null, chat.roomId)}>
                                 <ListItemAvatar>
                                     <Avatar
                                         alt="Profile Picture"

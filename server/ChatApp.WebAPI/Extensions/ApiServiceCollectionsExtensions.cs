@@ -23,7 +23,7 @@ namespace ChatApp.WebAPI.Extensions
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("OfficeConnection");
+            var connectionString = config.GetConnectionString("HomeConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
