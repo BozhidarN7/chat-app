@@ -13,11 +13,7 @@ export const getFriends = async (id: string) => {
     return await requester.get(routes.getFriendsURL(id));
 };
 
-export const debounceGetMatchedUsers = async (
-    matchedUsers: User[],
-    query: string,
-    timeout: number = 300
-) => {
+export const debounceGetMatchedUsers = async (matchedUsers: User[], query: string, timeout: number = 300) => {
     let timer: number = 0;
 
     clearTimeout(timer);
@@ -28,4 +24,8 @@ export const debounceGetMatchedUsers = async (
 
 export const getMatchedUsers = async (query: string) => {
     return await requester.get(routes.getAllUsersURL(query));
+};
+
+export const filterUsers = (users: User[], query: string) => {
+    return users.filter((u) => u.fullName.toLowerCase().includes(query.toLowerCase()));
 };

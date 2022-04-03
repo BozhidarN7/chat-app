@@ -11,10 +11,12 @@ import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 
 import SearchField from 'components/common/SearrchField';
+import AddButton from 'components/common/AddButton';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { getFriends } from 'services/userService';
-import AddButton from 'components/common/AddButton';
+import { fetchUsers } from 'features/usersSlice';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 type Props = {
     openChatSpace: boolean;
@@ -29,6 +31,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
             secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
         },
     ];
+    const dispatch = useAppDispatch();
     const theme = useTheme();
     const { currentUser } = useAuth();
     const { connection } = useChat();
@@ -42,6 +45,7 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
 
         if (searchFieldRef.current && !addFriendClicked) {
             searchFieldRef.current.focus();
+            dispatch(fetchUsers());
         }
     };
 

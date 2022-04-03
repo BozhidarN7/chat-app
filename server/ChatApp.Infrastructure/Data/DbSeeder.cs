@@ -19,13 +19,14 @@ namespace ChatApp.Infrastructure.Data
             var user1 = new ApplicationUser
             {
                 Id = "1",
-                FirstName = "Bozhidar",
-                LastName = "Nemski",
-                UserName = "bozhidar",
-                NormalizedUserName = "bozhidar".ToUpper(),
+                FirstName = "Martin",
+                LastName = "Genchev",
+                UserName = "martin",
+                NormalizedUserName = "martin".ToUpper(),
                 Email = "test@abv.bg",
                 NormalizedEmail = "test@abv.bg".ToUpper(),
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName= "Martin Genchev"
             };
             user1.PasswordHash = ph.HashPassword(user1, "asdfasdf");
 
@@ -38,7 +39,8 @@ namespace ChatApp.Infrastructure.Data
                 NormalizedUserName = "ivan".ToUpper(),
                 Email = "test1@abv.bg",
                 NormalizedEmail = "test1@abv.bg".ToUpper(),
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                FullName = "Ivan Ivanov"
             };
             user2.PasswordHash = ph.HashPassword(user2, "asdfasdf");
 

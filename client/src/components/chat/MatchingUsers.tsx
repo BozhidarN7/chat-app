@@ -4,6 +4,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Box from '@mui/system/Box';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
@@ -12,12 +13,13 @@ import { User } from 'interfaces/userInterfaces';
 
 type Props = {
     matchingUsersRef: RefObject<HTMLUListElement>;
+    searchValue: string;
     matchedUsers: User[];
 };
 
-const MatchingUsers = ({ matchingUsersRef, matchedUsers }: Props) => {
+const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) => {
     const theme = useTheme();
-    console.log(matchedUsers);
+
     return (
         <List
             ref={matchingUsersRef}
@@ -34,13 +36,36 @@ const MatchingUsers = ({ matchingUsersRef, matchedUsers }: Props) => {
         >
             {matchedUsers.map((u) => {
                 const labelId = `checkbox-list-secondary-label-${u.id}`;
+                const startPosition = u.fullName.toLowerCase().indexOf(searchValue.toLowerCase());
+                const endPosition = startPosition + searchValue.length;
+                const boldPart = u.fullName.substring(startPosition, endPosition);
+                const firstPart = u.fullName.substring(0, startPosition);
+                const lastPart = u.fullName.substring(endPosition);
+                console.log(lastPart);
                 return (
                     <ListItem key={u.id} disablePadding>
                         <ListItemButton>
                             <ListItemAvatar>
                                 <Avatar alt={`${u.fullName}`} />
                             </ListItemAvatar>
-                            <ListItemText id={labelId} primary={u.fullName} />
+                            {searchValue === '' ? (
+                                <ListItemText id={labelId} primary={u.fullName} />
+                            ) : (
+                                <>
+                                    <Box component="pre" sx={{ fontFamily: theme.typography.fontFamily }}>
+                                        {firstPart}
+                                    </Box>
+                                    <Box
+                                        component="pre"
+                                        sx={{ fontWeight: 'bold', fontFamily: theme.typography.fontFamily }}
+                                    >
+                                        {boldPart}
+                                    </Box>
+                                    <Box component="pre" sx={{ fontFamily: theme.typography.fontFamily }}>
+                                        {lastPart}
+                                    </Box>
+                                </>
+                            )}
                         </ListItemButton>
                     </ListItem>
                 );
@@ -54,15 +79,10 @@ const MatchingUsers = ({ matchingUsersRef, matchedUsers }: Props) => {
                             <ListItemAvatar>
                                 <Avatar
                                     alt={`Avatar n°${value + 1}`}
-                                    src={`/static/images/avatar/${
-                                        value + 1
-                                    }.jpg`}
+                                    src={`/static/images/avatar/${value + 1}.jpg`}
                                 />
                             </ListItemAvatar>
-                            <ListItemText
-                                id={labelId}
-                                primary={`Line item ${value + 1}`}
-                            />
+                            <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
                         </ListItemButton>
                     </ListItem>
                 );

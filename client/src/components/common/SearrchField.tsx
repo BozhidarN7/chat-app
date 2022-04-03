@@ -7,8 +7,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import MatchingUsers from 'components/chat/MatchingUsers';
 
 import 'components/chat/MatchingUsers.css';
-import { debounceGetMatchedUsers } from 'services/userService';
+import { filterUsers } from 'services/userService';
 import { User } from 'interfaces/userInterfaces';
+import { useAppSelector } from 'app/hooks';
 
 const Search = styled('div')(({ theme }) => ({
     'position': 'relative',
@@ -59,13 +60,12 @@ const SearchField = ({ addFriendClicked, searchFieldRef }: Props) => {
     const [searchValue, setSearchField] = useState('');
     const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
     const matchingUsersRef = useRef(null);
+    const users = useAppSelector((state) => state.users.users);
 
     const searchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const currentSearch = e.target.value;
         setSearchField(currentSearch);
-        let currentMatchedUsers: User[] = [];
-        await debounceGetMatchedUsers(currentMatchedUsers, currentSearch);
-        setMatchedUsers(currentMatchedUsers);
+        setMatchedUsers(filterUsers(users, currentSearch));
     };
 
     return (
@@ -90,7 +90,11 @@ const SearchField = ({ addFriendClicked, searchFieldRef }: Props) => {
                 classNames="alert"
                 nodeRef={matchingUsersRef}
             >
-                <MatchingUsers matchingUsersRef={matchingUsersRef} matchedUsers={matchedUsers} />
+                <MatchingUsers
+                    searchValue={searchValue}
+                    matchingUsersRef={matchingUsersRef}
+                    matchedUsers={matchedUsers}
+                />
             </CSSTransition>
         </>
     );
