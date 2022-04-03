@@ -6,7 +6,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
+import MailIcon from '@mui/icons-material/Mail';
 
 import { useAuth } from 'contexts/AuthCtx';
 
@@ -25,9 +27,16 @@ const Header = () => {
                         ChatApp
                     </Typography>
                     {currentUser?.id ? (
-                        <Button color="inherit" onClick={() => logout()}>
-                            logout
-                        </Button>
+                        <>
+                            <IconButton color="inherit">
+                                <Badge badgeContent={4} color="secondary" sx={{ mr: 2 }}>
+                                    <MailIcon color="inherit" />
+                                </Badge>
+                            </IconButton>
+                            <Button color="inherit" onClick={() => logout()}>
+                                logout
+                            </Button>
+                        </>
                     ) : (
                         <>
                             <Button color="inherit" onClick={() => navigate('/login')}>
