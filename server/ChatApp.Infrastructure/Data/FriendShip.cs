@@ -17,5 +17,9 @@ namespace ChatApp.Infrastructure.Data
         public string UserReceiveId { get; set; }
 
         public string RoomId { get; set; } = Guid.NewGuid().ToString();
+
+        public bool Accepted { get; set; } = false;
+
+        public bool Rejected { get; set; } = false;
     }
 }

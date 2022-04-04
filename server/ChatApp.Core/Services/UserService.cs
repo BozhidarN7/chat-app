@@ -71,5 +71,24 @@ namespace ChatApp.Core.Services
                 });
 
         }
+
+        public async Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequests(string id)
+        {
+            try
+            {
+                return await repo.All<FriendShip>()
+                    .Where(fs => fs.Accepted == false && fs.Rejected == false && fs.UserReceiveId == id)
+                    .Select(fs => new FriendshipsDTO
+                    {
+                        SenderId = fs.UserSendId,
+                        SenderFullName = fs.UserSend.FullName
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

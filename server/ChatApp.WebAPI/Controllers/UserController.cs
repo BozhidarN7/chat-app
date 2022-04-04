@@ -90,5 +90,26 @@ namespace ChatApp.WebAPI.Controllers
 
             });
         }
+
+        [HttpGet("{id}/friendship-requests/new"), Authorize]
+        public async Task<IActionResult> GetNewFriendshipRequests(string id)
+        {
+            IEnumerable<FriendshipsDTO> requests = await userService.GetNewFriendshipRequests(id);
+
+            if (requests == null)
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            return Ok(new
+            {
+                success = true,
+                message = "Data received successfully",
+                data = new
+                {
+                    FriendShipRequests = requests
+                }
+            });
+        }
     }
 }
