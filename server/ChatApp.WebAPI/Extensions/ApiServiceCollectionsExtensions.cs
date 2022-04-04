@@ -8,6 +8,7 @@ using System.Text;
 using ChatApp.Core.Contracts;
 using ChatApp.Core.Services;
 using ChatApp.Infrastructure.Data.Repositories;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.WebAPI.Extensions
 {
@@ -18,12 +19,12 @@ namespace ChatApp.WebAPI.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
             services.AddScoped<IUserService, UserService>();
-
+            //services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             return services;
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("HomeConnection");
+            var connectionString = config.GetConnectionString("OfficeConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -43,7 +44,6 @@ namespace ChatApp.WebAPI.Extensions
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            //.AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
 
             return services;
         }

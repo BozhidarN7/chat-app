@@ -17,18 +17,23 @@ import inMemoryJwtService from 'services/inMemoryJwtService';
 function App() {
     const { saveConnection } = useChat();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const token = localStorage.getItem('token');
     useEffect(() => {
         (async () => {
-            const connection = new HubConnectionBuilder()
-                .withUrl('https://localhost:44325/api/v1/chat')
-                .withAutomaticReconnect()
-                .configureLogging(LogLevel.Information)
-                .build();
+            if (token) {
+                const connection = new HubConnectionBuilder()
+                    .withUrl('https://localhost:44325/api/v1/chat', {
+                        accessTokenFactory: () => token,
+                    })
+                    .withAutomaticReconnect()
+                    .configureLogging(LogLevel.Information)
+                    .build();
 
-            await connection.start();
-            saveConnection(connection);
+                await connection.start();
+                saveConnection(connection);
+            }
         })();
-    }, []);
+    }, [token]);
 
     // useEffect(() => {
     //     const accessToken = localStorage.getItem('token');

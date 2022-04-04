@@ -30,7 +30,6 @@ namespace ChatApp.Core.Services
         public async Task<LoggedUerDTO> Login(LoginCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
-
             if (user != null && await userManager.CheckPasswordAsync(user, credentials.Password))
             {
                 JwtSecurityToken token = await CreateToken();
@@ -80,6 +79,7 @@ namespace ChatApp.Core.Services
             };
 
             user.PasswordHash = ph.HashPassword(user, credentials.Password);
+            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
 
             await repo.AddAsync(user);
 
@@ -102,12 +102,6 @@ namespace ChatApp.Core.Services
             if (principal == null)
             {
                 return null;
-            }
-
-            foreach (Claim claim in principal.Claims)
-            {
-                string type = claim.Type;
-                string value = claim.Value;
             }
 
             string email = principal.Claims
