@@ -11,6 +11,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { User } from 'interfaces/userInterfaces';
 import ConfirmModal from 'components/common/modals/ConfirmModal';
+import { useChat } from 'contexts/ChatCtx';
 
 type Props = {
     matchingUsersRef: RefObject<HTMLUListElement>;
@@ -20,13 +21,21 @@ type Props = {
 
 const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) => {
     const theme = useTheme();
+    const { sendFriendRequest } = useChat();
 
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [friendId, setFriendId] = useState('');
 
-    const sendFriendRequestHandler = (fullName: string) => {
+    const openConfirmModalHandler = (fullName: string, userId: string) => {
         setOpenConfirmModal(true);
+        setFriendId(userId);
         setModalMessage(`Are you sure you want to send a friend request to ${fullName}`);
+    };
+
+    const sendFriendRequestHandler = async () => {
+        setOpenConfirmModal(false);
+        await sendFriendRequest(friendId);
     };
 
     const closeConfirmModalHandler = () => {
@@ -57,7 +66,7 @@ const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) =
                     const lastPart = u.fullName.substring(endPosition);
                     return (
                         <ListItem key={u.id} disablePadding>
-                            <ListItemButton onClick={sendFriendRequestHandler.bind(null, u.fullName)}>
+                            <ListItemButton onClick={openConfirmModalHandler.bind(null, u.fullName, u.id)}>
                                 <ListItemAvatar>
                                     <Avatar alt={`${u.fullName}`} />
                                 </ListItemAvatar>
@@ -89,8 +98,9 @@ const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) =
             </List>
             <ConfirmModal
                 openConfirmModal={openConfirmModal}
-                closeConfirmModalHandler={closeConfirmModalHandler}
                 modalMessage={modalMessage}
+                closeConfirmModalHandler={closeConfirmModalHandler}
+                confirmHandler={sendFriendRequestHandler}
             />
         </>
     );

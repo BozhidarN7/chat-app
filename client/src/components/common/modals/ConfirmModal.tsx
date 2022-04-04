@@ -21,10 +21,16 @@ const style = {
 type Props = {
     modalMessage: string;
     openConfirmModal: boolean;
+    confirmHandler: () => void;
     closeConfirmModalHandler: () => void;
 };
 
-const ConfirmModal = ({ modalMessage, openConfirmModal, closeConfirmModalHandler }: Props) => {
+const ConfirmModal = ({
+    modalMessage,
+    openConfirmModal,
+    closeConfirmModalHandler,
+    confirmHandler,
+}: Props) => {
     return (
         <Modal
             aria-labelledby="confirm-modal"
@@ -46,7 +52,12 @@ const ConfirmModal = ({ modalMessage, openConfirmModal, closeConfirmModalHandler
                             </Typography>
                         </Grid>
                         <Grid item xs={true}>
-                            <Button variant="contained" color="success" sx={{ mr: 2 }}>
+                            <Button
+                                variant="contained"
+                                color="success"
+                                sx={{ mr: 2 }}
+                                onClick={confirmHandler}
+                            >
                                 Confirm
                             </Button>
                             <Button variant="contained" color="error" onClick={closeConfirmModalHandler}>

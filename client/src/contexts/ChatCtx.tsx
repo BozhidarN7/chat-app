@@ -8,6 +8,7 @@ interface ChatCtxInterface {
     saveConnection: any;
     sendMessage: any;
     joinChatRoom: any;
+    sendFriendRequest: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -41,15 +42,9 @@ export const ChatProvider = ({ children }: Props) => {
             fullName: `${currentUser?.firstName} ${currentUser?.lastName}`,
         });
 
-        connection?.on(
-            'ReceiveMessage',
-            (fullName: string, message: string) => {
-                setMessages((prev) => [
-                    ...prev,
-                    { message, senderName: fullName },
-                ]);
-            }
-        );
+        connection?.on('ReceiveMessage', (fullName: string, message: string) => {
+            setMessages((prev) => [...prev, { message, senderName: fullName }]);
+        });
 
         connection?.on('PreviousConversation', (messages) => {
             // setMessages(prev => )
@@ -67,12 +62,21 @@ export const ChatProvider = ({ children }: Props) => {
         );
     };
 
+    const sendFriendRequest = async (userId: string) => {
+        await connection?.invoke('SendFriendRequest', currentUser?.id, userId);
+
+        connection?.on('ReceiveInvitation', (senderId) => {
+            console.log(senderId);
+        });
+    };
+
     const value = {
         connection,
         messages,
         saveConnection,
         sendMessage,
         joinChatRoom,
+        sendFriendRequest,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

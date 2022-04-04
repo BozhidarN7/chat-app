@@ -4,6 +4,7 @@ using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data;
 using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.Infrastructure.Data.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,17 +12,26 @@ namespace ChatApp.WebAPI.Hubs
 {
     public class ChatHub : Hub
     {
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IApplicationDbRepository repo;
         private readonly IUserService userService;
 
-        public ChatHub(IApplicationDbRepository repo, IUserService userService)
+        public ChatHub(IApplicationDbRepository repo, IUserService userService, UserManager<ApplicationUser> userManager)
         {
+            this.userManager = userManager;
             this.repo = repo;
             this.userService = userService;
         }
 
-        public async Task AddToFriends(string fullName, string senderId)
+        public async Task SendFriendRequest(string senderId, string receiverId)
         {
+            ApplicationUser user = await userManager.FindByIdAsync(receiverId);
+
+            await Clients.User(receiverId).SendAsync("ReceiveInvitation", senderId);
+        }
+
+        public async Task AddToFriends(string fullName, string senderId)
+        { 
             List<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
             ApplicationUser invitedUser = users.FirstOrDefault(u => $"{u.FirstName} {u.LastName}" == fullName);
             ApplicationUser senderUser = users.FirstOrDefault(u => u.Id == senderId);
