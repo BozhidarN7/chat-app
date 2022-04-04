@@ -19,7 +19,11 @@ type Props = {
     matchedUsers: User[];
 };
 
-const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) => {
+const MatchingUsers = ({
+    matchingUsersRef,
+    matchedUsers,
+    searchValue,
+}: Props) => {
     const theme = useTheme();
     const { sendFriendRequest } = useChat();
 
@@ -30,7 +34,9 @@ const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) =
     const openConfirmModalHandler = (fullName: string, userId: string) => {
         setOpenConfirmModal(true);
         setFriendId(userId);
-        setModalMessage(`Are you sure you want to send a friend request to ${fullName}`);
+        setModalMessage(
+            `Are you sure you want to send a friend request to ${fullName}`
+        );
     };
 
     const sendFriendRequestHandler = async () => {
@@ -59,34 +65,61 @@ const MatchingUsers = ({ matchingUsersRef, matchedUsers, searchValue }: Props) =
             >
                 {matchedUsers.map((u) => {
                     const labelId = `checkbox-list-secondary-label-${u.id}`;
-                    const startPosition = u.fullName.toLowerCase().indexOf(searchValue.toLowerCase());
+                    const startPosition = u.fullName
+                        .toLowerCase()
+                        .indexOf(searchValue.toLowerCase());
                     const endPosition = startPosition + searchValue.length;
-                    const boldPart = u.fullName.substring(startPosition, endPosition);
+                    const boldPart = u.fullName.substring(
+                        startPosition,
+                        endPosition
+                    );
                     const firstPart = u.fullName.substring(0, startPosition);
                     const lastPart = u.fullName.substring(endPosition);
                     return (
                         <ListItem key={u.id} disablePadding>
-                            <ListItemButton onClick={openConfirmModalHandler.bind(null, u.fullName, u.id)}>
+                            <ListItemButton
+                                onClick={openConfirmModalHandler.bind(
+                                    null,
+                                    u.fullName,
+                                    u.id
+                                )}
+                            >
                                 <ListItemAvatar>
                                     <Avatar alt={`${u.fullName}`} />
                                 </ListItemAvatar>
                                 {searchValue === '' ? (
-                                    <ListItemText id={labelId} primary={u.fullName} />
+                                    <ListItemText
+                                        id={labelId}
+                                        primary={u.fullName}
+                                    />
                                 ) : (
                                     <>
-                                        <Box component="pre" sx={{ fontFamily: theme.typography.fontFamily }}>
+                                        <Box
+                                            component="pre"
+                                            sx={{
+                                                fontFamily:
+                                                    theme.typography.fontFamily,
+                                            }}
+                                        >
                                             {firstPart}
                                         </Box>
                                         <Box
                                             component="pre"
                                             sx={{
                                                 fontWeight: 'bold',
-                                                fontFamily: theme.typography.fontFamily,
+                                                fontFamily:
+                                                    theme.typography.fontFamily,
                                             }}
                                         >
                                             {boldPart}
                                         </Box>
-                                        <Box component="pre" sx={{ fontFamily: theme.typography.fontFamily }}>
+                                        <Box
+                                            component="pre"
+                                            sx={{
+                                                fontFamily:
+                                                    theme.typography.fontFamily,
+                                            }}
+                                        >
                                             {lastPart}
                                         </Box>
                                     </>

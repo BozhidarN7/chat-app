@@ -10,17 +10,18 @@ import 'components/chat/MatchingUsers.css';
 import { filterUsers } from 'services/userService';
 import { User } from 'interfaces/userInterfaces';
 import { useAppSelector } from 'app/hooks';
+import { useAuth } from 'contexts/AuthCtx';
 
 const Search = styled('div')(({ theme }) => ({
-    'position': 'relative',
-    'borderRadius': theme.shape.borderRadius,
-    'backgroundColor': alpha(theme.palette.primary.light, 0.15),
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.primary.light, 0.15),
     '&:hover': {
         backgroundColor: alpha(theme.palette.primary.light, 0.25),
     },
-    'marginRight': theme.spacing(2),
-    'marginLeft': 0,
-    'width': '100%',
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(2),
         width: 'auto',
@@ -38,7 +39,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    'color': 'inherit',
+    color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
@@ -61,11 +62,12 @@ const SearchField = ({ addFriendClicked, searchFieldRef }: Props) => {
     const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
     const matchingUsersRef = useRef(null);
     const users = useAppSelector((state) => state.users.users);
+    const { currentUser } = useAuth();
 
     const searchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const currentSearch = e.target.value;
         setSearchField(currentSearch);
-        setMatchedUsers(filterUsers(users, currentSearch));
+        setMatchedUsers(filterUsers(users, currentSearch, currentUser!.id));
     };
 
     return (
