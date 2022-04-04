@@ -23,3 +23,8 @@ export interface Token {
     accessToken: string;
     refreshToken: string;
 }
+
+export interface FriendshipRequest {
+    senderId: string;
+    senderFullName: string;
+}

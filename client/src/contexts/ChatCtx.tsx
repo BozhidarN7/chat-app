@@ -42,9 +42,15 @@ export const ChatProvider = ({ children }: Props) => {
             fullName: `${currentUser?.firstName} ${currentUser?.lastName}`,
         });
 
-        connection?.on('ReceiveMessage', (fullName: string, message: string) => {
-            setMessages((prev) => [...prev, { message, senderName: fullName }]);
-        });
+        connection?.on(
+            'ReceiveMessage',
+            (fullName: string, message: string) => {
+                setMessages((prev) => [
+                    ...prev,
+                    { message, senderName: fullName },
+                ]);
+            }
+        );
 
         connection?.on('PreviousConversation', (messages) => {
             // setMessages(prev => )
@@ -65,7 +71,7 @@ export const ChatProvider = ({ children }: Props) => {
     const sendFriendRequest = async (userId: string) => {
         await connection?.invoke('SendFriendRequest', currentUser?.id, userId);
 
-        connection?.on('ReceiveInvitation', (senderId) => {
+        connection?.on('ReceiveInvitation', (fullName, senderId) => {
             console.log(senderId);
         });
     };

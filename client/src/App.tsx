@@ -9,15 +9,19 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import 'react-toastify/dist/ReactToastify.css';
 
 import AppRouter from 'routes/AppRouter';
+import inMemoryJwtService from 'services/inMemoryJwtService';
 import { useChat } from 'contexts/ChatCtx';
 import { refreshToken as refreshTokenHandler } from 'services/authService';
-
-import inMemoryJwtService from 'services/inMemoryJwtService';
+import { useAuth } from 'contexts/AuthCtx';
+import { useAppDispatch } from 'app/hooks';
+import { fetchNewFriendRequests } from 'features/usersSlice';
 
 function App() {
+    const dispatch = useAppDispatch();
     const { saveConnection } = useChat();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const token = localStorage.getItem('token');
+    const { currentUser } = useAuth();
     useEffect(() => {
         (async () => {
             if (token) {
@@ -34,6 +38,14 @@ function App() {
             }
         })();
     }, [token]);
+
+    useEffect(() => {
+        (async () => {
+            if (currentUser) {
+                dispatch(fetchNewFriendRequests(currentUser.id));
+            }
+        })();
+    }, [currentUser, dispatch]);
 
     // useEffect(() => {
     //     const accessToken = localStorage.getItem('token');

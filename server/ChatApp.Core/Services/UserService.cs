@@ -81,7 +81,7 @@ namespace ChatApp.Core.Services
                     .Select(fs => new FriendshipsDTO
                     {
                         SenderId = fs.UserSendId,
-                        SenderFullName = fs.UserSend.FullName
+                        SenderFullName = fs.UserSend.FullName!
                     })
                     .ToListAsync();
             }
