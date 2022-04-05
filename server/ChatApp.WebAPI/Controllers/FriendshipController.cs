@@ -33,7 +33,7 @@ namespace ChatApp.WebAPI.Controllers
                 message = "Data received successfully",
                 data = new
                 {
-                    FrieendshipRequest = request
+                    FriendshipRequest = request
                 }
             });
         }

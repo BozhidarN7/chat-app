@@ -80,6 +80,7 @@ namespace ChatApp.Core.Services
                     .Where(fs => fs.Accepted == false && fs.Rejected == false && fs.UserReceiveId == id)
                     .Select(fs => new FriendshipsDTO
                     {
+                        FriendshipId = fs.Id.ToString(),
                         SenderId = fs.UserSendId,
                         SenderFullName = fs.UserSend.FullName!
                     })

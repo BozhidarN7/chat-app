@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { FriendshipRequest, User } from 'interfaces/userInterfaces';
+import { getNewFriendShipRequest } from 'services/friendshipRequestsService';
 import { getAllUsers, getNewFriendShipRequests } from 'services/userService';
 
 interface UsersSliceInterface {
@@ -21,10 +22,18 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
 });
 
 export const fetchNewFriendRequests = createAsyncThunk(
-    '/users/fetchFriendRequests',
+    '/users/fetchNewFriendRequests',
     async (id: string) => {
         const data = await getNewFriendShipRequests(id);
         return data.data.friendShipRequests;
+    }
+);
+
+export const fetchNewFriendRequest = createAsyncThunk(
+    '/users/fetchNewFriendRequest',
+    async (firendshipId: string) => {
+        const data = await getNewFriendShipRequest(firendshipId);
+        return data.data.friendshipRequest;
     }
 );
 
@@ -46,6 +55,24 @@ const usersSlice = createSlice({
         builder.addCase(fetchNewFriendRequests.fulfilled, (state, action) => {
             state.status = 'succeeded';
             state.newFriendshipRequests = action.payload;
+        });
+        builder.addCase(fetchNewFriendRequest.pending, (state, action) => {
+            state.status = 'loading';
+        });
+        builder.addCase(fetchNewFriendRequest.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            if (
+                !state.newFriendshipRequests.find(
+                    (fs) => fs.friendshipId === action.payload.friendshipId
+                )
+            ) {
+                state.newFriendshipRequests = [
+                    ...state.newFriendshipRequests,
+                    action.payload,
+                ];
+            } else {
+                state.newFriendshipRequests = [...state.newFriendshipRequests];
+            }
         });
     },
 });

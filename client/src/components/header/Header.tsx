@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
-import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppSelector } from 'app/hooks';
@@ -68,7 +68,7 @@ const Header = () => {
                                         color="secondary"
                                         sx={{ mr: 2 }}
                                     >
-                                        <MailIcon color="inherit" />
+                                        <NotificationsIcon color="inherit" />
                                     </Badge>
                                 </IconButton>
 

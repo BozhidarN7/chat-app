@@ -28,7 +28,8 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
         {
             id: 1,
             primary: 'Martin Stefanov',
-            secondary: "I'll be in the neighbourhood this week. Let's grab a bite to eat",
+            secondary:
+                "I'll be in the neighbourhood this week. Let's grab a bite to eat",
         },
     ];
     const dispatch = useAppDispatch();
@@ -61,16 +62,21 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     // connection?.on('ReceiveInvitation', (username) => {
     //     setRefetch((prev) => !prev);
     // });
-    connection?.on('ReceiveInvitation', (senderId) => {
-        console.log(senderId);
-    });
+    // connection?.on('ReceiveInvitation', (senderId) => {
+    //     console.log(senderId);
+    // });
 
     return (
         <>
             <Paper square sx={{ height: '100%' }}>
                 <Grid container>
                     <Grid item xs={6}>
-                        <Typography variant="h5" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
+                        <Typography
+                            variant="h5"
+                            gutterBottom
+                            component="div"
+                            sx={{ p: 2, pb: 0 }}
+                        >
                             Chats
                         </Typography>
                     </Grid>
@@ -82,10 +88,16 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                         />
                     </Grid>
                 </Grid>
-                <SearchField addFriendClicked={addFriendClicked} searchFieldRef={searchFieldRef} />
+                <SearchField
+                    addFriendClicked={addFriendClicked}
+                    searchFieldRef={searchFieldRef}
+                />
                 <List sx={{ mb: 2 }}>
                     <React.Fragment>
-                        <ListItem button onClick={openChatSpaceHandler.bind(null, '')}>
+                        <ListItem
+                            button
+                            onClick={openChatSpaceHandler.bind(null, '')}
+                        >
                             <ListItemAvatar>
                                 <Avatar
                                     alt="Profile Picture"
@@ -101,7 +113,13 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                     </React.Fragment>
                     {chats.map((chat: any) => (
                         <React.Fragment key={chat.id}>
-                            <ListItem button onClick={openChatSpaceHandler.bind(null, chat.roomId)}>
+                            <ListItem
+                                button
+                                onClick={openChatSpaceHandler.bind(
+                                    null,
+                                    chat.roomId
+                                )}
+                            >
                                 <ListItemAvatar>
                                     <Avatar
                                         alt="Profile Picture"

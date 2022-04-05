@@ -21,9 +21,15 @@ const users = {
         `${baseUrl}/users/${id}/friendship-requests/new`,
 };
 
+const friendshipRequests = {
+    getNewFriendshipRequestURL: (friendshipId: string) =>
+        `${baseUrl}/friendship-requests/new/${friendshipId}`,
+};
+
 const routes = {
     ...authRoutes,
     ...users,
+    ...friendshipRequests,
 };
 
 export default routes;

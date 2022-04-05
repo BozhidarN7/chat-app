@@ -33,7 +33,7 @@ const NotificationMenu = ({ notificationMenuRef }: Props) => {
             }}
         >
             {newFriendShipRequests.map((nfr) => (
-                <ListItem key={nfr.senderId}>
+                <ListItem key={nfr.friendshipId}>
                     <ListItemText
                         primary={nfr.senderFullName}
                         secondary="Please add me to your friends list"

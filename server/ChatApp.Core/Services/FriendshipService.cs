@@ -33,6 +33,7 @@ namespace ChatApp.Core.Services
 
             return new FriendshipsDTO
             {
+                FriendshipId = friendshipId,
                 SenderFullName = fs.UserSend.FullName!,
                 SenderId = fs.UserSendId!
             };

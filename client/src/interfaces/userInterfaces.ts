@@ -25,6 +25,7 @@ export interface Token {
 }
 
 export interface FriendshipRequest {
+    friendshipId: string;
     senderId: string;
     senderFullName: string;
 }

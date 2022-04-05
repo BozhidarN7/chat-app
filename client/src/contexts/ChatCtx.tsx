@@ -71,8 +71,8 @@ export const ChatProvider = ({ children }: Props) => {
     const sendFriendRequest = async (userId: string) => {
         await connection?.invoke('SendFriendRequest', currentUser?.id, userId);
 
-        connection?.on('ReceiveInvitation', (fullName, senderId) => {
-            console.log(senderId);
+        connection?.on('ReceiveInvitation', (friendshipId) => {
+            console.log(friendshipId);
         });
     };
 

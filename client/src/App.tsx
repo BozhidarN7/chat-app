@@ -9,16 +9,17 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import 'react-toastify/dist/ReactToastify.css';
 
 import AppRouter from 'routes/AppRouter';
-import inMemoryJwtService from 'services/inMemoryJwtService';
 import { useChat } from 'contexts/ChatCtx';
-import { refreshToken as refreshTokenHandler } from 'services/authService';
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import { fetchNewFriendRequests } from 'features/usersSlice';
+import {
+    fetchNewFriendRequests,
+    fetchNewFriendRequest,
+} from 'features/usersSlice';
 
 function App() {
     const dispatch = useAppDispatch();
-    const { saveConnection } = useChat();
+    const { saveConnection, connection } = useChat();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const token = localStorage.getItem('token');
     const { currentUser } = useAuth();
@@ -60,6 +61,10 @@ function App() {
     //         });
     //     }
     // }, []);
+
+    connection?.on('ReceiveInvitation', (friendshipId) => {
+        dispatch(fetchNewFriendRequest(friendshipId));
+    });
 
     const theme = useMemo(
         () =>
