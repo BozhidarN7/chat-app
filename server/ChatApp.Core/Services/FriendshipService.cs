@@ -20,6 +20,29 @@ namespace ChatApp.Core.Services
             this.repo = repo;
         }
 
+        public async Task<string> AnsewrToFriendshipRequest(string friendshipId, bool answer)
+        {
+            FriendShip fs = (await repo.All<FriendShip>().FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId))!;
+
+            if (fs.Rejected == true || fs.Accepted == true)
+            {
+                return "Friendship request already accepted or rejected";
+            }
+
+            if (answer)
+            {
+                fs.Accepted = true;
+            }
+            else
+            {
+                fs.Rejected = true;
+            }
+
+            await repo.SaveChangesAsync();
+
+            return "";
+        }
+
         public async Task<FriendshipsDTO> GetNewFriendshipRequest(string friendshipId)
         {
             FriendShip? fs = await repo.All<FriendShip>()

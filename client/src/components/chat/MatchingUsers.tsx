@@ -1,4 +1,5 @@
 import { RefObject, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -41,7 +42,12 @@ const MatchingUsers = ({
 
     const sendFriendRequestHandler = async () => {
         setOpenConfirmModal(false);
-        await sendFriendRequest(friendId);
+        try {
+            await sendFriendRequest(friendId);
+            toast.success('Friendship request is sent successfully!');
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const closeConfirmModalHandler = () => {

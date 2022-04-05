@@ -12,11 +12,10 @@ import { useTheme } from '@mui/material/styles';
 
 import SearchField from 'components/common/SearrchField';
 import AddButton from 'components/common/AddButton';
-import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { getFriends } from 'services/userService';
 import { fetchUsers } from 'features/usersSlice';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch } from 'app/hooks';
 
 type Props = {
     openChatSpace: boolean;
@@ -35,7 +34,6 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
     const { currentUser } = useAuth();
-    const { connection } = useChat();
     const [chats, setChats] = useState([]);
     const [refetch, setRefetch] = useState(true);
     const [addFriendClicked, setAddFriendClicked] = useState(false);

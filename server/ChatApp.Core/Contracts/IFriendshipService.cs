@@ -10,5 +10,7 @@ namespace ChatApp.Core.Contracts
     public interface IFriendshipService
     {
         Task<FriendshipsDTO> GetNewFriendshipRequest(string friendshipId);
+
+        Task<string> AnsewrToFriendshipRequest(string friendshipId, bool answer);
     }
 }

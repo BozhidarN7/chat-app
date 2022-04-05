@@ -1,4 +1,5 @@
 ﻿using ChatApp.Core.Contracts;
+using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace ChatApp.WebAPI.Controllers
         [HttpGet("new/{friendshipId}"), Authorize]
         public async Task<IActionResult> GetNewFriendshipRequest(string friendshipId)
         {
-            FriendshipsDTO request = await friendshipService.GetNewFriendshipRequest( friendshipId);
+            FriendshipsDTO request = await friendshipService.GetNewFriendshipRequest(friendshipId);
 
             if (request == null)
             {
@@ -36,6 +37,19 @@ namespace ChatApp.WebAPI.Controllers
                     FriendshipRequest = request
                 }
             });
+        }
+
+        [HttpPost("{friendshipId}")]
+        public async Task<IActionResult> AnswerToFriendshipRequest(string friendshipId, [FromBody] FriendshipAnswer answer)
+        {
+            string res = await friendshipService.AnsewrToFriendshipRequest(friendshipId, answer.Answer);
+
+            if (res != "")
+            {
+                return BadRequest(res);
+            }
+
+            return NoContent();
         }
     }
 }

@@ -40,7 +40,13 @@ export const fetchNewFriendRequest = createAsyncThunk(
 const usersSlice = createSlice({
     name: 'users',
     initialState,
-    reducers: {},
+    reducers: {
+        friendshipRequestDeleted(state, action) {
+            state.newFriendshipRequests = state.newFriendshipRequests.filter(
+                (fs) => fs.friendshipId !== action.payload
+            );
+        },
+    },
     extraReducers(builder) {
         builder.addCase(fetchUsers.pending, (state, action) => {
             state.status = 'loading';
@@ -76,5 +82,7 @@ const usersSlice = createSlice({
         });
     },
 });
+
+export const { friendshipRequestDeleted } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -45,7 +45,12 @@ const ConfirmModal = ({
         >
             <Fade in={openConfirmModal}>
                 <Box sx={style}>
-                    <Grid container flexDirection="column" alignItems="center" spacing={2}>
+                    <Grid
+                        container
+                        flexDirection="column"
+                        alignItems="center"
+                        spacing={2}
+                    >
                         <Grid item xs={true} sx={{ textAlign: 'center' }}>
                             <Typography variant="h6" component="h2">
                                 {modalMessage}
@@ -60,7 +65,11 @@ const ConfirmModal = ({
                             >
                                 Confirm
                             </Button>
-                            <Button variant="contained" color="error" onClick={closeConfirmModalHandler}>
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={closeConfirmModalHandler}
+                            >
                                 Decline
                             </Button>
                         </Grid>

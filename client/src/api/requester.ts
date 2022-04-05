@@ -1,7 +1,3 @@
-import { toast } from 'react-toastify';
-
-import inMemoryJwtService from 'services/inMemoryJwtService';
-
 export const request = async (url: string, options: any) => {
     try {
         if (!url || !options?.method) {
@@ -9,7 +5,6 @@ export const request = async (url: string, options: any) => {
         }
 
         const response = await fetch(url, options);
-
         if (!response.ok) {
             const message = await response.json();
             throw new Error(message.message);
@@ -17,7 +12,6 @@ export const request = async (url: string, options: any) => {
         const data = await response.json();
         return data;
     } catch (err: any) {
-        toast.error(err.message);
         return err.message;
     }
 };

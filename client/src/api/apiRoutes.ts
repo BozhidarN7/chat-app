@@ -24,6 +24,8 @@ const users = {
 const friendshipRequests = {
     getNewFriendshipRequestURL: (friendshipId: string) =>
         `${baseUrl}/friendship-requests/new/${friendshipId}`,
+    acceptRejectFriendshipRequestURL: (friendshipId: string) =>
+        `${baseUrl}/friendship-requests/${friendshipId}`,
 };
 
 const routes = {
