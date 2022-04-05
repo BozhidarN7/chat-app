@@ -19,6 +19,7 @@ namespace ChatApp.WebAPI.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFriendshipService, FriendshipService>();
             return services;
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)

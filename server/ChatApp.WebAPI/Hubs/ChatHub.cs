@@ -38,7 +38,7 @@ namespace ChatApp.WebAPI.Hubs
             await repo.AddAsync(fs);
             await repo.SaveChangesAsync();
 
-            await Clients.User(receiverId).SendAsync("ReceiveInvitation", user.FullName, senderId);
+            await Clients.User(receiverId).SendAsync("ReceiveInvitation", senderId);
         }
 
         public async Task AddToFriends(string fullName, string senderId)
