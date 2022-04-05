@@ -12,5 +12,7 @@ namespace ChatApp.Core.Contracts
         Task<IEnumerable<FriendsDTO>> GetFriends(string id);
 
         Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequests(string id);
+
+        Task<IEnumerable<ChatDTO>> GetUserChatRooms(string id);
     }
 }

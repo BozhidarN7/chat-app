@@ -2,6 +2,8 @@ import { HubConnection } from '@microsoft/signalr';
 import React, { useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
+import { useAppDispatch } from 'app/hooks';
+import { newChatAdded } from 'features/chatsSlice';
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
     messages: message[];
@@ -9,6 +11,7 @@ interface ChatCtxInterface {
     sendMessage: any;
     joinChatRoom: any;
     sendFriendRequest: any;
+    acceptFriendship: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -27,6 +30,7 @@ type message = {
 };
 
 export const ChatProvider = ({ children }: Props) => {
+    const dispatch = useAppDispatch();
     const [messages, setMessages] = useState<message[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
 
@@ -70,10 +74,30 @@ export const ChatProvider = ({ children }: Props) => {
 
     const sendFriendRequest = async (userId: string) => {
         await connection?.invoke('SendFriendRequest', currentUser?.id, userId);
+    };
 
-        connection?.on('ReceiveInvitation', (friendshipId) => {
-            console.log(friendshipId);
+    const acceptFriendship = async (friendshipId: string) => {
+        connection?.on('AcceptFriendship', (data) => {
+            console.log('here');
+            if (currentUser?.fullName !== data.senderFullName) {
+                dispatch(
+                    newChatAdded({
+                        friendFullName: data.senderFullName,
+                        friendId: data.senderId,
+                        roomId: data.roomId,
+                    })
+                );
+            } else {
+                dispatch(
+                    newChatAdded({
+                        friendFullName: data.receiverFullName,
+                        friendId: data.receiverId,
+                        roomId: data.roomId,
+                    })
+                );
+            }
         });
+        await connection?.invoke('AcceptFriendship', friendshipId);
     };
 
     const value = {
@@ -83,6 +107,7 @@ export const ChatProvider = ({ children }: Props) => {
         sendMessage,
         joinChatRoom,
         sendFriendRequest,
+        acceptFriendship,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

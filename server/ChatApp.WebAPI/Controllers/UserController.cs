@@ -111,5 +111,18 @@ namespace ChatApp.WebAPI.Controllers
                 }
             });
         }
+
+        [HttpGet("{id}/rooms"), Authorize]
+        public async Task<IActionResult> GetUserChatRooms(string id)
+        {
+           IEnumerable<ChatDTO> chats =  await userService.GetUserChatRooms(id);
+
+            return Ok(new
+            {
+                success = true,
+                message = "Data received successfully",
+                chats
+            });
+        }
     }
 }

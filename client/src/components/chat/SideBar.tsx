@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
@@ -12,32 +12,23 @@ import { useTheme } from '@mui/material/styles';
 
 import SearchField from 'components/common/SearrchField';
 import AddButton from 'components/common/AddButton';
-import { useAuth } from 'contexts/AuthCtx';
-import { getFriends } from 'services/userService';
 import { fetchUsers } from 'features/usersSlice';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAuth } from 'contexts/AuthCtx';
+import { current } from '@reduxjs/toolkit';
 
 type Props = {
     openChatSpace: boolean;
-    openChatSpaceHandler: (roomId: string) => void;
 };
 
-const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
-    const testChats = [
-        {
-            id: 1,
-            primary: 'Martin Stefanov',
-            secondary:
-                "I'll be in the neighbourhood this week. Let's grab a bite to eat",
-        },
-    ];
+const SideBar = ({ openChatSpace }: Props) => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
-    const { currentUser } = useAuth();
-    const [chats, setChats] = useState([]);
-    const [refetch, setRefetch] = useState(true);
     const [addFriendClicked, setAddFriendClicked] = useState(false);
     const searchFieldRef = useRef<HTMLInputElement>();
+
+    const { currentUser } = useAuth();
+    const chats = useAppSelector((state) => state.chats.chats);
 
     const addFriendHandler = () => {
         setAddFriendClicked((prev) => !prev);
@@ -47,22 +38,6 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
             dispatch(fetchUsers());
         }
     };
-
-    useEffect(() => {
-        getFriends(currentUser?.id!).then((data) => {
-            setChats(data.data.users);
-        });
-        return () => {
-            setChats([]);
-        };
-    }, [currentUser?.id, refetch]);
-
-    // connection?.on('ReceiveInvitation', (username) => {
-    //     setRefetch((prev) => !prev);
-    // });
-    // connection?.on('ReceiveInvitation', (senderId) => {
-    //     console.log(senderId);
-    // });
 
     return (
         <>
@@ -91,33 +66,9 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                     searchFieldRef={searchFieldRef}
                 />
                 <List sx={{ mb: 2 }}>
-                    <React.Fragment>
-                        <ListItem
-                            button
-                            onClick={openChatSpaceHandler.bind(null, '')}
-                        >
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt="Profile Picture"
-                                    // src={person}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                sx={{ color: theme.palette.primary.main }}
-                                primary={testChats[0].primary}
-                                secondary={testChats[0].secondary}
-                            />
-                        </ListItem>
-                    </React.Fragment>
                     {chats.map((chat: any) => (
-                        <React.Fragment key={chat.id}>
-                            <ListItem
-                                button
-                                onClick={openChatSpaceHandler.bind(
-                                    null,
-                                    chat.roomId
-                                )}
-                            >
+                        <React.Fragment key={chat.friendId}>
+                            <ListItem button>
                                 <ListItemAvatar>
                                     <Avatar
                                         alt="Profile Picture"
@@ -126,8 +77,13 @@ const SideBar = ({ openChatSpace, openChatSpaceHandler }: Props) => {
                                 </ListItemAvatar>
                                 <ListItemText
                                     sx={{ color: theme.palette.primary.main }}
-                                    primary={`${chat.firstName} ${chat.lastName}`}
-                                    secondary={''}
+                                    primary={chat.friendFullName}
+                                    secondary={
+                                        currentUser?.fullName ===
+                                        chat.friendFullName
+                                            ? `${chat.friendFullName} accepted your friendship request`
+                                            : 'New friend. Be the first to send message'
+                                    }
                                 />
                             </ListItem>
                         </React.Fragment>

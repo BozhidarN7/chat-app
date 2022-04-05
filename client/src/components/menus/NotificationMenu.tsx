@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import { friendshipRequestDeleted } from 'features/usersSlice';
 import { acceptRejectFriendshipRequest } from 'services/friendshipRequestsService';
+import { useChat } from 'contexts/ChatCtx';
 
 type Props = {
     notificationMenuRef: RefObject<HTMLUListElement>;
@@ -16,6 +17,7 @@ type Props = {
 
 const NotificationMenu = ({ notificationMenuRef }: Props) => {
     const dispatch = useAppDispatch();
+    const { acceptFriendship } = useChat();
     const newFriendShipRequests = useAppSelector(
         (state) => state.users.newFriendshipRequests
     );
@@ -23,7 +25,8 @@ const NotificationMenu = ({ notificationMenuRef }: Props) => {
     const acceptFriendshipHandler = async (friendshipId: string) => {
         try {
             await acceptRejectFriendshipRequest(true, friendshipId);
-            dispatch(friendshipRequestDeleted(friendshipId));
+            await dispatch(friendshipRequestDeleted(friendshipId));
+            await acceptFriendship(friendshipId);
             toast.success('Friendship request accepted');
         } catch (err) {
             console.log(err);

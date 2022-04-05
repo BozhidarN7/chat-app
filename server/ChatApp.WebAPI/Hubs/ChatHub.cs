@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace ChatApp.WebAPI.Hubs
 {
@@ -82,6 +81,49 @@ namespace ChatApp.WebAPI.Hubs
 
             await Clients.All.SendAsync("ReceiveInvitation", $"{fullName}");
 
+        }
+
+        public async Task AcceptFriendship(string friendshipId)
+        {
+            FriendShip fs = (await repo.All<FriendShip>()
+                .FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId))!;
+            ApplicationUser? sender = await repo.All<ApplicationUser>().FirstOrDefaultAsync(u => u.Id == fs.UserSendId);
+            ApplicationUser? receiver = await repo.All<ApplicationUser>().FirstOrDefaultAsync(u => u.Id == fs.UserReceiveId);
+
+            Room room = new Room();
+
+            UsersRooms userRoom1 = new UsersRooms
+            {
+                UserId = fs.UserSendId,
+                RoomId = room.Id
+            };
+
+            UsersRooms userRoom2 = new UsersRooms
+            {
+                UserId = fs.UserReceiveId,
+                RoomId = room.Id
+            };
+
+            room.UsersRooms.Add(userRoom1);
+            room.UsersRooms.Add(userRoom2);
+
+            sender.UsersRooms.Add(userRoom1);
+            receiver.UsersRooms.Add(userRoom2);
+
+            await repo.AddAsync(userRoom1);
+            await repo.AddAsync(userRoom2);
+            await repo.AddAsync(room);
+
+            await repo.SaveChangesAsync();
+
+            await Clients.Users(fs.UserSendId, fs.UserReceiveId).SendAsync("AcceptFriendship", new
+            {
+                SenderId = sender.Id,
+                SenderFullName = sender.FullName,
+                ReceiverId = receiver.Id,
+                ReceiverFullName = receiver.FullName,
+                RoomId = room.Id
+            });
         }
         public async Task OpenChatRoom(UserConnectionModel userConnection)
         {

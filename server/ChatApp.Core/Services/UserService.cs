@@ -91,5 +91,33 @@ namespace ChatApp.Core.Services
                 return null;
             }
         }
+
+        public async Task<IEnumerable<ChatDTO>> GetUserChatRooms(string id)
+        {
+            ApplicationUser? user = await repo.All<ApplicationUser>()
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            List<UsersRooms> usersRooms = user.UsersRooms
+                 .Where(ur => ur.UserId == id)
+                 .ToList();
+
+            List<ChatDTO> chats = new List<ChatDTO>();
+
+            foreach (UsersRooms current in usersRooms)
+            {
+                UsersRooms? shared = await repo.All<UsersRooms>()
+                    .FirstOrDefaultAsync(ur => ur.Room == current.Room && ur.UserId != current.UserId);
+
+                chats.Add(new ChatDTO
+                {
+                    FriendFullName = shared.User.FullName!,
+                    FriendId = shared.UserId,
+                    RoomId = shared.UserId,
+                });
+
+            }
+
+            return chats;
+        }
     }
 }

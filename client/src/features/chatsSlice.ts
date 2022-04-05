@@ -1,28 +1,24 @@
-import { HubConnection } from '@microsoft/signalr';
 import { createSlice } from '@reduxjs/toolkit';
 
-type Connection = {
-    connection: HubConnection;
-};
-
+import { Chat } from 'interfaces/chatInterfaces';
 interface ChatInterface {
-    connection: Connection | undefined;
+    chats: Chat[];
 }
 
 const initialState: ChatInterface = {
-    connection: undefined,
+    chats: [],
 };
 
 const chatsSlice = createSlice({
     name: 'chats',
     initialState,
     reducers: {
-        connectionAdded(state, action) {
-            state.connection = action.payload;
+        newChatAdded(state, action) {
+            state.chats = [...state.chats, action.payload];
         },
     },
 });
 
-export const { connectionAdded } = chatsSlice.actions;
+export const { newChatAdded } = chatsSlice.actions;
 
 export default chatsSlice.reducer;
