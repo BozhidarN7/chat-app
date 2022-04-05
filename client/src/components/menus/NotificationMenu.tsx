@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -5,13 +7,18 @@ import Button from '@mui/material/Button';
 
 import { useAppSelector } from 'app/hooks';
 
-const NotificationMenu = () => {
+type Props = {
+    notificationMenuRef: RefObject<HTMLUListElement>;
+};
+
+const NotificationMenu = ({ notificationMenuRef }: Props) => {
     const newFriendShipRequests = useAppSelector(
         (state) => state.users.newFriendshipRequests
     );
 
     return (
         <List
+            ref={notificationMenuRef}
             sx={{
                 boxShadow: 2,
                 borderRadius: 2,
@@ -24,7 +31,6 @@ const NotificationMenu = () => {
                 color: 'black',
                 overflowY: 'scroll',
             }}
-            // onMouseLeave={hideNotificationMenuHandler}
         >
             {newFriendShipRequests.map((nfr) => (
                 <ListItem key={nfr.senderId}>

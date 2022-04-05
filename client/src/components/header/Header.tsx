@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,6 +18,7 @@ import NotificationMenu from 'components/menus/NotificationMenu';
 
 const Header = () => {
     const navigate = useNavigate();
+    const notificationMenuRef = useRef(null);
     const [showNotificationMenu, setShowNotificationMenu] = useState(false);
     const { currentUser, logout } = useAuth();
     const newFriendShipRequests = useAppSelector(
@@ -69,10 +71,23 @@ const Header = () => {
                                         <MailIcon color="inherit" />
                                     </Badge>
                                 </IconButton>
-                                {showNotificationMenu &&
-                                newFriendShipRequests.length > 0 ? (
-                                    <NotificationMenu />
-                                ) : null}
+
+                                <CSSTransition
+                                    in={
+                                        showNotificationMenu &&
+                                        newFriendShipRequests.length > 0
+                                    }
+                                    timeout={300}
+                                    unmountOnExit
+                                    classNames="alert"
+                                    nodeRef={notificationMenuRef}
+                                >
+                                    <NotificationMenu
+                                        notificationMenuRef={
+                                            notificationMenuRef
+                                        }
+                                    />
+                                </CSSTransition>
                             </Box>
                             <Button color="inherit" onClick={() => logout()}>
                                 logout
