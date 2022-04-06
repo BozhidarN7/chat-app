@@ -3,7 +3,11 @@ import React, { useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import { newChatAdded, newMessageAdded } from 'features/chatsSlice';
+import {
+    newChatAdded,
+    newMessageAdded,
+    previousMessagesAdded,
+} from 'features/chatsSlice';
 import { Message } from 'interfaces/chatInterfaces';
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
@@ -35,6 +39,10 @@ export const ChatProvider = ({ children }: Props) => {
     };
 
     const openChatRoom = async (roomId: string) => {
+        connection?.on('PreviousConversation', (roomId, messages) => {
+            console.log('here');
+            dispatch(previousMessagesAdded({ roomId, messages }));
+        });
         await connection?.invoke('OpenChatRoom', {
             roomId,
             fullName: `${currentUser?.id}`,
@@ -42,9 +50,6 @@ export const ChatProvider = ({ children }: Props) => {
         connection?.on('ReceiveMessage', (roomId: string, message: Message) => {
             dispatch(newMessageAdded({ roomId, message }));
         });
-        // connection?.on('PreviousConversation', (messages) => {
-        //     // setMessages(prev => )
-        // });
     };
 
     const sendMessage = async (roomId: string, message: string) => {

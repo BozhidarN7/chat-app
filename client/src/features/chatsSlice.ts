@@ -32,6 +32,11 @@ const chatsSlice = createSlice({
                 .find((chat) => chat.roomId === action.payload.roomId)
                 ?.messages.push(action.payload.message);
         },
+        previousMessagesAdded(state, action) {
+            state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            )!.messages = action.payload.messages;
+        },
     },
     extraReducers(builder) {
         builder.addCase(fetchChats.pending, (state, action) => {
@@ -44,6 +49,7 @@ const chatsSlice = createSlice({
     },
 });
 
-export const { newChatAdded, newMessageAdded } = chatsSlice.actions;
+export const { newChatAdded, newMessageAdded, previousMessagesAdded } =
+    chatsSlice.actions;
 
 export default chatsSlice.reducer;
