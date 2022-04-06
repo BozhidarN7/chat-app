@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 
 import { Chat } from 'interfaces/chatInterfaces';
 import { getChats } from 'services/userService';
@@ -27,6 +27,11 @@ const chatsSlice = createSlice({
         newChatAdded(state, action) {
             state.chats = [...state.chats, action.payload];
         },
+        newMessageAdded(state, action) {
+            state.chats
+                .find((chat) => chat.roomId === action.payload.roomId)
+                ?.messages.push(action.payload.message);
+        },
     },
     extraReducers(builder) {
         builder.addCase(fetchChats.pending, (state, action) => {
@@ -39,6 +44,6 @@ const chatsSlice = createSlice({
     },
 });
 
-export const { newChatAdded } = chatsSlice.actions;
+export const { newChatAdded, newMessageAdded } = chatsSlice.actions;
 
 export default chatsSlice.reducer;

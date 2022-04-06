@@ -2,14 +2,17 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Message from 'components/chat/Message';
 import { useChat } from 'contexts/ChatCtx';
+import { useAppSelector } from 'app/hooks';
 
 type Props = {
-    openChatSpace: boolean;
+    roomId: string | undefined;
 };
 
-const MessagesZone = ({ openChatSpace }: Props) => {
-    const { messages } = useChat();
-    return openChatSpace ? (
+const MessagesZone = ({ roomId }: Props) => {
+    const messages = useAppSelector((state) =>
+        state.chats.chats.find((chat) => chat.roomId === roomId)
+    )?.messages;
+    return roomId ? (
         <>
             <Box
                 sx={{
@@ -20,9 +23,9 @@ const MessagesZone = ({ openChatSpace }: Props) => {
                     overflowY: 'scroll',
                 }}
             >
-                {messages.map((message, index) => (
+                {messages?.map((message, index) => (
                     <Message
-                        senderName={message.senderName}
+                        senderName={message.senderFullName}
                         message={message.message}
                         key={index}
                     />

@@ -7,5 +7,7 @@
         public string FriendFullName { get; set; }
 
         public string RoomId { get; set; }
+
+        public IEnumerable<MessageDTO> Messages { get; set; } 
     }
 }

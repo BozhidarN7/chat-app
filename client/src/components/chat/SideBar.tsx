@@ -15,13 +15,12 @@ import AddButton from 'components/common/AddButton';
 import { fetchUsers } from 'features/usersSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useAuth } from 'contexts/AuthCtx';
-import { current } from '@reduxjs/toolkit';
 
 type Props = {
-    openChatSpace: boolean;
+    openChatSpaceHandler: (roomId: string) => void;
 };
 
-const SideBar = ({ openChatSpace }: Props) => {
+const SideBar = ({ openChatSpaceHandler }: Props) => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
     const [addFriendClicked, setAddFriendClicked] = useState(false);
@@ -67,8 +66,14 @@ const SideBar = ({ openChatSpace }: Props) => {
                 />
                 <List sx={{ mb: 2 }}>
                     {chats.map((chat: any) => (
-                        <React.Fragment key={chat.friendId}>
-                            <ListItem button>
+                        <React.Fragment key={chat.roomId}>
+                            <ListItem
+                                button
+                                onClick={openChatSpaceHandler.bind(
+                                    null,
+                                    chat.roomId
+                                )}
+                            >
                                 <ListItemAvatar>
                                     <Avatar
                                         alt="Profile Picture"

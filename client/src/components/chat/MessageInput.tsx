@@ -28,13 +28,15 @@ const MessageInput = ({ roomId }: Props) => {
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
                 fullWidth
-                // autoFocus={true}
                 placeholder="Type a message..."
                 multiline={true}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
-                            <IconButton onClick={sendMessageHandler}>
+                            <IconButton
+                                onClick={sendMessageHandler}
+                                disabled={roomId ? false : true}
+                            >
                                 <SendIcon />
                             </IconButton>
                         </InputAdornment>

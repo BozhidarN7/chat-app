@@ -88,15 +88,14 @@ namespace ChatApp.WebAPI.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
 
-            // TODO Send the previous messages
             List<Message> messages = await repo.All<Message>().Where(m => m.RoomId == Guid.Parse(userConnection.RoomId)).ToListAsync();
             await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", messages);
         }
 
         public async Task SendMessage(UserConnectionModel userConnection, string message)
         {
-            List<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
-            ApplicationUser user = users.FirstOrDefault(u => $"{u.FirstName} {u.LastName}" == userConnection.FullName);
+            ApplicationUser user = await repo.All<ApplicationUser>()
+                .FirstOrDefaultAsync(u => u.Id == userConnection.UserId);
             Message newMessage = new Message
             {
                 Text = message,
@@ -108,7 +107,12 @@ namespace ChatApp.WebAPI.Hubs
             await repo.AddAsync(newMessage);
             await repo.SaveChangesAsync();
 
-            await Clients.Group(userConnection.RoomId).SendAsync("ReceiveMessage", userConnection.FullName, message);
+            await Clients.Group(userConnection.RoomId).SendAsync("ReceiveMessage",newMessage.RoomId,new MessageDTO
+            {
+                Message = message,
+                MessageDateAndTime = newMessage.DateAndTime,
+                SenderFullName = user.FullName
+            });
         }
     }
 }

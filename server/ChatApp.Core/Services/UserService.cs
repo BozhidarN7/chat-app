@@ -116,6 +116,7 @@ namespace ChatApp.Core.Services
                     FriendFullName = shared.User.FullName!,
                     FriendId = shared.UserId,
                     RoomId = shared.RoomId.ToString(),
+                    Messages = new List<MessageDTO>()
                 });
 
             }

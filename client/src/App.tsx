@@ -88,7 +88,7 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <ToastContainer />
+            <ToastContainer autoClose={2000} />
             <AppRouter />
         </ThemeProvider>
     );

@@ -3,13 +3,13 @@ import React, { useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import { newChatAdded } from 'features/chatsSlice';
+import { newChatAdded, newMessageAdded } from 'features/chatsSlice';
+import { Message } from 'interfaces/chatInterfaces';
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
-    messages: message[];
     saveConnection: any;
     sendMessage: any;
-    joinChatRoom: any;
+    openChatRoom: any;
     sendFriendRequest: any;
     acceptFriendship: any;
 }
@@ -24,14 +24,8 @@ type Props = {
     children: React.ReactNode[] | React.ReactNode;
 };
 
-type message = {
-    message: string;
-    senderName: string;
-};
-
 export const ChatProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();
-    const [messages, setMessages] = useState<message[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
 
     const { currentUser } = useAuth();
@@ -40,25 +34,17 @@ export const ChatProvider = ({ children }: Props) => {
         setConnection(connection);
     };
 
-    const joinChatRoom = async (roomId: string) => {
+    const openChatRoom = async (roomId: string) => {
         await connection?.invoke('OpenChatRoom', {
             roomId,
-            fullName: `${currentUser?.firstName} ${currentUser?.lastName}`,
+            fullName: `${currentUser?.id}`,
         });
-
-        connection?.on(
-            'ReceiveMessage',
-            (fullName: string, message: string) => {
-                setMessages((prev) => [
-                    ...prev,
-                    { message, senderName: fullName },
-                ]);
-            }
-        );
-
-        connection?.on('PreviousConversation', (messages) => {
-            // setMessages(prev => )
+        connection?.on('ReceiveMessage', (roomId: string, message: Message) => {
+            dispatch(newMessageAdded({ roomId, message }));
         });
+        // connection?.on('PreviousConversation', (messages) => {
+        //     // setMessages(prev => )
+        // });
     };
 
     const sendMessage = async (roomId: string, message: string) => {
@@ -66,7 +52,7 @@ export const ChatProvider = ({ children }: Props) => {
             'SendMessage',
             {
                 roomId,
-                fullName: `${currentUser?.firstName} ${currentUser?.lastName}`,
+                userId: `${currentUser?.id}`,
             },
             message
         );
@@ -78,7 +64,6 @@ export const ChatProvider = ({ children }: Props) => {
 
     const acceptFriendship = async (friendshipId: string) => {
         connection?.on('AcceptFriendship', (data) => {
-            console.log('here');
             if (currentUser?.fullName !== data.senderFullName) {
                 dispatch(
                     newChatAdded({
@@ -98,14 +83,14 @@ export const ChatProvider = ({ children }: Props) => {
             }
         });
         await connection?.invoke('AcceptFriendship', friendshipId);
+        connection?.off('AcceptFriendship');
     };
 
     const value = {
         connection,
-        messages,
         saveConnection,
         sendMessage,
-        joinChatRoom,
+        openChatRoom,
         sendFriendRequest,
         acceptFriendship,
     };
