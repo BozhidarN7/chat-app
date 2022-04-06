@@ -40,7 +40,7 @@ function App() {
                 saveConnection(connection);
             }
         })();
-    }, [token]);
+    }, [token, saveConnection]);
 
     useEffect(() => {
         (async () => {

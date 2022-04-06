@@ -1,5 +1,5 @@
 import { HubConnection } from '@microsoft/signalr';
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
@@ -34,13 +34,12 @@ export const ChatProvider = ({ children }: Props) => {
 
     const { currentUser } = useAuth();
 
-    const saveConnection = (connection: HubConnection) => {
+    const saveConnection = useCallback((connection: HubConnection) => {
         setConnection(connection);
-    };
+    }, []);
 
     const openChatRoom = async (roomId: string) => {
         connection?.on('PreviousConversation', (roomId, messages) => {
-            console.log('here');
             dispatch(previousMessagesAdded({ roomId, messages }));
         });
         await connection?.invoke('OpenChatRoom', {
@@ -50,6 +49,7 @@ export const ChatProvider = ({ children }: Props) => {
         connection?.on('ReceiveMessage', (roomId: string, message: Message) => {
             dispatch(newMessageAdded({ roomId, message }));
         });
+        connection?.off('PreviousConversation');
     };
 
     const sendMessage = async (roomId: string, message: string) => {

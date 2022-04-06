@@ -1,7 +1,6 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Message from 'components/chat/Message';
-import { useChat } from 'contexts/ChatCtx';
 import { useAppSelector } from 'app/hooks';
 
 type Props = {

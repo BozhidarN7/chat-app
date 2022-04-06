@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { Chat } from 'interfaces/chatInterfaces';
 import { getChats } from 'services/userService';
