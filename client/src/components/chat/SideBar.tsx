@@ -23,6 +23,7 @@ type Props = {
 const SideBar = ({ openChatSpaceHandler }: Props) => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
+    const [currentChatId, setCurrentChatId] = useState('');
     const [addFriendClicked, setAddFriendClicked] = useState(false);
     const searchFieldRef = useRef<HTMLInputElement>();
 

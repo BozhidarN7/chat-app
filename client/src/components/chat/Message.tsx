@@ -8,9 +8,10 @@ import { useAuth } from 'contexts/AuthCtx';
 type Props = {
     message: string;
     senderFullName: string;
+    dateAndTime: string;
 };
 
-const Message = ({ message, senderFullName }: Props) => {
+const Message = ({ message, senderFullName, dateAndTime }: Props) => {
     const theme = useTheme();
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
 
@@ -56,6 +57,7 @@ const Message = ({ message, senderFullName }: Props) => {
                 >
                     {message}
                 </Box>
+                {/* <Typography sx={{ fontSize: 13 }}>{dateAndTime}</Typography> */}
             </Box>
         </Box>
     );

@@ -7,6 +7,6 @@ export interface Chat {
 
 export interface Message {
     message: string;
-    messageDateTime: string;
+    messageDateAndTime: string;
     senderFullName: string;
 }

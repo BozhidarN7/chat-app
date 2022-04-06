@@ -2,6 +2,9 @@ import { useRef, useEffect } from 'react';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 import Message from 'components/chat/Message';
 
 import { useAppSelector } from 'app/hooks';
@@ -31,6 +34,7 @@ const MessagesZone = ({ roomId }: Props) => {
         <>
             <Box
                 sx={{
+                    position: 'relative',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-end',
@@ -44,9 +48,15 @@ const MessagesZone = ({ roomId }: Props) => {
                     <Message
                         senderFullName={message.senderFullName}
                         message={message.message}
+                        dateAndTime={message.messageDateAndTime}
                         key={index}
                     />
                 ))}
+                <Box sx={{ absolute: 'fixed', left: 15, bottom: 5 }}>
+                    <Fab size="medium" color="secondary" aria-label="add">
+                        <ArrowDownwardIcon />
+                    </Fab>
+                </Box>
             </Box>
         </>
     ) : (
