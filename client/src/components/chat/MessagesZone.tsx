@@ -18,8 +18,9 @@ const MessagesZone = ({ roomId }: Props) => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-end',
-                    height: '90%',
+                    height: '97%',
                     overflowY: 'scroll',
+                    // pt: 2,
                 }}
             >
                 {messages?.map((message, index) => (

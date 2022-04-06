@@ -22,10 +22,14 @@ const HomePage = () => {
         <>
             <Header />
             <Grid container>
-                <Grid item xs={3} sx={{ height: '100vh', overflowY: 'scroll' }}>
+                <Grid
+                    item
+                    xs={3}
+                    sx={{ height: '93.2vh', overflowY: 'scroll' }}
+                >
                     <SideBar openChatSpaceHandler={openChatSpaceHandler} />
                 </Grid>
-                <Grid item sx={{ height: '100vh' }} xs={true}>
+                <Grid item sx={{ height: '90vh' }} xs={true}>
                     <MessagesZone roomId={roomId} />
                     <MessageInput roomId={roomId} />
                 </Grid>

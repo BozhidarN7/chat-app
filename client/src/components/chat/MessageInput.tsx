@@ -23,7 +23,7 @@ const MessageInput = ({ roomId }: Props) => {
     };
 
     return (
-        <Box sx={{ position: 'fixed', bottom: 0, width: '75%' }}>
+        <Box sx={{ position: 'fixed', bottom: 0, width: '75%', zIndex: 10 }}>
             <TextField
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}

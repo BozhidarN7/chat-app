@@ -34,7 +34,11 @@ const Header = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box
+            sx={{
+                minHeight: '6.835vh',
+            }}
+        >
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
