@@ -42,7 +42,7 @@ const MessagesZone = ({ roomId }: Props) => {
             >
                 {messages?.map((message, index) => (
                     <Message
-                        senderName={message.senderFullName}
+                        senderFullName={message.senderFullName}
                         message={message.message}
                         key={index}
                     />
