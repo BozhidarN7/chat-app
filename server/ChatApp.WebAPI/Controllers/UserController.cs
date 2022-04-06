@@ -121,7 +121,7 @@ namespace ChatApp.WebAPI.Controllers
             {
                 success = true,
                 message = "Data received successfully",
-                chats
+                data = chats
             });
         }
     }

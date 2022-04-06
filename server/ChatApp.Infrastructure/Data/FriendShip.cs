@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChatApp.Infrastructure.Data
 {
-    public class FriendShip
+    public class Friendship
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -16,7 +16,7 @@ namespace ChatApp.Infrastructure.Data
 
         public string UserReceiveId { get; set; }
 
-        public string RoomId { get; set; } = Guid.NewGuid().ToString();
+        public Guid RoomId { get; set; } 
 
         public bool Accepted { get; set; } = false;
 

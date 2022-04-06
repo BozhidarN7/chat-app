@@ -16,7 +16,7 @@ namespace ChatApp.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UsersRooms>(entity =>
+            modelBuilder.Entity<UserRoom>(entity =>
             {
                 entity.HasKey(ur => new { ur.UserId, ur.RoomId });
             });
@@ -27,11 +27,11 @@ namespace ChatApp.Infrastructure.Data
 
         public DbSet<Room> Rooms { get; set; }
 
-        public DbSet<UsersRooms> UsersRooms { get; set; }
+        public DbSet<UserRoom> UsersRooms { get; set; }
 
         public DbSet<Message> Messages { get; set; }
 
-        public DbSet<FriendShip> Friendships { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
     }
 }

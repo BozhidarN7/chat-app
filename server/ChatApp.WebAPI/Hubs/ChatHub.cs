@@ -29,7 +29,7 @@ namespace ChatApp.WebAPI.Hubs
         {
             ApplicationUser user = await userManager.FindByIdAsync(receiverId);
 
-            FriendShip fs = new FriendShip
+            Friendship fs = new Friendship
             {
                 UserSendId = senderId,
                 UserReceiveId = receiverId
@@ -40,65 +40,22 @@ namespace ChatApp.WebAPI.Hubs
             await Clients.User(receiverId).SendAsync("ReceiveInvitation", fs.Id.ToString());
         }
 
-        public async Task AddToFriends(string fullName, string senderId)
-        {
-            List<ApplicationUser> users = await repo.All<ApplicationUser>().ToListAsync();
-            ApplicationUser invitedUser = users.FirstOrDefault(u => $"{u.FirstName} {u.LastName}" == fullName);
-            ApplicationUser senderUser = users.FirstOrDefault(u => u.Id == senderId);
-
-            IEnumerable<FriendsDTO> friends = await userService.GetFriends(senderId);
-            bool isFriend = friends.FirstOrDefault(u => u.Id == invitedUser.Id) != null ? true : false;
-
-            if (isFriend)
-            {
-                return;
-            }
-
-
-            FriendShip friendShip = new FriendShip();
-            friendShip.UserSendId = senderId;
-            friendShip.UserReceiveId = invitedUser.Id;
-
-            UsersRooms userRoom1 = new UsersRooms();
-            userRoom1.UserId = invitedUser.Id;
-
-            UsersRooms userRoom2 = new UsersRooms();
-            userRoom2.UserId = senderUser.Id;
-
-            Room room = new Room();
-            room.UsersRooms.Add(userRoom1);
-            room.UsersRooms.Add(userRoom2);
-
-            friendShip.RoomId = room.Id.ToString();
-
-
-            await repo.AddAsync(room);
-            await repo.AddAsync(userRoom1);
-            await repo.AddAsync(userRoom2);
-            await repo.AddAsync(friendShip);
-
-            await repo.SaveChangesAsync();
-
-            await Clients.All.SendAsync("ReceiveInvitation", $"{fullName}");
-
-        }
-
         public async Task AcceptFriendship(string friendshipId)
         {
-            FriendShip fs = (await repo.All<FriendShip>()
+            Friendship fs = (await repo.All<Friendship>()
                 .FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId))!;
             ApplicationUser? sender = await repo.All<ApplicationUser>().FirstOrDefaultAsync(u => u.Id == fs.UserSendId);
             ApplicationUser? receiver = await repo.All<ApplicationUser>().FirstOrDefaultAsync(u => u.Id == fs.UserReceiveId);
 
             Room room = new Room();
 
-            UsersRooms userRoom1 = new UsersRooms
+            UserRoom userRoom1 = new UserRoom
             {
                 UserId = fs.UserSendId,
                 RoomId = room.Id
             };
 
-            UsersRooms userRoom2 = new UsersRooms
+            UserRoom userRoom2 = new UserRoom
             {
                 UserId = fs.UserReceiveId,
                 RoomId = room.Id
@@ -109,6 +66,8 @@ namespace ChatApp.WebAPI.Hubs
 
             sender.UsersRooms.Add(userRoom1);
             receiver.UsersRooms.Add(userRoom2);
+
+            fs.RoomId = room.Id;
 
             await repo.AddAsync(userRoom1);
             await repo.AddAsync(userRoom2);

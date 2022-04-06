@@ -35,6 +35,10 @@ export const getNewFriendShipRequests = async (id: string) => {
     return await requester.get(routes.getNewFriendShipRequestsURL(id));
 };
 
+export const getChats = async (id: string) => {
+    return await requester.get(routes.getChatsURL(id));
+};
+
 export const filterUsers = (
     users: User[],
     query: string,

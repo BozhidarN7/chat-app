@@ -22,7 +22,7 @@ namespace ChatApp.Core.Services
 
         public async Task<string> AnsewrToFriendshipRequest(string friendshipId, bool answer)
         {
-            FriendShip fs = (await repo.All<FriendShip>().FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId))!;
+            Friendship fs = (await repo.All<Friendship>().FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId))!;
 
             if (fs.Rejected == true || fs.Accepted == true)
             {
@@ -45,7 +45,7 @@ namespace ChatApp.Core.Services
 
         public async Task<FriendshipsDTO> GetNewFriendshipRequest(string friendshipId)
         {
-            FriendShip? fs = await repo.All<FriendShip>()
+            Friendship? fs = await repo.All<Friendship>()
                 .Include(fs => fs.UserSend)
                 .FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId && fs.Accepted == false && fs.Rejected == false);
 

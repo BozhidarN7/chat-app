@@ -40,7 +40,7 @@ namespace ChatApp.Core.Services
         }
         public async Task<IEnumerable<FriendsDTO>> GetFriends(string id)
         {
-            IEnumerable<FriendShip> friendShips = await repo.All<FriendShip>()
+            IEnumerable<Friendship> friendShips = await repo.All<Friendship>()
                 .Where(fs => fs.UserReceiveId == id || fs.UserSendId == id)
                 .ToListAsync();
 
@@ -67,7 +67,7 @@ namespace ChatApp.Core.Services
                     LastName = u.LastName,
                     Email = u.Email,
                     RoomId = friendShips.FirstOrDefault(fs => fs.UserSendId == u.Id && fs.UserReceiveId == id
-                    || fs.UserSendId == id && fs.UserReceiveId == u.Id).RoomId
+                    || fs.UserSendId == id && fs.UserReceiveId == u.Id).RoomId.ToString()
                 });
 
         }
@@ -76,7 +76,7 @@ namespace ChatApp.Core.Services
         {
             try
             {
-                return await repo.All<FriendShip>()
+                return await repo.All<Friendship>()
                     .Where(fs => fs.Accepted == false && fs.Rejected == false && fs.UserReceiveId == id)
                     .Select(fs => new FriendshipsDTO
                     {
@@ -95,24 +95,27 @@ namespace ChatApp.Core.Services
         public async Task<IEnumerable<ChatDTO>> GetUserChatRooms(string id)
         {
             ApplicationUser? user = await repo.All<ApplicationUser>()
+                .Include(u => u.UsersRooms)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            List<UsersRooms> usersRooms = user.UsersRooms
+            List<UserRoom> usersRooms = user.UsersRooms
                  .Where(ur => ur.UserId == id)
                  .ToList();
 
             List<ChatDTO> chats = new List<ChatDTO>();
 
-            foreach (UsersRooms current in usersRooms)
+            foreach (UserRoom current in usersRooms)
             {
-                UsersRooms? shared = await repo.All<UsersRooms>()
-                    .FirstOrDefaultAsync(ur => ur.Room == current.Room && ur.UserId != current.UserId);
+                UserRoom? shared = await repo.All<UserRoom>()
+                    .Include(ur => ur.User)
+                    .Include(ur => ur.Room)
+                    .FirstOrDefaultAsync(ur => ur.RoomId == current.RoomId && ur.UserId != current.UserId);
 
                 chats.Add(new ChatDTO
                 {
                     FriendFullName = shared.User.FullName!,
                     FriendId = shared.UserId,
-                    RoomId = shared.UserId,
+                    RoomId = shared.RoomId.ToString(),
                 });
 
             }

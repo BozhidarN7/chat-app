@@ -7,7 +7,7 @@ namespace ChatApp.Infrastructure.Data
     {
         public Room ()
         {
-            UsersRooms = new HashSet<UsersRooms>();
+            UsersRooms = new HashSet<UserRoom>();
             Messages = new HashSet<Message>();
         }
 
@@ -16,6 +16,6 @@ namespace ChatApp.Infrastructure.Data
 
         public ICollection<Message> Messages { get; set; }
 
-        public ICollection<UsersRooms> UsersRooms { get; set; }
+        public ICollection<UserRoom> UsersRooms { get; set; }
     }
 }

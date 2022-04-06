@@ -17,6 +17,8 @@ import {
     fetchNewFriendRequest,
 } from 'features/usersSlice';
 
+import { fetchChats } from 'features/chatsSlice';
+
 function App() {
     const dispatch = useAppDispatch();
     const { saveConnection, connection } = useChat();
@@ -44,6 +46,14 @@ function App() {
         (async () => {
             if (currentUser) {
                 dispatch(fetchNewFriendRequests(currentUser.id));
+            }
+        })();
+    }, [currentUser, dispatch]);
+
+    useEffect(() => {
+        (async () => {
+            if (currentUser) {
+                dispatch(fetchChats(currentUser.id));
             }
         })();
     }, [currentUser, dispatch]);

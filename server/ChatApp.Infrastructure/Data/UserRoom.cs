@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChatApp.Infrastructure.Data
 {
-    public class UsersRooms
+    public class UserRoom
     {
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }

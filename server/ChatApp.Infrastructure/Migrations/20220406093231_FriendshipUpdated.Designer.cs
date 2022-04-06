@@ -4,6 +4,7 @@ using ChatApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220406093231_FriendshipUpdated")]
+    partial class FriendshipUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,9 +140,9 @@ namespace ChatApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "60c7d5a2-6607-4207-a9df-229edd051547",
+                            Id = "faf93ff1-b8da-46e8-90fe-4643a3ed79e7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "35747e04-29c0-4ff1-9bcc-ef2a63721268",
+                            ConcurrencyStamp = "e4525ce0-8a85-4c6e-b1b6-035165f1feeb",
                             Email = "test3@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Boris",
@@ -148,17 +150,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Stamatov",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST3@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHPJabGbFfbzq6AgFvV4XEgc11fb03P5J44yTOGLZMxIlUqpHypzjDClDkoYbhJ5cw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENmhiCocm7flRSkLeyzrxB1LFZk/dvN6OZFXmN3aFYr6XILTRzK/2B9zwjQC12jqbw==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "cf16b605-067e-49a9-81ad-f917cefa1266",
+                            SecurityStamp = "546a2cbd-ea86-4827-b55b-eb194c7b88a4",
                             TwoFactorEnabled = false
                         },
                         new
                         {
-                            Id = "05825369-b1b4-4545-a98f-f30bbca776ad",
+                            Id = "257aa2fe-65ec-4287-95a6-8a15091773e0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f7a8dbde-3c13-4b2e-bb01-e949cae46e8d",
+                            ConcurrencyStamp = "907f15e6-978e-4438-a58e-1c35d34670ca",
                             Email = "test4@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Georgi",
@@ -166,17 +168,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Stoynov",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST4@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKAkGAI+BxCNvAKYQ/8AwPViEatzUeJyoIl6Q1uxNqaTuRqAlKQywfgVMSuvCb2NJQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK4LKiTdGDqSZb4FjHIRYfnu5g/HYWNvsbpnzdMwbODuBNYiBVJPVbNzPD71eWimqQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "1113d905-e329-4528-a25d-570bdc4f3881",
+                            SecurityStamp = "00c6635b-ac22-4a6d-9885-3c68b1a4fa60",
                             TwoFactorEnabled = false
                         },
                         new
                         {
-                            Id = "8b961203-84cc-44fb-b10a-d3b8221d985d",
+                            Id = "a0a1d293-6322-495e-bc63-8e42e3200cda",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2ea1c928-f23a-40b2-b0ed-35893c83a0d9",
+                            ConcurrencyStamp = "a1923d82-39c0-4a04-a271-e6d54a389def",
                             Email = "test5@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Momchil",
@@ -184,17 +186,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Ivanov",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST5@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFGMmTFCsdR1csj+Wg8zb/yT0P+5smX2A8cjtMrhYiP4HqWPW16yQl3GTNlnG9O+KA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAD3Ln7V2MEfgCO3sFQHpvihYOwNZk1wv0x1iGltCBHN3smeWrr/NxRuemKFvy9Iiw==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "ba6c2e95-5afe-430f-abee-f6673ed82383",
+                            SecurityStamp = "5a42d0ec-b42f-4396-88d9-708a26a5c8f3",
                             TwoFactorEnabled = false
                         },
                         new
                         {
-                            Id = "aa705904-a2df-489b-8fe5-1a1cde90f072",
+                            Id = "404a553f-4026-416a-a4e3-635c762bf6ae",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d060e0cd-608b-4cb1-9c29-17e6f5ff92cf",
+                            ConcurrencyStamp = "c8e1cdd4-4a98-4c2c-a0d5-910a4066235c",
                             Email = "test6@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Atanas",
@@ -202,17 +204,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Marinov",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST6@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBJd1JN3KebSQUq19MnAOSTpH3ipayQyT9N0tpiEAnSsRGSCjROv+/uJ2zFCZFJT1w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAED4DVDcJbl9FBu+T2LyvasxDY3bSlDDLt3SWvf8F23G9ThWyYJ5J00hCH9lJS7iSdg==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "d89b95ac-843a-4f2e-b4e1-fa34b4ff8030",
+                            SecurityStamp = "fb9a1531-08ed-4546-9ac0-913bb9a8dca9",
                             TwoFactorEnabled = false
                         },
                         new
                         {
-                            Id = "a82abb7e-2679-4dd4-977e-82dee43682e3",
+                            Id = "fca1d495-d330-4fce-a920-a5c013bf1ce5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "be18d5c9-bd07-41ac-950d-422c0f7645a2",
+                            ConcurrencyStamp = "174cdb78-efca-4ba4-999b-a53ac743155c",
                             Email = "test7@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Ivet",
@@ -220,17 +222,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Nikolova",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST7@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFdPx4OBJHQdDHnctwOOobc+H6lLUPogXsQNvSj3AMvWNgLuMkEuP9jCy6VPTMwx2g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENwq38mvhaDz3Q9uTYCs2S3pQ9XrNd/Pl9wrY2cmnFsErWlL4w0Hc+G4HzFEGQnFUg==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "00e2d6b5-2370-416c-bdda-d748c1a58ce6",
+                            SecurityStamp = "3961e864-581d-4e1d-bd8c-95945c68b853",
                             TwoFactorEnabled = false
                         },
                         new
                         {
-                            Id = "6a9bc8ba-f969-441a-810b-bbc972efc3a7",
+                            Id = "482e8837-ffb1-4fd7-ba20-69563293f4f0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "053c1a2d-d5f6-47d9-9c87-8bbba9898cb5",
+                            ConcurrencyStamp = "4ce78ffb-d61f-4bd9-8946-e8e9bb94f8ff",
                             Email = "test8@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Ani",
@@ -238,17 +240,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Mincheva",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST8@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBLi1yzaSLNkjdD8OwXLZWxczZZ6bEJU2L7kEnKB3UjSYPS4AypTEH9xTO0//9jAVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKv8F3nSCkfUeNhPaQpXl1y6S7+59NgPHTIR5cemdsH3hIw4rLe3chTm0PQdWMSMuA==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "eaf9d035-3a9c-4104-b069-ace55580fbac",
+                            SecurityStamp = "3e38bdf3-c75e-4ae6-83a6-1db020fd0941",
                             TwoFactorEnabled = false
                         },
                         new
                         {
-                            Id = "451be6fc-3128-4ff8-ab45-a9fb6ce468bb",
+                            Id = "dd6744d1-9e5c-4dd1-b500-8a718bb742d6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "769cd077-bc66-407e-b565-c5110b83f069",
+                            ConcurrencyStamp = "54e239cc-01ef-4d19-9f17-966cc682a5bf",
                             Email = "test9@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Desislava",
@@ -256,17 +258,17 @@ namespace ChatApp.Infrastructure.Migrations
                             LastName = "Genova",
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST9@ABV.BG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDfvC7J+DpUOGK261/7oTQfHq8Lh8HgjOyfGWuhwkMS1b6JEy3TyNQGNVjovaZxuvQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENyqArIdmq8JoZ/6vVRoPFbq5rHek7NiY+PiUPNSPNukE552p3UPOXww5YNc8th5JQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "219a0921-66b5-4680-9b58-42da93e870a0",
+                            SecurityStamp = "994aefdd-04c6-4258-a083-6370e257e42b",
                             TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ad07f42a-2ac7-4009-adfc-3f0367e79677",
+                            ConcurrencyStamp = "60eee900-da82-4ca0-99ac-932a553732a1",
                             Email = "test@abv.bg",
                             EmailConfirmed = true,
                             FirstName = "Martin",
@@ -275,10 +277,10 @@ namespace ChatApp.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@ABV.BG",
                             NormalizedUserName = "MARTIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECx9Kwus6kskygm93zq+YmsNGE7u5q7CPC89HaRrpIBldiK4rbZqLaWcMYZOlscOnA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEkywrlotJJtj+zb6XodgLkRVYtH40AbO1WK7C1/w8staiR61Kc3mrBw9OnfoHESOQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "f14123cf-989f-4086-abe2-415a23f6cd79",
+                            SecurityStamp = "0f2747cd-c9ea-4902-b216-2fc2974b8325",
                             TwoFactorEnabled = false,
                             UserName = "martin"
                         },
@@ -286,7 +288,7 @@ namespace ChatApp.Infrastructure.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f539565c-df0a-4cc0-86ec-fa1836f57b03",
+                            ConcurrencyStamp = "3458195d-6ed0-41a4-872b-80b59b3879ec",
                             Email = "test1@abv.bg",
                             EmailConfirmed = true,
                             FirstName = "Ivan",
@@ -295,10 +297,10 @@ namespace ChatApp.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST1@ABV.BG",
                             NormalizedUserName = "IVAN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBimm2a/D0Fx+rScdxQXLrAT5hocoL67fbtMTdhNDRy0l1HuMVHbH384dDBW6ErKoA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOJsLDsvNV9j/AMbxvgFe/1cUgty+k4asb2f2EIu69yyehzL/m4mghALf5n9biPXOQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "3ca4c67a-fdbf-4f66-83ed-3ac61b8b6add",
+                            SecurityStamp = "bcfb3a34-5a67-465e-854e-c71ee3aa786f",
                             TwoFactorEnabled = false,
                             UserName = "ivan"
                         });
@@ -345,7 +347,7 @@ namespace ChatApp.Infrastructure.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("ChatApp.Infrastructure.Data.UserRoom", b =>
+            modelBuilder.Entity("ChatApp.Infrastructure.Data.UsersRooms", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -390,14 +392,14 @@ namespace ChatApp.Infrastructure.Migrations
                         new
                         {
                             Id = "admin_role",
-                            ConcurrencyStamp = "ece50194-d368-4f04-b4bf-364a8a9abadd",
+                            ConcurrencyStamp = "9318b18d-3a9e-4d2d-8647-09213a788659",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "user_role",
-                            ConcurrencyStamp = "da308489-8b52-4744-a86c-b1a3e9b1338a",
+                            ConcurrencyStamp = "44834457-541e-4a5e-836b-9cd5b8720e07",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -551,7 +553,7 @@ namespace ChatApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ChatApp.Infrastructure.Data.UserRoom", b =>
+            modelBuilder.Entity("ChatApp.Infrastructure.Data.UsersRooms", b =>
                 {
                     b.HasOne("ChatApp.Infrastructure.Data.Room", "Room")
                         .WithMany("UsersRooms")
