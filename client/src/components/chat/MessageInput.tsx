@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -17,9 +17,22 @@ const MessageInput = ({ roomId }: Props) => {
 
     const { sendMessage } = useChat();
 
-    const sendMessageHandler = () => {
-        sendMessage(roomId, message);
-        setMessage('');
+    const sendMessageHandler = (
+        e: React.KeyboardEvent | React.MouseEvent<HTMLButtonElement>
+    ) => {
+        if (message.trim() === '') return;
+
+        if (e.type === 'keydown') {
+            e = e as React.KeyboardEvent;
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage(roomId, message);
+                setMessage('');
+            }
+        } else {
+            sendMessage(roomId, message);
+            setMessage('');
+        }
     };
 
     return (
@@ -30,6 +43,8 @@ const MessageInput = ({ roomId }: Props) => {
                 fullWidth
                 placeholder="Type a message..."
                 multiline={true}
+                onKeyDown={sendMessageHandler}
+                disabled={roomId ? false : true}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
