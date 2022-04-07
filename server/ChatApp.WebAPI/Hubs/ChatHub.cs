@@ -91,7 +91,8 @@ namespace ChatApp.WebAPI.Hubs
             List<MessageDTO> messages = await repo.All<Message>()
                 .Include(m => m.User)
                 .Where(m => m.RoomId == Guid.Parse(userConnection.RoomId))
-                .OrderBy(m => m.DateAndTime)
+                .OrderByDescending(m => m.DateAndTime)
+                .Take(10)
                 .Select(m => new MessageDTO
                 {
                     Id = m.Id.ToString(),

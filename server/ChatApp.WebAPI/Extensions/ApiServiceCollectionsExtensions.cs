@@ -8,7 +8,6 @@ using System.Text;
 using ChatApp.Core.Contracts;
 using ChatApp.Core.Services;
 using ChatApp.Infrastructure.Data.Repositories;
-using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.WebAPI.Extensions
 {
@@ -20,6 +19,9 @@ namespace ChatApp.WebAPI.Extensions
             services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFriendshipService, FriendshipService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IUserRoomService, UserRoomService>();
+
             return services;
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
