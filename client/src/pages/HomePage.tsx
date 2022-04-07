@@ -27,7 +27,10 @@ const HomePage = () => {
                     xs={3}
                     sx={{ height: '93.2vh', overflowY: 'scroll' }}
                 >
-                    <SideBar openChatSpaceHandler={openChatSpaceHandler} />
+                    <SideBar
+                        openChatSpaceHandler={openChatSpaceHandler}
+                        roomId={roomId}
+                    />
                 </Grid>
                 <Grid item sx={{ height: '90vh' }} xs={true}>
                     <MessagesZone roomId={roomId} />

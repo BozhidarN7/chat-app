@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
@@ -17,13 +17,13 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useAuth } from 'contexts/AuthCtx';
 
 type Props = {
+    roomId: string | undefined;
     openChatSpaceHandler: (roomId: string) => void;
 };
 
-const SideBar = ({ openChatSpaceHandler }: Props) => {
+const SideBar = ({ openChatSpaceHandler, roomId }: Props) => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
-    const [currentChatId, setCurrentChatId] = useState('');
     const [addFriendClicked, setAddFriendClicked] = useState(false);
     const searchFieldRef = useRef<HTMLInputElement>();
 
@@ -68,12 +68,12 @@ const SideBar = ({ openChatSpaceHandler }: Props) => {
                 <List sx={{ mb: 2 }}>
                     {chats.map((chat: any) => (
                         <React.Fragment key={chat.roomId}>
-                            <ListItem
-                                button
+                            <ListItemButton
                                 onClick={openChatSpaceHandler.bind(
                                     null,
                                     chat.roomId
                                 )}
+                                selected={chat.roomId === roomId ? true : false}
                             >
                                 <ListItemAvatar>
                                     <Avatar
@@ -91,7 +91,7 @@ const SideBar = ({ openChatSpaceHandler }: Props) => {
                                             : 'New friend. Be the first to send message'
                                     }
                                 />
-                            </ListItem>
+                            </ListItemButton>
                         </React.Fragment>
                     ))}
                 </List>
