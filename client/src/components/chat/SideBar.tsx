@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 
 import SearchField from 'components/common/SearrchField';
-import AddButton from 'components/common/AddButton';
+import AddButton from 'components/common/buttons/AddButton';
 import { fetchUsers } from 'features/usersSlice';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useAuth } from 'contexts/AuthCtx';

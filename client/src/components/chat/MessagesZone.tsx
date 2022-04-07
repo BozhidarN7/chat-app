@@ -1,11 +1,10 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 import Message from 'components/chat/Message';
+import ScrollToBottomButton from 'components/common/buttons/ScrollToBottomButton';
 
 import { useAppSelector } from 'app/hooks';
 
@@ -14,6 +13,9 @@ type Props = {
 };
 
 const MessagesZone = ({ roomId }: Props) => {
+    const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] =
+        useState(false);
+
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const messages = useAppSelector((state) =>
         state.chats.chats.find((chat) => chat.roomId === roomId)
@@ -30,11 +32,28 @@ const MessagesZone = ({ roomId }: Props) => {
         }
     }, [messages]);
 
+    const handleScrollEvent = () => {
+        if (messageBoxRef && messageBoxRef.current) {
+            const { clientHeight, scrollHeight, scrollTop } =
+                messageBoxRef.current;
+            // console.log(messageBoxRef.current.clientHeight);
+            // console.log(
+            //     messageBoxRef.current.scrollHeight -
+            //         messageBoxRef.current.scrollTop
+            // );
+
+            if (scrollHeight - scrollTop > clientHeight + 100) {
+                setScrollToBottomButtonVisibility(true);
+            } else {
+                setScrollToBottomButtonVisibility(false);
+            }
+        }
+    };
+
     return roomId ? (
         <>
             <Box
                 sx={{
-                    position: 'relative',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-end',
@@ -43,6 +62,7 @@ const MessagesZone = ({ roomId }: Props) => {
                     pt: 2,
                 }}
                 ref={messageBoxRef}
+                onScroll={handleScrollEvent}
             >
                 {messages?.map((message, index) => (
                     <Message
@@ -52,12 +72,11 @@ const MessagesZone = ({ roomId }: Props) => {
                         key={index}
                     />
                 ))}
-                <Box sx={{ absolute: 'fixed', left: 15, bottom: 5 }}>
-                    <Fab size="medium" color="secondary" aria-label="add">
-                        <ArrowDownwardIcon />
-                    </Fab>
-                </Box>
             </Box>
+            <ScrollToBottomButton
+                messageBoxRef={messageBoxRef}
+                scrollToBottomButtonVisibility={scrollToBottomButtonVisibility}
+            />
         </>
     ) : (
         <Typography sx={{ ml: 2, mt: 2 }}>
