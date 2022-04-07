@@ -6,6 +6,7 @@ export interface Chat {
 }
 
 export interface Message {
+    id: string;
     message: string;
     messageDateAndTime: string;
     senderFullName: string;

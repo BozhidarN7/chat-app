@@ -94,6 +94,7 @@ namespace ChatApp.WebAPI.Hubs
                 .OrderBy(m => m.DateAndTime)
                 .Select(m => new MessageDTO
                 {
+                    Id = m.Id.ToString(),
                     Message = m.Text,
                     MessageDateAndTime = m.DateAndTime,
                     SenderFullName = m.User.FullName

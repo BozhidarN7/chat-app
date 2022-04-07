@@ -64,12 +64,12 @@ const MessagesZone = ({ roomId }: Props) => {
                 ref={messageBoxRef}
                 onScroll={handleScrollEvent}
             >
-                {messages?.map((message, index) => (
+                {messages?.map((message) => (
                     <Message
                         senderFullName={message.senderFullName}
                         message={message.message}
                         dateAndTime={message.messageDateAndTime}
-                        key={index}
+                        key={message.id}
                     />
                 ))}
             </Box>

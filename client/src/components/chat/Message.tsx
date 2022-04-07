@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
-import { useAuth } from 'contexts/AuthCtx';
-
 type Props = {
     message: string;
     senderFullName: string;
@@ -46,10 +44,10 @@ const Message = ({ message, senderFullName, dateAndTime }: Props) => {
                         p: 2,
                         minWidth: 100,
                         maxWidth: 400,
-                        widht: 'auto',
                         borderRadius: 3,
                         boxShadow: 2,
                         color: 'white',
+                        overflow: 'hidden',
                         backgroundColor: isLocalUser
                             ? `${theme.palette.primary.light}`
                             : `${theme.palette.secondary.light}`,
