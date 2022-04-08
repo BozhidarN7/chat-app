@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import Header from 'components/header/Header';
 import SideBar from 'components/chat/SideBar';
@@ -33,7 +34,14 @@ const HomePage = () => {
                     />
                 </Grid>
                 <Grid item sx={{ height: '90vh' }} xs={true}>
-                    <MessagesZone roomId={roomId} />
+                    {roomId ? (
+                        <MessagesZone roomId={roomId} />
+                    ) : (
+                        <Typography sx={{ ml: 2, mt: 2 }}>
+                            Choose a chat space from the menu
+                        </Typography>
+                    )}
+
                     <MessageInput roomId={roomId} />
                 </Grid>
             </Grid>

@@ -7,9 +7,15 @@ type Props = {
     message: string;
     senderFullName: string;
     dateAndTime: string;
+    firstMessageElRef: ((node: any) => void) | null;
 };
 
-const Message = ({ message, senderFullName, dateAndTime }: Props) => {
+const Message = ({
+    firstMessageElRef,
+    message,
+    senderFullName,
+    dateAndTime,
+}: Props) => {
     const theme = useTheme();
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
 
@@ -17,6 +23,7 @@ const Message = ({ message, senderFullName, dateAndTime }: Props) => {
 
     return (
         <Box
+            ref={firstMessageElRef}
             sx={{
                 display: 'flex',
                 alignSelf: isLocalUser ? 'flex-end' : 'center',

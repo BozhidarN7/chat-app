@@ -36,9 +36,12 @@ namespace ChatApp.WebAPI.Controllers
                 return Ok(new
                 {
                     success = true,
-                    messages = "Data received successfully",
-                    count = messages.Count(),
-                    data = messages
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        count = messages.Count(),
+                        messages,
+                    }
                 });
             }
             catch (Exception ex)

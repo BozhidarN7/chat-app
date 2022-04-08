@@ -1,4 +1,5 @@
-﻿using ChatApp.Core.Contracts;
+﻿using ChatApp.Core.Constants;
+using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data;
@@ -92,7 +93,7 @@ namespace ChatApp.WebAPI.Hubs
                 .Include(m => m.User)
                 .Where(m => m.RoomId == Guid.Parse(userConnection.RoomId))
                 .OrderByDescending(m => m.DateAndTime)
-                .Take(10)
+                .Take(GlobalConstants.DefaulMessagesReturned)
                 .Select(m => new MessageDTO
                 {
                     Id = m.Id.ToString(),
@@ -100,6 +101,7 @@ namespace ChatApp.WebAPI.Hubs
                     MessageDateAndTime = m.DateAndTime,
                     SenderFullName = m.User.FullName
                 })
+                .Reverse()
                 .ToListAsync();
             await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", userConnection.RoomId, messages);
         }

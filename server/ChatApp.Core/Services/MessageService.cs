@@ -32,6 +32,7 @@ namespace ChatApp.Core.Services
                     SenderFullName = m.User.FullName,
 
                 })
+                .Reverse()
                 .ToListAsync();
         }
     }

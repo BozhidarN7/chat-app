@@ -29,10 +29,16 @@ const friendshipRequests = {
         `${baseUrl}/friendship-requests/${friendshipId}`,
 };
 
+const messages = {
+    getRoomMessagesURL: (roomId: string, userId: string, page: number) =>
+        `${baseUrl}/messages/${roomId}?userId=${userId}&page=${page}`,
+};
+
 const routes = {
     ...authRoutes,
     ...users,
     ...friendshipRequests,
+    ...messages,
 };
 
 export default routes;
