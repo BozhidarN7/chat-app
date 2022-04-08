@@ -8,7 +8,7 @@ namespace ChatApp.WebAPI.Controllers
 {
     [Route("api/v1/friendship-requests")]
     [ApiController]
-    public class FriendshipController : Controller
+    public class FriendshipController : ControllerBase
     {
         private readonly IFriendshipService friendshipService;
 

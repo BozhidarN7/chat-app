@@ -7,7 +7,7 @@ namespace ChatApp.WebAPI.Controllers
 {
     [Route("api/v1/messages")]
     [ApiController]
-    public class MessageController : Controller
+    public class MessageController : ControllerBase
     {
         private readonly IMessageService messageService;
         private readonly IUserRoomService userRoomService;

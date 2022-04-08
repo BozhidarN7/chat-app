@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddApiDbContexts(builder.Configuration);
+builder.Services.AddMongoClient();
 builder.Services.AddApiIdentity();
 builder.Services.AddJwt(builder.Configuration);
 builder.Services.AddCorsPolicies(builder.Configuration);
