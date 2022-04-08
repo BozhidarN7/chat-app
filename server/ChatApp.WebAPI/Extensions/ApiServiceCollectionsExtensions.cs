@@ -8,6 +8,7 @@ using System.Text;
 using ChatApp.Core.Contracts;
 using ChatApp.Core.Services;
 using ChatApp.Infrastructure.Data.Repositories;
+using MongoDB.Driver;
 
 namespace ChatApp.WebAPI.Extensions
 {
@@ -30,6 +31,15 @@ namespace ChatApp.WebAPI.Extensions
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            return services;
+        }
+
+        public static IServiceCollection AddMongoClient(this IServiceCollection services)
+        {
+            services.AddSingleton<IMongoClient, MongoClient>(s =>
+             {
+                 return new MongoClient(s.GetRequiredService<IConfiguration>()["MongoConnection"]);
+             });
             return services;
         }
 
