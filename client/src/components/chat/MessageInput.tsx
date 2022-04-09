@@ -7,19 +7,32 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
 import { useChat } from 'contexts/ChatCtx';
+import { useAuth } from 'contexts/AuthCtx';
+import { sendFile } from 'services/messageService';
+import UploadFileButton from 'components/common/buttons/UploadFileButton';
 
 type Props = {
     roomId: string | undefined;
 };
 
 const MessageInput = ({ roomId }: Props) => {
+    const { sendMessage } = useChat();
+    const { currentUser } = useAuth();
     const [message, setMessage] = useState<string>('');
 
-    const { sendMessage } = useChat();
+    const changeFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const formData = new FormData();
+            formData.append('file', e.target.files[0]);
+            formData.append('senderFullName', currentUser?.fullName!);
+            formData.append('senderId', currentUser?.id!);
 
-    const sendMessageHandler = (
-        e: React.KeyboardEvent | React.MouseEvent<HTMLButtonElement>
-    ) => {
+            await sendFile(roomId!, formData);
+            e.target.value = '';
+        }
+    };
+
+    const sendMessageHandler = (e: React.KeyboardEvent | React.MouseEvent<HTMLButtonElement>) => {
         if (message.trim() === '') return;
 
         if (e.type === 'keydown') {
@@ -47,14 +60,14 @@ const MessageInput = ({ roomId }: Props) => {
                 disabled={roomId ? false : true}
                 InputProps={{
                     endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                onClick={sendMessageHandler}
-                                disabled={roomId ? false : true}
-                            >
-                                <SendIcon />
-                            </IconButton>
-                        </InputAdornment>
+                        <>
+                            <UploadFileButton roomId={roomId} changeFileHandler={changeFileHandler} />
+                            <InputAdornment position="end">
+                                <IconButton onClick={sendMessageHandler} disabled={roomId ? false : true}>
+                                    <SendIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        </>
                     ),
                 }}
             />

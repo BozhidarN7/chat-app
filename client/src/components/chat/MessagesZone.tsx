@@ -15,6 +15,7 @@ type Props = {
 const MessagesZone = ({ roomId }: Props) => {
     const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] = useState(false);
     const [page, setPage] = useState(0);
+    const [messagesCount, setMessageCount] = useState(0);
 
     const { currentUser } = useAuth();
 
@@ -46,7 +47,11 @@ const MessagesZone = ({ roomId }: Props) => {
     );
 
     useEffect(() => {
-        if (messageBoxRef && messageBoxRef.current) {
+        if (
+            messageBoxRef &&
+            messageBoxRef.current &&
+            (messages?.length! - 1 === messagesCount || messagesCount === 0)
+        ) {
             const { scrollHeight, clientHeight } = messageBoxRef.current;
             messageBoxRef.current.scrollTo({
                 left: 0,
@@ -54,7 +59,8 @@ const MessagesZone = ({ roomId }: Props) => {
                 behavior: 'smooth',
             });
         }
-    }, [messages]);
+        setMessageCount(messages?.length!);
+    }, [messages, messagesCount]);
 
     const handleScrollEvent = () => {
         if (messageBoxRef && messageBoxRef.current) {

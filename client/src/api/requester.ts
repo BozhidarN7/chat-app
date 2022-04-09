@@ -30,8 +30,12 @@ export const getOptions = async (method = 'get', body: any = undefined) => {
     }
 
     if (body) {
-        options.headers['Content-Type'] = 'application/json';
-        options.body = JSON.stringify(body);
+        if (!(body instanceof FormData)) {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        } else {
+            options.body = body;
+        }
     }
 
     return options;
