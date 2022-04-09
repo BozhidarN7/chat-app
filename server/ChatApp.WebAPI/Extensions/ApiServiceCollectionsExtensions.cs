@@ -39,7 +39,9 @@ namespace ChatApp.WebAPI.Extensions
         {
             services.AddSingleton<IMongoClient, MongoClient>(s =>
              {
-                 return new MongoClient(s.GetRequiredService<IConfiguration>().GetConnectionString("MongoConnection"));
+                 IConfiguration config = s.GetRequiredService<IConfiguration>();
+                 return new MongoClient(config.GetConnectionString("MongoConnection")
+                     .Replace("<password>", config["Passwords:MongoPassword"]));
              });
             return services;
         }
