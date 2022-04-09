@@ -123,6 +123,7 @@ namespace ChatApp.WebAPI.Hubs
 
             await Clients.Group(userConnection.RoomId).SendAsync("ReceiveMessage", newMessage.RoomId, new MessageDTO
             {
+                Id = newMessage.Id.ToString(),
                 Message = message,
                 MessageDateAndTime = newMessage.DateAndTime,
                 SenderFullName = user.FullName

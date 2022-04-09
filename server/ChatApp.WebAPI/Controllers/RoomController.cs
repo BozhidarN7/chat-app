@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ChatApp.Core.Contracts;
+using ChatApp.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,19 +10,19 @@ namespace ChatApp.WebAPI.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
-        [HttpPost("{id}/file-upload"), Authorize]
+        private readonly IRoomService roomService;
 
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public RoomController(IRoomService roomService)
+        {
+            this.roomService = roomService;
+        }
+
+        [HttpPost("{id}/file-upload"), Authorize]
+        public async Task<IActionResult> UploadFile(string id, [FromForm] FileUploadModel model)
         {
             try
             {
-                if (file != null && file.Length > 0)
-                {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(memoryStream);
-                    }
-                }
+                await roomService.SaveFile(id, model);
 
                 return CreatedAtAction(nameof(UploadFile), new
                 {

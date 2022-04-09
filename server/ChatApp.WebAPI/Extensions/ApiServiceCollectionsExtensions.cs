@@ -22,12 +22,13 @@ namespace ChatApp.WebAPI.Extensions
             services.AddScoped<IFriendshipService, FriendshipService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IUserRoomService, UserRoomService>();
+            services.AddScoped<IRoomService, RoomService>();
 
             return services;
         }
         public static IServiceCollection AddApiDbContexts(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("OfficeConnection");
+            var connectionString = config.GetConnectionString("HomeConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -38,7 +39,7 @@ namespace ChatApp.WebAPI.Extensions
         {
             services.AddSingleton<IMongoClient, MongoClient>(s =>
              {
-                 return new MongoClient(s.GetRequiredService<IConfiguration>()["MongoConnection"]);
+                 return new MongoClient(s.GetRequiredService<IConfiguration>().GetConnectionString("MongoConnection"));
              });
             return services;
         }

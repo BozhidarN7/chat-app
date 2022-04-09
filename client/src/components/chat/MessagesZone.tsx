@@ -1,10 +1,8 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
 import Message from 'components/chat/Message';
-import Spinner from 'components/common/Spinner';
 import ScrollToBottomButton from 'components/common/buttons/ScrollToBottomButton';
 import useGetRoomMessages from 'hooks/useGetRoomMessages';
 import { useAppSelector } from 'app/hooks';
@@ -15,17 +13,12 @@ type Props = {
 };
 
 const MessagesZone = ({ roomId }: Props) => {
-    const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] =
-        useState(false);
+    const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] = useState(false);
     const [page, setPage] = useState(0);
 
     const { currentUser } = useAuth();
 
-    const { loading, hasMore } = useGetRoomMessages(
-        roomId!,
-        currentUser!.id,
-        page
-    );
+    const { loading, hasMore } = useGetRoomMessages(roomId!, currentUser!.id, page);
 
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const messages = useAppSelector((state) =>
@@ -53,7 +46,7 @@ const MessagesZone = ({ roomId }: Props) => {
     );
 
     useEffect(() => {
-        if (messageBoxRef && messageBoxRef.current && page === 0) {
+        if (messageBoxRef && messageBoxRef.current) {
             const { scrollHeight, clientHeight } = messageBoxRef.current;
             messageBoxRef.current.scrollTo({
                 left: 0,
@@ -61,12 +54,11 @@ const MessagesZone = ({ roomId }: Props) => {
                 behavior: 'smooth',
             });
         }
-    }, [messages, page]);
+    }, [messages]);
 
     const handleScrollEvent = () => {
         if (messageBoxRef && messageBoxRef.current) {
-            const { clientHeight, scrollHeight, scrollTop } =
-                messageBoxRef.current;
+            const { clientHeight, scrollHeight, scrollTop } = messageBoxRef.current;
 
             if (scrollHeight - scrollTop > clientHeight + 100) {
                 setScrollToBottomButtonVisibility(true);
