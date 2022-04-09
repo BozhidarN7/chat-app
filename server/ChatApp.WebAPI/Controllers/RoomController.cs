@@ -1,7 +1,7 @@
 ﻿using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
+using ChatApp.Core.Models.OutputDTOs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -17,7 +17,7 @@ namespace ChatApp.WebAPI.Controllers
             this.roomService = roomService;
         }
 
-        [HttpPost("{id}/file-upload"), Authorize]
+        [HttpPost("{id}/files"), Authorize]
         public async Task<IActionResult> UploadFile(string id, [FromForm] FileUploadModel model)
         {
             try
@@ -33,6 +33,30 @@ namespace ChatApp.WebAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Did not manage to upload file");
+            }
+        }
+
+        [HttpGet("{id}/files"), Authorize]
+        public async Task<IActionResult> GetFiles(string id)
+        {
+            try
+            {
+                IEnumerable<RoomFileDTO> files = await roomService.GetFiles(id);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        count = files.Count(),
+                        files
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Did not manage to get files");
             }
         }
     }
