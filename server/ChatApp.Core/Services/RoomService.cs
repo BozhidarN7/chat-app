@@ -3,6 +3,7 @@ using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.MongoModels;
 using Microsoft.AspNetCore.Http;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace ChatApp.Core.Services
@@ -16,6 +17,20 @@ namespace ChatApp.Core.Services
             roomCollection = database.GetCollection<Room>("rooms");
         }
 
+        public async Task<RoomFileDTO> GetFile(ObjectId documentId)
+        {
+            Room document = await roomCollection.Find(r => r.Id == documentId).FirstOrDefaultAsync();
+            return new RoomFileDTO
+            {
+                DocumentId = document.Id.ToString(),
+                RoomId = document.RoomId,
+                File = GetImage(Convert.ToBase64String(document.File)),
+                SenderFullName = document.SenderFullName,
+                SenderId = document.SenderId,
+                DateAndTime = document.DateAndTime
+            };
+        }
+
         public async Task<IEnumerable<RoomFileDTO>> GetFiles(string roomId)
         {
             return (await roomCollection.Find(r => r.RoomId == roomId)
@@ -24,14 +39,14 @@ namespace ChatApp.Core.Services
                 {
                     DocumentId = r.Id.ToString(),
                     RoomId = r.RoomId,
-                    File  = Convert.ToBase64String(r.File),
+                    File = GetImage(Convert.ToBase64String(r.File)),
                     SenderFullName = r.SenderFullName,
                     SenderId = r.SenderId,
                     DateAndTime = r.DateAndTime
                 });
         }
 
-        public async Task SaveFile(string roomId, FileUploadModel model)
+        public async Task<ObjectId> SaveFile(string roomId, FileUploadModel model)
         {
             byte[] fileBytes = await ConverFileToByteArray(model.File);
 
@@ -39,35 +54,20 @@ namespace ChatApp.Core.Services
             {
                 throw new InvalidOperationException();
             }
-
-            //Room room = await roomCollection.Find(r => r.RoomId == roomId).FirstOrDefaultAsync();
-            await roomCollection.InsertOneAsync(new Room
+            Room room = new Room
             {
                 RoomId = roomId,
                 File = fileBytes,
                 DateAndTime = DateTime.Now,
                 SenderFullName = model.SenderFullName,
                 SenderId = model.SenderId
-            });
+            };
+            await roomCollection.InsertOneAsync(room);
 
-            //if (room == null)
-            //{
-            //    await roomCollection.InsertOneAsync(new Room
-            //    {
-            //        RoomId = roomId,
-            //        Files = new List<byte[]>() { fileBytes },
-            //        DateAndTime = DateTime.Now,
-            //        SenderFullName = model.SenderFullName,
-            //        SenderId = model.SenderId
-            //    });
-            //}
-            //else
-            //{
-            //    FilterDefinition<Room> filter = Builders<Room>.Filter.Eq(e => e.RoomId, roomId);
+            return room.Id;
+
+            //FilterDefinition<Room> filter = Builders<Room>.Filter.Eq(e => e.RoomId, roomId);
             //    UpdateDefinition<Room> update = Builders<Room>.Update.Push(e => e.Files, fileBytes);
-
-            //    await roomCollection.UpdateOneAsync(filter, update);
-            //}
         }
 
         private async Task<byte[]> ConverFileToByteArray(IFormFile file)
@@ -82,6 +82,16 @@ namespace ChatApp.Core.Services
                 }
             }
             return null;
+        }
+        private byte[] GetImage(string image)
+        {
+            byte[] bytes = null;
+
+            if (!string.IsNullOrEmpty(image))
+            {
+                bytes = Convert.FromBase64String(image);
+            }
+            return bytes;
         }
     }
 }

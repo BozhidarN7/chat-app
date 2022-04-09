@@ -3,11 +3,7 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import {
-    newChatAdded,
-    newMessageAdded,
-    previousMessagesAdded,
-} from 'features/chatsSlice';
+import { newChatAdded, newMessageAdded, previousMessagesAdded } from 'features/chatsSlice';
 import { Message } from 'interfaces/chatInterfaces';
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
@@ -46,8 +42,9 @@ export const ChatProvider = ({ children }: Props) => {
             roomId,
             fullName: `${currentUser?.id}`,
         });
-        connection?.on('ReceiveMessage', (roomId: string, message: Message) => {
-            dispatch(newMessageAdded({ roomId, message }));
+        connection?.on('ReceiveMessage', (roomId: string, message) => {
+            console.log(message);
+            // dispatch(newMessageAdded({ roomId, message }));
         });
         connection?.off('PreviousConversation');
     };

@@ -1,8 +1,11 @@
 ﻿using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
+using ChatApp.WebAPI.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using MongoDB.Bson;
 
 namespace ChatApp.WebAPI.Controllers
 {
@@ -10,10 +13,12 @@ namespace ChatApp.WebAPI.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
+        private readonly IHubContext<ChatHub> hubContext;
         private readonly IRoomService roomService;
 
-        public RoomController(IRoomService roomService)
+        public RoomController(IHubContext<ChatHub> hubContext, IRoomService roomService)
         {
+            this.hubContext = hubContext;
             this.roomService = roomService;
         }
 
@@ -22,7 +27,9 @@ namespace ChatApp.WebAPI.Controllers
         {
             try
             {
-                await roomService.SaveFile(id, model);
+                ObjectId documentId = await roomService.SaveFile(id, model);
+                RoomFileDTO file = await roomService.GetFile(documentId);
+                await hubContext.Clients.Group(id).SendAsync("ReceiveMessage", id, file);
 
                 return CreatedAtAction(nameof(UploadFile), new
                 {
