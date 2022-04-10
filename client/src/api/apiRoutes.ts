@@ -28,12 +28,11 @@ const friendshipRequests = {
         `${baseUrl}/friendship-requests/${friendshipId}`,
 };
 
-const messages = {
-    getRoomMessagesURL: (roomId: string, userId: string, page: number) =>
-        `${baseUrl}/messages/${roomId}?userId=${userId}&page=${page}`,
-};
+const messages = {};
 
 const rooms = {
+    getAllRoomMessagesURL: (roomId: string, userId: string, page: number) =>
+        `${baseUrl}/rooms/${roomId}/messages?userId=${userId}&page=${page}`,
     sendFileURL: (roomId: string) => `${baseUrl}/rooms/${roomId}/files`,
 };
 

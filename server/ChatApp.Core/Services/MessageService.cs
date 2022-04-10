@@ -15,26 +15,6 @@ namespace ChatApp.Core.Services
         {
             this.repo = repo;
         }
-
-        public async Task<IEnumerable<MessageDTO>> GetRoomMessagesAsync(string roomId, int page)
-        {
-            return await repo.All<Message>()
-                .Include(m => m.User)
-                .Where(m => m.RoomId == Guid.Parse(roomId))
-                .OrderByDescending(m => m.DateAndTime)
-                .Skip((page - 1) * GlobalConstants.DefaulMessagesReturned)
-                .Take(GlobalConstants.DefaulMessagesReturned)
-                .Select(m => new MessageDTO
-                {
-                    Id = m.Id.ToString(),
-                    Message = m.Text,
-                    MessageDateAndTime = DateTime.Now,
-                    SenderFullName = m.User.FullName,
-
-                })
-                .Reverse()
-                .ToListAsync();
-        }
     }
 }
 

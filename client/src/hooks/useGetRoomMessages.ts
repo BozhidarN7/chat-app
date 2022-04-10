@@ -17,10 +17,14 @@ const useGetRoomMessages = (roomId: string, userId: string, page: number) => {
             setError(false);
             getRoomMesssages(roomId, userId, page)
                 .then((data) => {
+                    const combine = [...data.data.messages, ...data.data.files].sort(
+                        (a, b) =>
+                            (new Date(a.messageDateAndTime) as any) - (new Date(b.messageDateAndTime) as any)
+                    );
                     dispatch(
                         loadMorePreviousMessages({
                             roomId,
-                            messages: data.data.messages,
+                            messages: combine,
                         })
                     );
                     setHasMore(data.data.count > 0);

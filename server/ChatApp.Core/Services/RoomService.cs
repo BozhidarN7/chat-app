@@ -1,8 +1,12 @@
-﻿using ChatApp.Core.Contracts;
+﻿using ChatApp.Core.Constants;
+using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
+using ChatApp.Infrastructure.Data;
 using ChatApp.Infrastructure.Data.MongoModels;
+using ChatApp.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -10,16 +14,19 @@ namespace ChatApp.Core.Services
 {
     public class RoomService : IRoomService
     {
-        private IMongoCollection<Room> roomCollection;
-        public RoomService(IMongoClient mongoClient)
+        private IMongoCollection<RoomCollection> roomCollection;
+        private readonly IApplicationDbRepository repo;
+
+        public RoomService(IMongoClient mongoClient, IApplicationDbRepository repo)
         {
             IMongoDatabase database = mongoClient.GetDatabase("chat-app");
-            roomCollection = database.GetCollection<Room>("rooms");
+            roomCollection = database.GetCollection<RoomCollection>("rooms");
+            this.repo = repo;
         }
 
         public async Task<RoomFileDTO> GetFile(ObjectId documentId)
         {
-            Room document = await roomCollection.Find(r => r.Id == documentId).FirstOrDefaultAsync();
+            RoomCollection document = await roomCollection.Find(r => r.Id == documentId).FirstOrDefaultAsync();
             return new RoomFileDTO
             {
                 Id = document.Id.ToString(),
@@ -54,7 +61,7 @@ namespace ChatApp.Core.Services
             {
                 throw new InvalidOperationException();
             }
-            Room room = new Room
+            RoomCollection room = new RoomCollection
             {
                 RoomId = roomId,
                 File = fileBytes,
@@ -68,6 +75,39 @@ namespace ChatApp.Core.Services
 
             //FilterDefinition<Room> filter = Builders<Room>.Filter.Eq(e => e.RoomId, roomId);
             //    UpdateDefinition<Room> update = Builders<Room>.Update.Push(e => e.Files, fileBytes);
+        }
+
+        public async Task<AllMessagesDTO> GetAllRoomMessagesAsync(string roomId, int page)
+        {
+            List<MessageDTO> messages = await repo.All<Message>()
+                .Include(m => m.User)
+                .Where(m => m.RoomId == Guid.Parse(roomId))
+                .OrderByDescending(m => m.DateAndTime)
+                .Skip((page - 1) * GlobalConstants.DefaulMessagesReturned)
+                .Take(GlobalConstants.DefaulMessagesReturned)
+                .Select(m => new MessageDTO
+                {
+                    Id = m.Id.ToString(),
+                    Message = m.Text,
+                    MessageDateAndTime = m.DateAndTime,
+                    SenderFullName = m.User.FullName,
+
+                })
+                .Reverse()
+                .ToListAsync();
+
+            List<RoomFileDTO> roomFiles = (await GetFiles(roomId))
+                .OrderByDescending(r => r.MessageDateAndTime)
+                .Skip((page - 1) * GlobalConstants.DefaulFilesReturned)
+                .Take(GlobalConstants.DefaulFilesReturned)
+                .Reverse()
+                .ToList();
+
+            return new AllMessagesDTO
+            {
+                Messages = messages,
+                RoomFiles = roomFiles
+            };
         }
 
         private async Task<byte[]> ConverFileToByteArray(IFormFile file)

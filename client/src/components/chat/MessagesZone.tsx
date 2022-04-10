@@ -75,14 +75,9 @@ const MessagesZone = ({ roomId }: Props) => {
         }
     };
 
-    // if (loading) {
+    // if (status === 'loading') {
     //     return (
-    //         <Grid
-    //             sx={{ pt: 2 }}
-    //             container
-    //             justifyContent="center"
-    //             alignItems="center"
-    //         >
+    //         <Grid sx={{ pt: 2 }} container justifyContent="center" alignItems="center">
     //             <Spinner />
     //         </Grid>
     //     );

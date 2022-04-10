@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace ChatApp.Infrastructure.Data.MongoModels
 {
     [BsonIgnoreExtraElements]
-    public class Room
+    public class RoomCollection
     {
         [BsonId]
         public ObjectId Id { get; set; }
