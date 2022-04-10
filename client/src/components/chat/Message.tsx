@@ -7,15 +7,11 @@ type Props = {
     message: string;
     senderFullName: string;
     dateAndTime: string;
+    type: string;
     firstMessageElRef: ((node: any) => void) | null;
 };
 
-const Message = ({
-    firstMessageElRef,
-    message,
-    senderFullName,
-    dateAndTime,
-}: Props) => {
+const Message = ({ firstMessageElRef, message, senderFullName, dateAndTime, type }: Props) => {
     const theme = useTheme();
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
 
@@ -43,25 +39,46 @@ const Message = ({
             </Avatar>
             <Box>
                 <Typography sx={{ fontSize: 13 }}>{senderFullName}</Typography>
-                <Box
-                    sx={{
-                        display: 'inline-block',
-                        my: 1,
-                        mr: 1,
-                        p: 2,
-                        minWidth: 100,
-                        maxWidth: 400,
-                        borderRadius: 3,
-                        boxShadow: 2,
-                        color: 'white',
-                        overflow: 'hidden',
-                        backgroundColor: isLocalUser
-                            ? `${theme.palette.primary.light}`
-                            : `${theme.palette.secondary.light}`,
-                    }}
-                >
-                    {message}
-                </Box>
+                {type === 'file' ? (
+                    <Box
+                        sx={{
+                            display: 'inline-block',
+                            my: 1,
+                            mr: 1,
+                            p: 2,
+                            minWidth: 100,
+                            maxWidth: 600,
+                        }}
+                    >
+                        <img
+                            src={`data:image/jpeg;base64,${message}`}
+                            style={{ maxHeight: '400px', maxWidth: 400, minWidth: 400 }}
+                            alt=""
+                        />
+                    </Box>
+                ) : (
+                    <Box
+                        sx={{
+                            display: 'inline-block',
+                            my: 1,
+                            mr: 1,
+                            p: 2,
+                            minWidth: 100,
+                            maxWidth: 400,
+                            borderRadius: 3,
+                            boxShadow: 2,
+                            color: 'white',
+                            overflow: 'hidden',
+                            backgroundColor:
+                                isLocalUser && type
+                                    ? `${theme.palette.primary.light}`
+                                    : `${theme.palette.secondary.light}`,
+                        }}
+                    >
+                        {message}
+                    </Box>
+                )}
+
                 {/* <Typography sx={{ fontSize: 13 }}>{dateAndTime}</Typography> */}
             </Box>
         </Box>

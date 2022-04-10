@@ -7,6 +7,7 @@ import ScrollToBottomButton from 'components/common/buttons/ScrollToBottomButton
 import useGetRoomMessages from 'hooks/useGetRoomMessages';
 import { useAppSelector } from 'app/hooks';
 import { useAuth } from 'contexts/AuthCtx';
+import { TextMessage, FileMessage } from 'interfaces/chatInterfaces';
 
 type Props = {
     roomId: string | undefined;
@@ -102,26 +103,57 @@ const MessagesZone = ({ roomId }: Props) => {
                 onScroll={handleScrollEvent}
             >
                 {messages?.map((message, index) => {
-                    if (index === 0) {
-                        return (
-                            <Message
-                                firstMessageElRef={firstMessageElRef}
-                                senderFullName={message.senderFullName}
-                                message={message.message}
-                                dateAndTime={message.messageDateAndTime}
-                                key={message.id}
-                            />
-                        );
+                    const type = message.messageType;
+                    if (type === 'file') {
+                        message = message as FileMessage;
+                        if (index === 0) {
+                            return (
+                                <Message
+                                    firstMessageElRef={firstMessageElRef}
+                                    senderFullName={message.senderFullName}
+                                    message={message.file}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        } else {
+                            return (
+                                <Message
+                                    firstMessageElRef={null}
+                                    senderFullName={message.senderFullName}
+                                    message={message.file}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        }
                     } else {
-                        return (
-                            <Message
-                                firstMessageElRef={null}
-                                senderFullName={message.senderFullName}
-                                message={message.message}
-                                dateAndTime={message.messageDateAndTime}
-                                key={message.id}
-                            />
-                        );
+                        message = message as TextMessage;
+                        if (index === 0) {
+                            return (
+                                <Message
+                                    firstMessageElRef={firstMessageElRef}
+                                    senderFullName={message.senderFullName}
+                                    message={message.message}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        } else {
+                            return (
+                                <Message
+                                    firstMessageElRef={null}
+                                    senderFullName={message.senderFullName}
+                                    message={message.message}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        }
                     }
                 })}
             </Box>

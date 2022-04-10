@@ -22,9 +22,9 @@ namespace ChatApp.Core.Services
             Room document = await roomCollection.Find(r => r.Id == documentId).FirstOrDefaultAsync();
             return new RoomFileDTO
             {
-                DocumentId = document.Id.ToString(),
+                Id = document.Id.ToString(),
                 RoomId = document.RoomId,
-                File = GetImage(Convert.ToBase64String(document.File)),
+                File = Convert.ToBase64String(document.File),
                 SenderFullName = document.SenderFullName,
                 SenderId = document.SenderId,
                 DateAndTime = document.DateAndTime
@@ -33,13 +33,13 @@ namespace ChatApp.Core.Services
 
         public async Task<IEnumerable<RoomFileDTO>> GetFiles(string roomId)
         {
-            return (await roomCollection.Find(r => r.RoomId == roomId)
+            return (await roomCollection.Find(r => r.RoomId.ToLower() == roomId.ToLower())
                 .ToListAsync())
                 .Select(r => new RoomFileDTO
                 {
-                    DocumentId = r.Id.ToString(),
+                    Id = r.Id.ToString(),
                     RoomId = r.RoomId,
-                    File = GetImage(Convert.ToBase64String(r.File)),
+                    File = Convert.ToBase64String(r.File),
                     SenderFullName = r.SenderFullName,
                     SenderId = r.SenderId,
                     DateAndTime = r.DateAndTime

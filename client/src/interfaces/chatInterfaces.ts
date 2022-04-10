@@ -1,13 +1,21 @@
+interface Message {
+    id: string;
+    messageDateAndTime: string;
+    senderFullName: string;
+    messageType: string;
+}
+
 export interface Chat {
     friendId: string;
     firendFullName: string;
     roomId: string;
-    messages: Message[];
+    messages: Array<FileMessage | TextMessage>;
 }
 
-export interface Message {
-    id: string;
+export interface TextMessage extends Message {
     message: string;
-    messageDateAndTime: string;
-    senderFullName: string;
+}
+
+export interface FileMessage extends Message {
+    file: string;
 }

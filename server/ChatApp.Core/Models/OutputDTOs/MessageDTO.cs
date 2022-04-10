@@ -8,5 +8,7 @@
         public DateTime MessageDateAndTime { get; set; }
 
         public string SenderFullName { get; set; }
+
+        public string MessageType { get; set; } = "text";
     }
 }
