@@ -27,7 +27,7 @@ namespace ChatApp.Core.Services
                 File = Convert.ToBase64String(document.File),
                 SenderFullName = document.SenderFullName,
                 SenderId = document.SenderId,
-                DateAndTime = document.DateAndTime
+                MessageDateAndTime = document.DateAndTime.ToLocalTime()
             };
         }
 
@@ -42,7 +42,7 @@ namespace ChatApp.Core.Services
                     File = Convert.ToBase64String(r.File),
                     SenderFullName = r.SenderFullName,
                     SenderId = r.SenderId,
-                    DateAndTime = r.DateAndTime
+                    MessageDateAndTime = r.DateAndTime.ToLocalTime()
                 });
         }
 

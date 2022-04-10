@@ -16,12 +16,14 @@ namespace ChatApp.WebAPI.Hubs
     public class ChatHub : Hub
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IRoomService roomService;
         private readonly IApplicationDbRepository repo;
         private readonly IUserService userService;
 
-        public ChatHub(IApplicationDbRepository repo, IUserService userService, UserManager<ApplicationUser> userManager)
+        public ChatHub(IApplicationDbRepository repo, IUserService userService, UserManager<ApplicationUser> userManager, IRoomService roomService)
         {
             this.userManager = userManager;
+            this.roomService = roomService;
             this.repo = repo;
             this.userService = userService;
         }
@@ -89,21 +91,9 @@ namespace ChatApp.WebAPI.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
 
-            List<MessageDTO> messages = await repo.All<Message>()
-                .Include(m => m.User)
-                .Where(m => m.RoomId == Guid.Parse(userConnection.RoomId))
-                .OrderByDescending(m => m.DateAndTime)
-                .Take(GlobalConstants.DefaulMessagesReturned)
-                .Select(m => new MessageDTO
-                {
-                    Id = m.Id.ToString(),
-                    Message = m.Text,
-                    MessageDateAndTime = m.DateAndTime,
-                    SenderFullName = m.User.FullName
-                })
-                .Reverse()
-                .ToListAsync();
-            await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", userConnection.RoomId, messages);
+            List<MessageDTO> messages = await GetLastFewMessages(userConnection.RoomId);
+            List<RoomFileDTO> files = await GetLastFewFiles(userConnection.RoomId);
+            await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", userConnection.RoomId, messages,files);
         }
 
         public async Task SendMessage(UserConnectionModel userConnection, string message)
@@ -128,6 +118,33 @@ namespace ChatApp.WebAPI.Hubs
                 MessageDateAndTime = newMessage.DateAndTime,
                 SenderFullName = user.FullName
             });
+        }
+
+        private async Task<List<MessageDTO>> GetLastFewMessages(string roomId)
+        {
+            return await repo.All<Message>()
+                .Include(m => m.User)
+                .Where(m => m.RoomId == Guid.Parse(roomId))
+                .OrderByDescending(m => m.DateAndTime)
+                .Take(GlobalConstants.DefaulMessagesReturned)
+                .Select(m => new MessageDTO
+                {
+                    Id = m.Id.ToString(),
+                    Message = m.Text,
+                    MessageDateAndTime = m.DateAndTime,
+                    SenderFullName = m.User.FullName
+                })
+                .Reverse()
+                .ToListAsync();
+        }
+
+        private async Task<List<RoomFileDTO>> GetLastFewFiles(string roomId)
+        {
+            return (await roomService.GetFiles(roomId)).
+                OrderByDescending(r => r.MessageDateAndTime)
+                .Take(GlobalConstants.DefaulFilesReturned)
+                .Reverse()
+                .ToList();
         }
     }
 }

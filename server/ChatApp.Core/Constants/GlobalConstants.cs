@@ -3,5 +3,6 @@
     public static class GlobalConstants
     {
         public const int DefaulMessagesReturned = 20;
+        public const int DefaulFilesReturned = 5;
     }
 }

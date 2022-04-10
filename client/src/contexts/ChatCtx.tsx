@@ -35,8 +35,11 @@ export const ChatProvider = ({ children }: Props) => {
     }, []);
 
     const openChatRoom = async (roomId: string) => {
-        connection?.on('PreviousConversation', (roomId, messages) => {
-            dispatch(previousMessagesAdded({ roomId, messages }));
+        connection?.on('PreviousConversation', (roomId, messages, files) => {
+            const combine = [...messages, ...files].sort(
+                (a, b) => (new Date(a.messageDateAndTime) as any) - (new Date(b.messageDateAndTime) as any)
+            );
+            dispatch(previousMessagesAdded({ roomId, messages: combine }));
         });
         await connection?.invoke('OpenChatRoom', {
             roomId,

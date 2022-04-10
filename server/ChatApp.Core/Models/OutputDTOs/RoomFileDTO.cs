@@ -12,7 +12,7 @@
 
         public string SenderId { get; set; }
 
-        public DateTime DateAndTime { get; set; }
+        public DateTime MessageDateAndTime { get; set; }
 
         public string MessageType { get; set; } = "file";
     }
