@@ -20,7 +20,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginCredentialsModel credentials)
+        public async Task<IActionResult> Login([FromBody] LoginCredentialsModel credentials)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -39,7 +39,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterCredentialsModel credentials)
+        public async Task<IActionResult> Register([FromBody] RegisterCredentialsModel credentials)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -66,7 +66,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("revoke/{id}"), Authorize]
-        public async Task<IActionResult> RevokeAsync(string id)
+        public async Task<IActionResult> Revoke(string id)
         {
             bool isSuccessful = await _authenticationService.RevokeUserRefreshTokenAsync(id);
 
@@ -77,7 +77,7 @@ namespace ChatApp.WebAPI.Controllers
 
         [HttpPost]
         [Route("refresh-token")]
-        public async Task<IActionResult> RefreshTokenAsync([FromBody] TokenModel tokenModel)
+        public async Task<IActionResult> RefreshToken([FromBody] TokenModel tokenModel)
         {
             if (!ModelState.IsValid || tokenModel == null)
             {

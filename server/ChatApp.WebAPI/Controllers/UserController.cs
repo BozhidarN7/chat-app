@@ -18,7 +18,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserAsync(string id)
+        public async Task<IActionResult> GetUser(string id)
         {
 
             (ApplicationUser user, bool isSuccessful) = await userService.GetUserAsync(id);
@@ -44,7 +44,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet, Authorize]
-        public async Task<IActionResult> GetAllUsersAsync([ModelBinder(BinderType = typeof(QueryStringModelBinder))] string fullName = "")
+        public async Task<IActionResult> GetAllUsers([ModelBinder(BinderType = typeof(QueryStringModelBinder))] string fullName = "")
         {
             IEnumerable<ApplicationUser> users = await userService.GetAllUsersAsync(fullName);
 
@@ -67,7 +67,7 @@ namespace ChatApp.WebAPI.Controllers
             });
         }
         [HttpGet("{id}/friends"), Authorize]
-        public async Task<IActionResult> GetFriendsAsync(string id)
+        public async Task<IActionResult> GetFriends(string id)
         {
             IEnumerable<FriendsDTO> users = await userService.GetFriendsAsync(id);
 
@@ -92,7 +92,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet("{id}/friendship-requests/new"), Authorize]
-        public async Task<IActionResult> GetNewFriendshipRequestsAsync(string id)
+        public async Task<IActionResult> GetNewFriendshipRequests(string id)
         {
             IEnumerable<FriendshipsDTO> requests = await userService.GetNewFriendshipRequestsAsync(id);
 
@@ -113,7 +113,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet("{id}/rooms"), Authorize]
-        public async Task<IActionResult> GetUserChatRoomsAsync(string id)
+        public async Task<IActionResult> GetUserChatRooms(string id)
         {
            IEnumerable<ChatDTO> chats =  await userService.GetUserChatRoomsAsync(id);
 

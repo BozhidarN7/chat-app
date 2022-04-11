@@ -29,7 +29,7 @@ namespace ChatApp.WebAPI.Controllers
 
 
         [HttpGet("{roomId}/messages"), Authorize]
-        public async Task<IActionResult> GetRoomMessagesAsync(string roomId, [FromQuery] string userId, [FromQuery] int page)
+        public async Task<IActionResult> GetRoomMessages(string roomId, [FromQuery] string userId, [FromQuery] int page)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("{id}/files"), Authorize]
-        public async Task<IActionResult> UploadFileAsync(string id, [FromForm] FileUploadModel model)
+        public async Task<IActionResult> UploadFile(string id, [FromForm] FileUploadModel model)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace ChatApp.WebAPI.Controllers
                 RoomFileDTO file = await roomService.GetFileAsync(documentId);
                 await hubContext.Clients.Group(id).SendAsync("ReceiveMessage", id, file);
 
-                return CreatedAtAction(nameof(UploadFileAsync), new
+                return CreatedAtAction(nameof(UploadFile), new
                 {
                     success = true,
                     message = "File uploaded successfully",
@@ -83,7 +83,7 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet("{id}/files"), Authorize]
-        public async Task<IActionResult> GetFilesAsync(string id)
+        public async Task<IActionResult> GetFiles(string id)
         {
             try
             {

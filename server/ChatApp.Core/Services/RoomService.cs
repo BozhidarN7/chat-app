@@ -69,8 +69,9 @@ namespace ChatApp.Core.Services
                 SenderFullName = model.SenderFullName,
                 SenderId = model.SenderId
             };
-            await roomCollection.InsertOneAsync(room);
 
+            await roomCollection.InsertOneAsync(room);
+            
             return room.Id;
 
             //FilterDefinition<Room> filter = Builders<Room>.Filter.Eq(e => e.RoomId, roomId);
