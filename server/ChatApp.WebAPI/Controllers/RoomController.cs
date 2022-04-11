@@ -29,11 +29,11 @@ namespace ChatApp.WebAPI.Controllers
 
 
         [HttpGet("{roomId}/messages"), Authorize]
-        public async Task<IActionResult> GetRoomMessages(string roomId, [FromQuery] string userId, [FromQuery] int page)
+        public async Task<IActionResult> GetRoomMessagesAsync(string roomId, [FromQuery] string userId, [FromQuery] int page)
         {
             try
             {
-                bool isUserAuthorizedToViewMessages = await userRoomService.IsUserInRoom(roomId, userId);
+                bool isUserAuthorizedToViewMessages = await userRoomService.IsUserInRoomAsync(roomId, userId);
 
 
                 if (!isUserAuthorizedToViewMessages)
@@ -62,15 +62,15 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("{id}/files"), Authorize]
-        public async Task<IActionResult> UploadFile(string id, [FromForm] FileUploadModel model)
+        public async Task<IActionResult> UploadFileAsync(string id, [FromForm] FileUploadModel model)
         {
             try
             {
-                ObjectId documentId = await roomService.SaveFile(id, model);
-                RoomFileDTO file = await roomService.GetFile(documentId);
+                ObjectId documentId = await roomService.SaveFileAsync(id, model);
+                RoomFileDTO file = await roomService.GetFileAsync(documentId);
                 await hubContext.Clients.Group(id).SendAsync("ReceiveMessage", id, file);
 
-                return CreatedAtAction(nameof(UploadFile), new
+                return CreatedAtAction(nameof(UploadFileAsync), new
                 {
                     success = true,
                     message = "File uploaded successfully",
@@ -83,11 +83,11 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet("{id}/files"), Authorize]
-        public async Task<IActionResult> GetFiles(string id)
+        public async Task<IActionResult> GetFilesAsync(string id)
         {
             try
             {
-                IEnumerable<RoomFileDTO> files = await roomService.GetFiles(id);
+                IEnumerable<RoomFileDTO> files = await roomService.GetFilesAsync(id);
 
                 return Ok(new
                 {

@@ -6,11 +6,11 @@ namespace ChatApp.Core.Contracts
 {
     public interface IRoomService
     {
-        public Task<ObjectId> SaveFile(string roomId, FileUploadModel model);
+        public Task<ObjectId> SaveFileAsync(string roomId, FileUploadModel model);
 
-        public Task<IEnumerable<RoomFileDTO>> GetFiles(string roomId);
+        public Task<IEnumerable<RoomFileDTO>> GetFilesAsync(string roomId);
 
-        public Task<RoomFileDTO> GetFile(ObjectId documentId);
+        public Task<RoomFileDTO> GetFileAsync(ObjectId documentId);
 
         public Task<AllMessagesDTO> GetAllRoomMessagesAsync(string roomId, int page);
     }

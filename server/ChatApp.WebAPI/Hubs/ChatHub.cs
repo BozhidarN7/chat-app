@@ -91,8 +91,8 @@ namespace ChatApp.WebAPI.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
 
-            List<MessageDTO> messages = await GetLastFewMessages(userConnection.RoomId);
-            List<RoomFileDTO> files = await GetLastFewFiles(userConnection.RoomId);
+            List<MessageDTO> messages = await GetLastFewMessagesAsync(userConnection.RoomId);
+            List<RoomFileDTO> files = await GetLastFewFilesAsync(userConnection.RoomId);
             await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", userConnection.RoomId, messages,files);
         }
 
@@ -120,7 +120,7 @@ namespace ChatApp.WebAPI.Hubs
             });
         }
 
-        private async Task<List<MessageDTO>> GetLastFewMessages(string roomId)
+        private async Task<List<MessageDTO>> GetLastFewMessagesAsync(string roomId)
         {
             return await repo.All<Message>()
                 .Include(m => m.User)
@@ -138,9 +138,9 @@ namespace ChatApp.WebAPI.Hubs
                 .ToListAsync();
         }
 
-        private async Task<List<RoomFileDTO>> GetLastFewFiles(string roomId)
+        private async Task<List<RoomFileDTO>> GetLastFewFilesAsync(string roomId)
         {
-            return (await roomService.GetFiles(roomId)).
+            return (await roomService.GetFilesAsync(roomId)).
                 OrderByDescending(r => r.MessageDateAndTime)
                 .Take(GlobalConstants.DefaulFilesReturned)
                 .Reverse()

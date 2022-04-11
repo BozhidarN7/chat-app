@@ -20,7 +20,7 @@ namespace ChatApp.Core.Services
             this.repo = repo;
         }
 
-        public async Task<string> AnsewrToFriendshipRequest(string friendshipId, bool answer)
+        public async Task<string> AnsewrToFriendshipRequestAsync(string friendshipId, bool answer)
         {
             Friendship fs = (await repo.All<Friendship>().FirstOrDefaultAsync(fs => fs.Id.ToString() == friendshipId))!;
 
@@ -43,7 +43,7 @@ namespace ChatApp.Core.Services
             return "";
         }
 
-        public async Task<FriendshipsDTO> GetNewFriendshipRequest(string friendshipId)
+        public async Task<FriendshipsDTO> GetNewFriendshipRequestAsync(string friendshipId)
         {
             Friendship? fs = await repo.All<Friendship>()
                 .Include(fs => fs.UserSend)

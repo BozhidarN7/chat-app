@@ -2,6 +2,6 @@
 {
     public interface IUserRoomService
     {
-        public Task<bool> IsUserInRoom(string roomId, string userId);
+        public Task<bool> IsUserInRoomAsync(string roomId, string userId);
     }
 }

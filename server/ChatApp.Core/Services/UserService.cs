@@ -19,14 +19,14 @@ namespace ChatApp.Core.Services
             this.repo = repo;
         }
 
-        public async Task<(ApplicationUser, bool)> GetUser(string id)
+        public async Task<(ApplicationUser, bool)> GetUserAsync(string id)
         {
             ApplicationUser user = await userManager.FindByIdAsync(id);
 
             return (user, user != null ? true : false);
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsers(string fullName)
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync(string fullName)
         {
             if (fullName != "")
             {
@@ -38,7 +38,7 @@ namespace ChatApp.Core.Services
 
 
         }
-        public async Task<IEnumerable<FriendsDTO>> GetFriends(string id)
+        public async Task<IEnumerable<FriendsDTO>> GetFriendsAsync(string id)
         {
             IEnumerable<Friendship> friendShips = await repo.All<Friendship>()
                 .Where(fs => fs.UserReceiveId == id || fs.UserSendId == id)
@@ -72,7 +72,7 @@ namespace ChatApp.Core.Services
 
         }
 
-        public async Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequests(string id)
+        public async Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequestsAsync(string id)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace ChatApp.Core.Services
             }
         }
 
-        public async Task<IEnumerable<ChatDTO>> GetUserChatRooms(string id)
+        public async Task<IEnumerable<ChatDTO>> GetUserChatRoomsAsync(string id)
         {
             ApplicationUser? user = await repo.All<ApplicationUser>()
                 .Include(u => u.UsersRooms)

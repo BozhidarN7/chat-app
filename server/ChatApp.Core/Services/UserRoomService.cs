@@ -14,7 +14,7 @@ namespace ChatApp.Core.Services
             this.repo = repo;
         }
 
-        public async Task<bool> IsUserInRoom(string roomId, string userId)
+        public async Task<bool> IsUserInRoomAsync(string roomId, string userId)
         {
             return (await repo.All<UserRoom>()
                  .Where(ur => ur.RoomId == Guid.Parse(roomId) && ur.UserId == userId)

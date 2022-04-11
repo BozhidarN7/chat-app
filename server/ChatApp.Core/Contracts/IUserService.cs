@@ -5,14 +5,14 @@ namespace ChatApp.Core.Contracts
 {
     public interface IUserService
     {
-        Task<(ApplicationUser, bool)> GetUser(string id);
+        Task<(ApplicationUser, bool)> GetUserAsync(string id);
 
-        Task<IEnumerable<ApplicationUser>> GetAllUsers(string fullName);
+        Task<IEnumerable<ApplicationUser>> GetAllUsersAsync(string fullName);
 
-        Task<IEnumerable<FriendsDTO>> GetFriends(string id);
+        Task<IEnumerable<FriendsDTO>> GetFriendsAsync(string id);
 
-        Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequests(string id);
+        Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequestsAsync(string id);
 
-        Task<IEnumerable<ChatDTO>> GetUserChatRooms(string id);
+        Task<IEnumerable<ChatDTO>> GetUserChatRoomsAsync(string id);
     }
 }

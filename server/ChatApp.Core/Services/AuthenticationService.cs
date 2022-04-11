@@ -27,12 +27,12 @@ namespace ChatApp.Core.Services
             this.config = config;
             this.repo = repo;
         }
-        public async Task<LoggedUerDTO> Login(LoginCredentialsModel credentials)
+        public async Task<LoggedUerDTO> LoginAsync(LoginCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
             if (user != null && await userManager.CheckPasswordAsync(user, credentials.Password))
             {
-                JwtSecurityToken token = await CreateToken();
+                JwtSecurityToken token = await CreateTokenAsync();
                 string refreshfreshToken = GenerateRefreshToken();
 
                 _ = int.TryParse(config["JwtSettings:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
@@ -59,7 +59,7 @@ namespace ChatApp.Core.Services
 
             return null;
         }
-        public async Task<ApplicationUser> Register(RegisterCredentialsModel credentials)
+        public async Task<ApplicationUser> RegisterAsync(RegisterCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
             if (user != null)
@@ -92,7 +92,7 @@ namespace ChatApp.Core.Services
             return null;
 
         }
-        public async Task<TokenModel> CreateNewToken(TokenModel tokenModel)
+        public async Task<TokenModel> CreateNewTokenAsync(TokenModel tokenModel)
         {
             string? accessToken = tokenModel.AccessToken;
             string? refreshToken = tokenModel.RefreshToken;
@@ -115,7 +115,7 @@ namespace ChatApp.Core.Services
                 return null;
             }
 
-            JwtSecurityToken newAccessToken = await CreateToken();
+            JwtSecurityToken newAccessToken = await CreateTokenAsync();
             string newRefreshToken = GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
@@ -129,7 +129,7 @@ namespace ChatApp.Core.Services
             };
         }
 
-        public async Task<bool> RevokeUserRefreshToken(string id)
+        public async Task<bool> RevokeUserRefreshTokenAsync(string id)
         {
             user = await userManager.FindByIdAsync(id);
 
@@ -141,11 +141,11 @@ namespace ChatApp.Core.Services
             return true;
         }
 
-        private async Task<JwtSecurityToken> CreateToken()
+        private async Task<JwtSecurityToken> CreateTokenAsync()
         {
             IConfigurationSection jwtSettings = config.GetSection("JwtSettings");
 
-            List<Claim> claims = await GetClaims();
+            List<Claim> claims = await GetClaimsAsync();
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Key").Value));
             SigningCredentials signCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -162,7 +162,7 @@ namespace ChatApp.Core.Services
             return token;
         }
 
-        private async Task<List<Claim>> GetClaims()
+        private async Task<List<Claim>> GetClaimsAsync()
         {
             List<Claim> claims = new List<Claim> {
                 new Claim(ClaimTypes.Email, user.Email),

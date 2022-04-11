@@ -18,9 +18,9 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpGet("new/{friendshipId}"), Authorize]
-        public async Task<IActionResult> GetNewFriendshipRequest(string friendshipId)
+        public async Task<IActionResult> GetNewFriendshipRequestAsync(string friendshipId)
         {
-            FriendshipsDTO request = await friendshipService.GetNewFriendshipRequest(friendshipId);
+            FriendshipsDTO request = await friendshipService.GetNewFriendshipRequestAsync(friendshipId);
 
             if (request == null)
             {
@@ -40,9 +40,9 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("{friendshipId}")]
-        public async Task<IActionResult> AnswerToFriendshipRequest(string friendshipId, [FromBody] FriendshipAnswer answer)
+        public async Task<IActionResult> AnswerToFriendshipRequestAsync(string friendshipId, [FromBody] FriendshipAnswer answer)
         {
-            string res = await friendshipService.AnsewrToFriendshipRequest(friendshipId, answer.Answer);
+            string res = await friendshipService.AnsewrToFriendshipRequestAsync(friendshipId, answer.Answer);
 
             if (res != "")
             {

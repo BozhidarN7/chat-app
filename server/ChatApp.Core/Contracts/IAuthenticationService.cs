@@ -8,13 +8,13 @@ namespace ChatApp.Core.Contracts
 {
     public interface IAuthenticationService
     {
-        public Task<LoggedUerDTO> Login(LoginCredentialsModel credentials);
+        public Task<LoggedUerDTO> LoginAsync(LoginCredentialsModel credentials);
 
-        public Task<ApplicationUser> Register(RegisterCredentialsModel credentials);
+        public Task<ApplicationUser> RegisterAsync(RegisterCredentialsModel credentials);
 
-        public Task<TokenModel> CreateNewToken(TokenModel tokenModel);
+        public Task<TokenModel> CreateNewTokenAsync(TokenModel tokenModel);
 
-        public Task<bool> RevokeUserRefreshToken(string id);
+        public Task<bool> RevokeUserRefreshTokenAsync(string id);
 
     }
 }

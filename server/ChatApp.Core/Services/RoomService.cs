@@ -24,7 +24,7 @@ namespace ChatApp.Core.Services
             this.repo = repo;
         }
 
-        public async Task<RoomFileDTO> GetFile(ObjectId documentId)
+        public async Task<RoomFileDTO> GetFileAsync(ObjectId documentId)
         {
             RoomCollection document = await roomCollection.Find(r => r.Id == documentId).FirstOrDefaultAsync();
             return new RoomFileDTO
@@ -38,7 +38,7 @@ namespace ChatApp.Core.Services
             };
         }
 
-        public async Task<IEnumerable<RoomFileDTO>> GetFiles(string roomId)
+        public async Task<IEnumerable<RoomFileDTO>> GetFilesAsync(string roomId)
         {
             return (await roomCollection.Find(r => r.RoomId.ToLower() == roomId.ToLower())
                 .ToListAsync())
@@ -53,9 +53,9 @@ namespace ChatApp.Core.Services
                 });
         }
 
-        public async Task<ObjectId> SaveFile(string roomId, FileUploadModel model)
+        public async Task<ObjectId> SaveFileAsync(string roomId, FileUploadModel model)
         {
-            byte[] fileBytes = await ConverFileToByteArray(model.File);
+            byte[] fileBytes = await ConverFileToByteArrayAsync(model.File);
 
             if (fileBytes == null)
             {
@@ -96,7 +96,7 @@ namespace ChatApp.Core.Services
                 .Reverse()
                 .ToListAsync();
 
-            List<RoomFileDTO> roomFiles = (await GetFiles(roomId))
+            List<RoomFileDTO> roomFiles = (await GetFilesAsync(roomId))
                 .OrderByDescending(r => r.MessageDateAndTime)
                 .Skip((page - 1) * GlobalConstants.DefaulFilesReturned)
                 .Take(GlobalConstants.DefaulFilesReturned)
@@ -110,7 +110,7 @@ namespace ChatApp.Core.Services
             };
         }
 
-        private async Task<byte[]> ConverFileToByteArray(IFormFile file)
+        private async Task<byte[]> ConverFileToByteArrayAsync(IFormFile file)
         {
             if (file != null && file.Length > 0)
             {

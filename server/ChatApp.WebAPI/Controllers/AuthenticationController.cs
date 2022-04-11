@@ -20,11 +20,11 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCredentialsModel credentials)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginCredentialsModel credentials)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            LoggedUerDTO user = await _authenticationService.Login(credentials);
+            LoggedUerDTO user = await _authenticationService.LoginAsync(credentials);
 
             if (user == null) return Unauthorized();
 
@@ -39,11 +39,11 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterCredentialsModel credentials)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterCredentialsModel credentials)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            ApplicationUser user = await _authenticationService.Register(credentials);
+            ApplicationUser user = await _authenticationService.RegisterAsync(credentials);
 
             if (user == null) return BadRequest();
 
@@ -66,9 +66,9 @@ namespace ChatApp.WebAPI.Controllers
         }
 
         [HttpPost("revoke/{id}"), Authorize]
-        public async Task<IActionResult> Revoke(string id)
+        public async Task<IActionResult> RevokeAsync(string id)
         {
-            bool isSuccessful = await _authenticationService.RevokeUserRefreshToken(id);
+            bool isSuccessful = await _authenticationService.RevokeUserRefreshTokenAsync(id);
 
             if (!isSuccessful) return BadRequest("Invalid user id");
 
@@ -77,14 +77,14 @@ namespace ChatApp.WebAPI.Controllers
 
         [HttpPost]
         [Route("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] TokenModel tokenModel)
+        public async Task<IActionResult> RefreshTokenAsync([FromBody] TokenModel tokenModel)
         {
             if (!ModelState.IsValid || tokenModel == null)
             {
                 return BadRequest("Invalid client request");
             }
 
-            TokenModel newTokenModel = await _authenticationService.CreateNewToken(tokenModel);
+            TokenModel newTokenModel = await _authenticationService.CreateNewTokenAsync(tokenModel);
 
             if (newTokenModel == null) return BadRequest("Invalid access token or refresh token");
 
@@ -94,12 +94,6 @@ namespace ChatApp.WebAPI.Controllers
                 message = "Token updated successfully",
                 data = tokenModel
             });
-        }
-
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return Ok(new { message = "successs" });
         }
     }
 }
