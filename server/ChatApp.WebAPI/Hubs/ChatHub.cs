@@ -93,7 +93,7 @@ namespace ChatApp.WebAPI.Hubs
 
             List<MessageDTO> messages = await GetLastFewMessagesAsync(userConnection.RoomId);
             List<RoomFileDTO> files = await GetLastFewFilesAsync(userConnection.RoomId);
-            await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", userConnection.RoomId, messages,files);
+            await Clients.Group(userConnection.RoomId).SendAsync("PreviousConversation", userConnection.RoomId, messages, files);
         }
 
         public async Task SendMessage(UserConnectionModel userConnection, string message)
@@ -116,7 +116,8 @@ namespace ChatApp.WebAPI.Hubs
                 Id = newMessage.Id.ToString(),
                 Message = message,
                 MessageDateAndTime = newMessage.DateAndTime,
-                SenderFullName = user.FullName
+                SenderFullName = user.FullName,
+                SenderId = user.Id
             });
         }
 
@@ -132,7 +133,8 @@ namespace ChatApp.WebAPI.Hubs
                     Id = m.Id.ToString(),
                     Message = m.Text,
                     MessageDateAndTime = m.DateAndTime,
-                    SenderFullName = m.User.FullName
+                    SenderFullName = m.User.FullName,
+                    SenderId = m.User.Id
                 })
                 .Reverse()
                 .ToListAsync();

@@ -17,7 +17,8 @@ const users = {
         return `${baseUrl}/users`;
     },
     getFriendsURL: (id: string) => `${baseUrl}/users/${id}/friends`,
-    getNewFriendShipRequestsURL: (id: string) => `${baseUrl}/users/${id}/friendship-requests/new`,
+    getNewFriendShipRequestsURL: (id: string) =>
+        `${baseUrl}/users/${id}/friendship-requests/new`,
     getChatsURL: (id: string) => `${baseUrl}/users/${id}/rooms`,
 };
 
@@ -28,7 +29,12 @@ const friendshipRequests = {
         `${baseUrl}/friendship-requests/${friendshipId}`,
 };
 
-const messages = {};
+const messages = {
+    deleteMessageURL: (messageId: string, userId: string, type: string) =>
+        `${baseUrl}/messages/${messageId}?userId=${userId}&type=${type}`,
+    editMessageURL: (messageId: string, userId: string) =>
+        `${baseUrl}/messages/${messageId}?userId=${userId}`,
+};
 
 const rooms = {
     getAllRoomMessagesURL: (roomId: string, userId: string, page: number) =>

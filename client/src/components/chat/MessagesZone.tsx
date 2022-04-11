@@ -14,13 +14,18 @@ type Props = {
 };
 
 const MessagesZone = ({ roomId }: Props) => {
-    const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] = useState(false);
+    const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] =
+        useState(false);
     const [page, setPage] = useState(0);
     const [messagesCount, setMessageCount] = useState(0);
 
     const { currentUser } = useAuth();
 
-    const { loading, hasMore } = useGetRoomMessages(roomId!, currentUser!.id, page);
+    const { loading, hasMore } = useGetRoomMessages(
+        roomId!,
+        currentUser!.id,
+        page
+    );
 
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const messages = useAppSelector((state) =>
@@ -65,7 +70,8 @@ const MessagesZone = ({ roomId }: Props) => {
 
     const handleScrollEvent = () => {
         if (messageBoxRef && messageBoxRef.current) {
-            const { clientHeight, scrollHeight, scrollTop } = messageBoxRef.current;
+            const { clientHeight, scrollHeight, scrollTop } =
+                messageBoxRef.current;
 
             if (scrollHeight - scrollTop > clientHeight + 100) {
                 setScrollToBottomButtonVisibility(true);
@@ -107,6 +113,8 @@ const MessagesZone = ({ roomId }: Props) => {
                                     firstMessageElRef={firstMessageElRef}
                                     senderFullName={message.senderFullName}
                                     message={message.file}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
                                     dateAndTime={message.messageDateAndTime}
                                     type={type}
                                     key={message.id}
@@ -118,6 +126,8 @@ const MessagesZone = ({ roomId }: Props) => {
                                     firstMessageElRef={null}
                                     senderFullName={message.senderFullName}
                                     message={message.file}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
                                     dateAndTime={message.messageDateAndTime}
                                     type={type}
                                     key={message.id}
@@ -132,6 +142,8 @@ const MessagesZone = ({ roomId }: Props) => {
                                     firstMessageElRef={firstMessageElRef}
                                     senderFullName={message.senderFullName}
                                     message={message.message}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
                                     dateAndTime={message.messageDateAndTime}
                                     type={type}
                                     key={message.id}
@@ -143,6 +155,8 @@ const MessagesZone = ({ roomId }: Props) => {
                                     firstMessageElRef={null}
                                     senderFullName={message.senderFullName}
                                     message={message.message}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
                                     dateAndTime={message.messageDateAndTime}
                                     type={type}
                                     key={message.id}

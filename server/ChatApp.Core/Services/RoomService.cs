@@ -71,11 +71,16 @@ namespace ChatApp.Core.Services
             };
 
             await roomCollection.InsertOneAsync(room);
-            
+
             return room.Id;
 
             //FilterDefinition<Room> filter = Builders<Room>.Filter.Eq(e => e.RoomId, roomId);
             //    UpdateDefinition<Room> update = Builders<Room>.Update.Push(e => e.Files, fileBytes);
+        }
+
+        public async Task DeleteFileAsync(ObjectId id)
+        {
+            await roomCollection.DeleteOneAsync(r => r.Id == id);
         }
 
         public async Task<AllMessagesDTO> GetAllRoomMessagesAsync(string roomId, int page)
@@ -92,6 +97,7 @@ namespace ChatApp.Core.Services
                     Message = m.Text,
                     MessageDateAndTime = m.DateAndTime,
                     SenderFullName = m.User.FullName,
+                    SenderId = m.User.Id
 
                 })
                 .Reverse()

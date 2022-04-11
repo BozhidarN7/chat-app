@@ -1,4 +1,5 @@
 ﻿using ChatApp.Core.Models.OutputDTOs;
+using ChatApp.Infrastructure.Data;
 
 namespace ChatApp.Core.Contracts
 {
@@ -9,5 +10,7 @@ namespace ChatApp.Core.Contracts
         public Task DeleteMessageAsync(string id);
 
         public Task EditMessageAsync(string id, string newText);
+
+        public Task<Message> GetMessageAsync(string id); 
     }
 }

@@ -13,5 +13,7 @@ namespace ChatApp.Core.Contracts
         public Task<RoomFileDTO> GetFileAsync(ObjectId documentId);
 
         public Task<AllMessagesDTO> GetAllRoomMessagesAsync(string roomId, int page);
+
+        public Task DeleteFileAsync(ObjectId id);
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import copy from 'copy-to-clipboard';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -6,9 +7,12 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
 import MessageOptionsMenu from 'components/menus/MessageOptionsMenu';
+import { useChat } from 'contexts/ChatCtx';
 
 type Props = {
     message: string;
+    messageId: string;
+    senderId: string;
     senderFullName: string;
     dateAndTime: string;
     type: string;
@@ -18,11 +22,14 @@ type Props = {
 const Message = ({
     firstMessageElRef,
     message,
+    messageId,
+    senderId,
     senderFullName,
     dateAndTime,
     type,
 }: Props) => {
     const theme = useTheme();
+    const { editMessage, deleteMessage } = useChat();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMessageOptionsMenu = Boolean(anchorEl);
@@ -35,10 +42,20 @@ const Message = ({
         e: React.MouseEvent<HTMLDivElement>
     ) => {
         e.preventDefault();
+        if (senderId !== currentUser.id) return;
         if (e.type === 'contextmenu') setAnchorEl(e.currentTarget);
     };
-    const closeMessageOptionsMenuHandler = () => {
+    const closeMessageOptionsMenuHandler = async (action: string) => {
         setAnchorEl(null);
+
+        if (action === 'edit' && type === 'text') {
+            await editMessage(messageId, currentUser.id, 'dasf');
+        }
+        if (action === 'delete') {
+            await deleteMessage(messageId, currentUser.id, type);
+        } else if (action === 'copy') {
+            copy(message);
+        }
     };
 
     return (

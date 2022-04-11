@@ -3,7 +3,16 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import { newChatAdded, newMessageAdded, previousMessagesAdded } from 'features/chatsSlice';
+import {
+    messageDeleted,
+    newChatAdded,
+    newMessageAdded,
+    previousMessagesAdded,
+} from 'features/chatsSlice';
+import {
+    deleteMessage as deleteMessageApi,
+    editMessage as editMessageApi,
+} from 'services/messageService';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
@@ -12,6 +21,8 @@ interface ChatCtxInterface {
     openChatRoom: any;
     sendFriendRequest: any;
     acceptFriendship: any;
+    editMessage: any;
+    deleteMessage: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -37,7 +48,9 @@ export const ChatProvider = ({ children }: Props) => {
     const openChatRoom = async (roomId: string) => {
         connection?.on('PreviousConversation', (roomId, messages, files) => {
             const combine = [...messages, ...files].sort(
-                (a, b) => (new Date(a.messageDateAndTime) as any) - (new Date(b.messageDateAndTime) as any)
+                (a, b) =>
+                    (new Date(a.messageDateAndTime) as any) -
+                    (new Date(b.messageDateAndTime) as any)
             );
             dispatch(previousMessagesAdded({ roomId, messages: combine }));
         });
@@ -90,6 +103,26 @@ export const ChatProvider = ({ children }: Props) => {
         connection?.off('AcceptFriendship');
     };
 
+    const editMessage = async (
+        messageId: string,
+        userId: string,
+        newText: string
+    ) => {};
+
+    const deleteMessage = async (
+        messageId: string,
+        userId: string,
+        type: string
+    ) => {
+        connection?.on('DeleteMessage', (messageId, roomId) => {
+            dispatch(messageDeleted({ messageId, roomId }));
+        });
+
+        await deleteMessageApi(messageId, userId, type);
+
+        // connection?.off('DeleteMessage');
+    };
+
     const value = {
         connection,
         saveConnection,
@@ -97,6 +130,8 @@ export const ChatProvider = ({ children }: Props) => {
         openChatRoom,
         sendFriendRequest,
         acceptFriendship,
+        editMessage,
+        deleteMessage,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

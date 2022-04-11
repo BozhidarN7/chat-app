@@ -2,6 +2,7 @@ interface Message {
     id: string;
     messageDateAndTime: string;
     senderFullName: string;
+    senderId: string;
     messageType: string;
 }
 

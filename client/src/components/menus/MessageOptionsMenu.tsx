@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 type Props = {
     anchorEl: null | HTMLElement;
     openMessageOptionsMenu: boolean;
-    closeMessageOptionsMenuHandler: () => void;
+    closeMessageOptionsMenuHandler: (action: string) => void;
 };
 
 const MessageOptionsMenu = ({
@@ -18,9 +18,21 @@ const MessageOptionsMenu = ({
             open={openMessageOptionsMenu}
             onClose={closeMessageOptionsMenuHandler}
         >
-            <MenuItem onClick={closeMessageOptionsMenuHandler}>Copy</MenuItem>
-            <MenuItem onClick={closeMessageOptionsMenuHandler}>Edit</MenuItem>
-            <MenuItem onClick={closeMessageOptionsMenuHandler}>Delete</MenuItem>
+            <MenuItem
+                onClick={closeMessageOptionsMenuHandler.bind(null, 'copy')}
+            >
+                Copy
+            </MenuItem>
+            <MenuItem
+                onClick={closeMessageOptionsMenuHandler.bind(null, 'edit')}
+            >
+                Edit
+            </MenuItem>
+            <MenuItem
+                onClick={closeMessageOptionsMenuHandler.bind(null, 'delete')}
+            >
+                Delete
+            </MenuItem>
         </Menu>
     );
 };

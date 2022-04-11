@@ -12,10 +12,13 @@ const initialState: ChatInterface = {
     status: 'idle',
 };
 
-export const fetchChats = createAsyncThunk('chats/fetchChats', async (id: string) => {
-    const data = await getChats(id);
-    return data.data;
-});
+export const fetchChats = createAsyncThunk(
+    'chats/fetchChats',
+    async (id: string) => {
+        const data = await getChats(id);
+        return data.data;
+    }
+);
 
 const chatsSlice = createSlice({
     name: 'chats',
@@ -29,9 +32,20 @@ const chatsSlice = createSlice({
                 .find((chat) => chat.roomId === action.payload.roomId)
                 ?.messages.push(action.payload.message);
         },
+        messageDeleted(state, action) {
+            const chat = state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            );
+            if (chat) {
+                chat.messages = chat?.messages.filter(
+                    (m) => m.id !== action.payload.messageId
+                );
+            }
+        },
         previousMessagesAdded(state, action) {
-            state.chats.find((chat) => chat.roomId === action.payload.roomId)!.messages =
-                action.payload.messages;
+            state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            )!.messages = action.payload.messages;
         },
         loadMorePreviousMessages(state, action) {
             state.chats
@@ -50,7 +64,12 @@ const chatsSlice = createSlice({
     },
 });
 
-export const { newChatAdded, newMessageAdded, loadMorePreviousMessages, previousMessagesAdded } =
-    chatsSlice.actions;
+export const {
+    newChatAdded,
+    newMessageAdded,
+    loadMorePreviousMessages,
+    previousMessagesAdded,
+    messageDeleted,
+} = chatsSlice.actions;
 
 export default chatsSlice.reducer;

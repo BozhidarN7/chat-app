@@ -24,12 +24,17 @@ namespace ChatApp.Core.Services
 
         public async Task EditMessageAsync(string id,string newText)
         {
-            Message? message = await repo.All<Message>()
-                 .FirstOrDefaultAsync(m => m.Id.ToString() == id);
+            Message? message = await GetMessageAsync(id);
 
             message.Text = newText;
 
             await repo.SaveChangesAsync();
+        }
+
+        public async Task<Message> GetMessageAsync(string id)
+        {
+            return await repo.All<Message>()
+                 .FirstOrDefaultAsync(m => m.Id.ToString() == id);
         }
 
         public async Task<bool> IsUserMessageCreatorAsync(string id, string userId)
