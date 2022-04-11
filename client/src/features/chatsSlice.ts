@@ -42,6 +42,19 @@ const chatsSlice = createSlice({
                 );
             }
         },
+        messageEdited(state, action) {
+            const chat = state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            );
+            if (chat) {
+                chat.messages = chat?.messages.map((m) => {
+                    if (m.id === action.payload.messageId) {
+                        return { ...m, message: action.payload.newText };
+                    }
+                    return m;
+                });
+            }
+        },
         previousMessagesAdded(state, action) {
             state.chats.find(
                 (chat) => chat.roomId === action.payload.roomId
@@ -70,6 +83,7 @@ export const {
     loadMorePreviousMessages,
     previousMessagesAdded,
     messageDeleted,
+    messageEdited,
 } = chatsSlice.actions;
 
 export default chatsSlice.reducer;

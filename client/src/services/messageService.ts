@@ -30,8 +30,5 @@ export const editMessage = async (
     userId: string,
     data: any
 ) => {
-    return await requester.patch(
-        routes.editMessageURL(messageId, userId),
-        data
-    );
+    return await requester.put(routes.editMessageURL(messageId, userId), data);
 };

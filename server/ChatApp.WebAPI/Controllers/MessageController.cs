@@ -79,7 +79,7 @@ namespace ChatApp.WebAPI.Controllers
             });
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> EditMessage(string id, [FromQuery] string userId, [FromBody] EditMessageModel model)
         {
             bool isUserAuthorizedToDeleteMessage = await messageService.IsUserMessageCreatorAsync(id, userId);
@@ -91,7 +91,9 @@ namespace ChatApp.WebAPI.Controllers
 
             try
             {
+                Message message = await messageService.GetMessageAsync(id);
                 await messageService.EditMessageAsync(id, model.NewText);
+                await hubContext.Clients.Group(message.RoomId.ToString()).SendAsync("EditMessage", id, message.RoomId.ToString());
             }
             catch (Exception ex)
             {

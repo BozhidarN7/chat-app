@@ -5,6 +5,7 @@ import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
 import {
     messageDeleted,
+    messageEdited,
     newChatAdded,
     newMessageAdded,
     previousMessagesAdded,
@@ -107,7 +108,15 @@ export const ChatProvider = ({ children }: Props) => {
         messageId: string,
         userId: string,
         newText: string
-    ) => {};
+    ) => {
+        connection?.on('EditMessage', (messageId, roomId) => {
+            dispatch(messageEdited({ messageId, roomId, newText }));
+        });
+
+        await editMessageApi(messageId, userId, { newText });
+
+        connection?.off('EditMessage');
+    };
 
     const deleteMessage = async (
         messageId: string,
@@ -120,7 +129,7 @@ export const ChatProvider = ({ children }: Props) => {
 
         await deleteMessageApi(messageId, userId, type);
 
-        // connection?.off('DeleteMessage');
+        connection?.off('DeleteMessage');
     };
 
     const value = {

@@ -4,6 +4,8 @@ import copy from 'copy-to-clipboard';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 
 import MessageOptionsMenu from 'components/menus/MessageOptionsMenu';
@@ -31,6 +33,8 @@ const Message = ({
     const theme = useTheme();
     const { editMessage, deleteMessage } = useChat();
 
+    const [editValue, setEditValue] = useState('');
+    const [openEditField, setOpenEditField] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMessageOptionsMenu = Boolean(anchorEl);
 
@@ -45,17 +49,24 @@ const Message = ({
         if (senderId !== currentUser.id) return;
         if (e.type === 'contextmenu') setAnchorEl(e.currentTarget);
     };
+
     const closeMessageOptionsMenuHandler = async (action: string) => {
         setAnchorEl(null);
 
         if (action === 'edit' && type === 'text') {
-            await editMessage(messageId, currentUser.id, 'dasf');
+            setOpenEditField(true);
+            setEditValue(message);
         }
         if (action === 'delete') {
             await deleteMessage(messageId, currentUser.id, type);
         } else if (action === 'copy') {
             copy(message);
         }
+    };
+
+    const editHandler = () => {
+        editMessage(messageId, currentUser.id, editValue);
+        setOpenEditField(false);
     };
 
     return (
@@ -125,6 +136,24 @@ const Message = ({
                         }}
                     >
                         <Typography>{message}</Typography>
+                        {openEditField ? (
+                            <>
+                                <TextField
+                                    onChange={(e) =>
+                                        setEditValue(e.currentTarget.value)
+                                    }
+                                    value={editValue}
+                                    variant="standard"
+                                    sx={{ mr: 4 }}
+                                />
+                                <Button
+                                    onClick={editHandler}
+                                    variant="contained"
+                                >
+                                    Edit
+                                </Button>
+                            </>
+                        ) : null}
                     </Box>
                 )}
                 <MessageOptionsMenu

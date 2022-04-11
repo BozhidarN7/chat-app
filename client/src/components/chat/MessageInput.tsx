@@ -20,7 +20,9 @@ const MessageInput = ({ roomId }: Props) => {
     const { currentUser } = useAuth();
     const [message, setMessage] = useState<string>('');
 
-    const changeFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const changeFileHandler = async (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         if (e.target.files) {
             const formData = new FormData();
             formData.append('file', e.target.files[0]);
@@ -32,7 +34,9 @@ const MessageInput = ({ roomId }: Props) => {
         }
     };
 
-    const sendMessageHandler = (e: React.KeyboardEvent | React.MouseEvent<HTMLButtonElement>) => {
+    const sendMessageHandler = (
+        e: React.KeyboardEvent | React.MouseEvent<HTMLButtonElement>
+    ) => {
         if (message.trim() === '') return;
 
         if (e.type === 'keydown') {
@@ -61,9 +65,15 @@ const MessageInput = ({ roomId }: Props) => {
                 InputProps={{
                     endAdornment: (
                         <>
-                            <UploadFileButton roomId={roomId} changeFileHandler={changeFileHandler} />
+                            <UploadFileButton
+                                roomId={roomId}
+                                changeFileHandler={changeFileHandler}
+                            />
                             <InputAdornment position="end">
-                                <IconButton onClick={sendMessageHandler} disabled={roomId ? false : true}>
+                                <IconButton
+                                    onClick={sendMessageHandler}
+                                    disabled={roomId ? false : true}
+                                >
                                     <SendIcon />
                                 </IconButton>
                             </InputAdornment>
