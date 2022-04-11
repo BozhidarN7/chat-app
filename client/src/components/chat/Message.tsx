@@ -1,7 +1,11 @@
+import React, { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+
+import MessageOptionsMenu from 'components/menus/MessageOptionsMenu';
 
 type Props = {
     message: string;
@@ -11,11 +15,31 @@ type Props = {
     firstMessageElRef: ((node: any) => void) | null;
 };
 
-const Message = ({ firstMessageElRef, message, senderFullName, dateAndTime, type }: Props) => {
+const Message = ({
+    firstMessageElRef,
+    message,
+    senderFullName,
+    dateAndTime,
+    type,
+}: Props) => {
     const theme = useTheme();
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const openMessageOptionsMenu = Boolean(anchorEl);
+
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
 
     const isLocalUser = currentUser.fullName.trim() === senderFullName.trim();
+
+    const openMessageOptionsMenuHandler = (
+        e: React.MouseEvent<HTMLDivElement>
+    ) => {
+        e.preventDefault();
+        if (e.type === 'contextmenu') setAnchorEl(e.currentTarget);
+    };
+    const closeMessageOptionsMenuHandler = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Box
@@ -41,6 +65,8 @@ const Message = ({ firstMessageElRef, message, senderFullName, dateAndTime, type
                 <Typography sx={{ fontSize: 13 }}>{senderFullName}</Typography>
                 {type === 'file' ? (
                     <Box
+                        onClick={openMessageOptionsMenuHandler}
+                        onContextMenu={openMessageOptionsMenuHandler}
                         sx={{
                             display: 'inline-block',
                             my: 1,
@@ -52,12 +78,18 @@ const Message = ({ firstMessageElRef, message, senderFullName, dateAndTime, type
                     >
                         <img
                             src={`data:image/jpeg;base64,${message}`}
-                            style={{ maxHeight: '400px', maxWidth: 400, minWidth: 400 }}
+                            style={{
+                                maxHeight: '400px',
+                                maxWidth: 400,
+                                minWidth: 400,
+                            }}
                             alt=""
                         />
                     </Box>
                 ) : (
                     <Box
+                        onClick={openMessageOptionsMenuHandler}
+                        onContextMenu={openMessageOptionsMenuHandler}
                         sx={{
                             display: 'inline-block',
                             my: 1,
@@ -75,9 +107,16 @@ const Message = ({ firstMessageElRef, message, senderFullName, dateAndTime, type
                                     : `${theme.palette.secondary.light}`,
                         }}
                     >
-                        {message}
+                        <Typography>{message}</Typography>
                     </Box>
                 )}
+                <MessageOptionsMenu
+                    anchorEl={anchorEl}
+                    openMessageOptionsMenu={openMessageOptionsMenu}
+                    closeMessageOptionsMenuHandler={
+                        closeMessageOptionsMenuHandler
+                    }
+                />
 
                 {/* <Typography sx={{ fontSize: 13 }}>{dateAndTime}</Typography> */}
             </Box>
