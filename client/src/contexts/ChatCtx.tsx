@@ -6,7 +6,6 @@ import { useAppDispatch } from 'app/hooks';
 import {
     messageDeleted,
     messageEdited,
-    newChatAdded,
     newMessageAdded,
     previousMessagesAdded,
 } from 'features/chatsSlice';
@@ -82,8 +81,6 @@ export const ChatProvider = ({ children }: Props) => {
         connection?.on('DeleteMessage', (messageId, roomId) => {
             dispatch(messageDeleted({ messageId, roomId }));
         });
-
-        connection?.off('PreviousConversation');
     };
 
     const sendMessage = async (roomId: string, message: string) => {
@@ -102,27 +99,7 @@ export const ChatProvider = ({ children }: Props) => {
     };
 
     const acceptFriendship = async (friendshipId: string) => {
-        connection?.on('AcceptFriendship', (data) => {
-            if (currentUser?.fullName !== data.senderFullName) {
-                dispatch(
-                    newChatAdded({
-                        friendFullName: data.senderFullName,
-                        friendId: data.senderId,
-                        roomId: data.roomId,
-                    })
-                );
-            } else {
-                dispatch(
-                    newChatAdded({
-                        friendFullName: data.receiverFullName,
-                        friendId: data.receiverId,
-                        roomId: data.roomId,
-                    })
-                );
-            }
-        });
         await connection?.invoke('AcceptFriendship', friendshipId);
-        connection?.off('AcceptFriendship');
     };
 
     const editMessage = async (

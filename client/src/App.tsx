@@ -17,7 +17,7 @@ import {
     fetchNewFriendRequest,
 } from 'features/usersSlice';
 
-import { fetchChats } from 'features/chatsSlice';
+import { fetchChats, newChatAdded } from 'features/chatsSlice';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -36,11 +36,31 @@ function App() {
                     .configureLogging(LogLevel.Information)
                     .build();
 
+                connection?.on('AcceptFriendship', (data) => {
+                    if (currentUser?.fullName !== data.senderFullName) {
+                        dispatch(
+                            newChatAdded({
+                                friendFullName: data.senderFullName,
+                                friendId: data.senderId,
+                                roomId: data.roomId,
+                            })
+                        );
+                    } else {
+                        dispatch(
+                            newChatAdded({
+                                friendFullName: data.receiverFullName,
+                                friendId: data.receiverId,
+                                roomId: data.roomId,
+                            })
+                        );
+                    }
+                });
+
                 await connection.start();
                 saveConnection(connection);
             }
         })();
-    }, [token, saveConnection]);
+    }, [token, saveConnection, currentUser?.fullName, dispatch]);
 
     useEffect(() => {
         (async () => {
