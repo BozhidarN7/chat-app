@@ -43,7 +43,7 @@ namespace ChatApp.WebAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            ApplicationUser user = await _authenticationService.RegisterAsync(credentials);
+            LoggedUerDTO user = await _authenticationService.RegisterAsync(credentials);
 
             if (user == null) return BadRequest();
 
@@ -51,17 +51,7 @@ namespace ChatApp.WebAPI.Controllers
             {
                 success = true,
                 message = "User register successfully",
-                data = new
-                {
-                    user = new UserDTO
-                    {
-                        Id = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        FullName = user.FullName
-                    }
-                }
+                data = user
             });
         }
 

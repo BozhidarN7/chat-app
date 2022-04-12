@@ -10,7 +10,7 @@ namespace ChatApp.Core.Contracts
     {
         public Task<LoggedUerDTO> LoginAsync(LoginCredentialsModel credentials);
 
-        public Task<ApplicationUser> RegisterAsync(RegisterCredentialsModel credentials);
+        public Task<LoggedUerDTO> RegisterAsync(RegisterCredentialsModel credentials);
 
         public Task<TokenModel> CreateNewTokenAsync(TokenModel tokenModel);
 

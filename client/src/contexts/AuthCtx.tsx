@@ -61,34 +61,47 @@ export const AuthProvider = ({ children }: Props) => {
     }, []);
 
     const signUp = async (inputData: RegisterUser) => {
-        const outputData = await registerUser(inputData);
+        try {
+            const outputData = await registerUser(inputData);
+            setCurrentUser({
+                ...outputData.data.user,
+                fullName: `${outputData.data.user.firstName} ${outputData.data.user.lastName}`,
+            });
 
-        setCurrentUser({
-            ...outputData.data.user,
-            fullName: `${outputData.data.user.firstName} ${outputData.user.lastName}`,
-        });
+            inMemoryJwtService.setToken({
+                token: outputData.data.token,
+                refreshToken: outputData.data.refreshToken,
+                expiration: outputData.data.expiration,
+            });
 
-        // setDataInLocalStorage(outputData.data.user, outputData.data.token);
+            setDataInLocalStorage(outputData.data.user);
 
-        return outputData.message;
+            return outputData.message;
+        } catch (err) {
+            return 'Register failed';
+        }
     };
     const signIn = async (inputData: LoginUser) => {
-        const outputData = await loginUser(inputData);
+        try {
+            const outputData = await loginUser(inputData);
 
-        setCurrentUser({
-            ...outputData.data.user,
-            fullName: `${outputData.data.user.firstName} ${outputData.data.user.lastName}`,
-        });
+            setCurrentUser({
+                ...outputData.data.user,
+                fullName: `${outputData.data.user.firstName} ${outputData.data.user.lastName}`,
+            });
 
-        const res = inMemoryJwtService.setToken({
-            token: outputData.data.token,
-            refreshToken: outputData.data.refreshToken,
-            expiration: outputData.data.expiration,
-        });
+            inMemoryJwtService.setToken({
+                token: outputData.data.token,
+                refreshToken: outputData.data.refreshToken,
+                expiration: outputData.data.expiration,
+            });
 
-        setDataInLocalStorage(outputData.data.user);
+            setDataInLocalStorage(outputData.data.user);
 
-        return outputData.message;
+            return outputData.message;
+        } catch (err) {
+            return 'Login failed';
+        }
     };
 
     const logout = () => {

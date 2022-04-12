@@ -59,7 +59,7 @@ namespace ChatApp.Core.Services
 
             return null;
         }
-        public async Task<ApplicationUser> RegisterAsync(RegisterCredentialsModel credentials)
+        public async Task<LoggedUerDTO> RegisterAsync(RegisterCredentialsModel credentials)
         {
             user = await userManager.FindByEmailAsync(credentials.Email);
             if (user != null)
@@ -81,13 +81,33 @@ namespace ChatApp.Core.Services
             user.PasswordHash = ph.HashPassword(user, credentials.Password);
             await userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
 
+            JwtSecurityToken token = await CreateTokenAsync();
+            string refreshfreshToken = GenerateRefreshToken();
+
+            _ = int.TryParse(config["JwtSettings:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+
+            user.RefreshToken = refreshfreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
+
             await repo.AddAsync(user);
 
             int res = await repo.SaveChangesAsync();
 
             if (res > 0)
             {
-                return user;
+                return new LoggedUerDTO
+                {
+                    User = new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email
+                    },
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    RefreshToken = refreshfreshToken,
+                    Expiration = token.ValidTo
+                };
             }
             return null;
 

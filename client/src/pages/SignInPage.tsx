@@ -45,6 +45,11 @@ const SignInPage = () => {
 
         const message = await signIn({ email, password });
 
+        if (message === 'Login failed') {
+            toast.error(message);
+            setDisableSubmitBtn(false);
+            return;
+        }
         toast.success(message);
 
         navigate('/');

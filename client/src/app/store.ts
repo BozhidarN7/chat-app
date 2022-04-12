@@ -1,9 +1,4 @@
-import {
-    configureStore,
-    ThunkAction,
-    Action,
-    getDefaultMiddleware,
-} from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 import chatsReducer from 'features/chatsSlice';
 import usersReducer from 'features/usersSlice';

@@ -25,6 +25,7 @@ import Copyright from 'components/common/Copyright';
 const SignUpPage = () => {
     const navigate = useNavigate();
 
+    const [disableSubmitBtn, setDisableSubmitBtn] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -32,6 +33,7 @@ const SignUpPage = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setDisableSubmitBtn(true);
         const data = new FormData(event.currentTarget);
         const firstName = data.get('firstName');
         const lastName = data.get('lastName');
@@ -39,17 +41,38 @@ const SignUpPage = () => {
         const password = data.get('password');
         const confirmPassword = data.get('confirmPassword');
 
-        if (!firstName || !lastName || !password || !confirmPassword || !email) {
+        if (
+            !firstName ||
+            !lastName ||
+            !password ||
+            !confirmPassword ||
+            !email
+        ) {
             toast.info('Please fill the form');
+            setDisableSubmitBtn(false);
             return;
         }
 
         if (password !== confirmPassword) {
+            setDisableSubmitBtn(false);
             toast.info('Password mismatch');
             return;
         }
 
-        const message = await signUp({ firstName, lastName, email, password, confirmPassword });
+        const message = await signUp({
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword,
+        });
+
+        if (message === 'Register failed') {
+            setDisableSubmitBtn(false);
+            toast.error(message);
+            return;
+        }
+
         toast.success(message);
 
         navigate('/');
@@ -71,7 +94,12 @@ const SignUpPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Box
+                    component="form"
+                    noValidate
+                    onSubmit={handleSubmit}
+                    sx={{ mt: 3 }}
+                >
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -116,8 +144,18 @@ const SignUpPage = () => {
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton onClick={() => setShowPassword((prev) => !prev)}>
-                                                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                            <IconButton
+                                                onClick={() =>
+                                                    setShowPassword(
+                                                        (prev) => !prev
+                                                    )
+                                                }
+                                            >
+                                                {showPassword ? (
+                                                    <VisibilityOffIcon />
+                                                ) : (
+                                                    <VisibilityIcon />
+                                                )}
                                             </IconButton>
                                         </InputAdornment>
                                     ),
@@ -137,7 +175,11 @@ const SignUpPage = () => {
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
-                                                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                                                onClick={() =>
+                                                    setShowConfirmPassword(
+                                                        (prev) => !prev
+                                                    )
+                                                }
                                             >
                                                 {showConfirmPassword ? (
                                                     <VisibilityOffIcon />
@@ -152,17 +194,32 @@ const SignUpPage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                control={
+                                    <Checkbox
+                                        value="allowExtraEmails"
+                                        color="primary"
+                                    />
+                                }
                                 label="I want to receive updates via email."
                             />
                         </Grid>
                     </Grid>
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        disabled={disableSubmitBtn}
+                        sx={{ mt: 3, mb: 2 }}
+                    >
                         Sign Up
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link component={RouterLink} to="/login" variant="body2">
+                            <Link
+                                component={RouterLink}
+                                to="/login"
+                                variant="body2"
+                            >
                                 Already have an account? Sign in
                             </Link>
                         </Grid>
