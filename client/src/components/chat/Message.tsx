@@ -135,7 +135,7 @@ const Message = ({
                                     : `${theme.palette.secondary.light}`,
                         }}
                     >
-                        <Typography>{message}</Typography>
+                        {message}
                         {openEditField ? (
                             <>
                                 <TextField

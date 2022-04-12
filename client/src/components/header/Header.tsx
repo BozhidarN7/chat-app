@@ -93,6 +93,13 @@ const Header = () => {
                                     />
                                 </CSSTransition>
                             </Box>
+
+                            <Button
+                                color="inherit"
+                                onClick={() => navigate('/profile')}
+                            >
+                                profile
+                            </Button>
                             <Button color="inherit" onClick={() => logout()}>
                                 logout
                             </Button>

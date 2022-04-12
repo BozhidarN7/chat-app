@@ -53,7 +53,16 @@ const MessageInput = ({ roomId }: Props) => {
     };
 
     return (
-        <Box sx={{ position: 'fixed', bottom: 0, width: '75%', zIndex: 10 }}>
+        <Box
+            sx={{
+                position: 'fixed',
+                bottom: 0,
+                width: '75%',
+                bgcolor: 'white',
+                maxHeight: 150,
+                zIndex: 10,
+            }}
+        >
             <TextField
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}

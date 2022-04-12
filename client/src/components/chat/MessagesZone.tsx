@@ -32,8 +32,6 @@ const MessagesZone = ({ roomId }: Props) => {
         state.chats.chats.find((chat) => chat.roomId === roomId)
     )?.messages;
 
-    console.log(messages);
-
     const observer = useRef<any>();
     const firstMessageElRef = useCallback(
         (node: any) => {
