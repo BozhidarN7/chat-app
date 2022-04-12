@@ -115,7 +115,7 @@ export const ChatProvider = ({ children }: Props) => {
 
         await editMessageApi(messageId, userId, { newText });
 
-        connection?.off('EditMessage');
+        // connection?.off('EditMessage');
     };
 
     const deleteMessage = async (
@@ -129,7 +129,7 @@ export const ChatProvider = ({ children }: Props) => {
 
         await deleteMessageApi(messageId, userId, type);
 
-        connection?.off('DeleteMessage');
+        // connection?.off('DeleteMessage');
     };
 
     const value = {

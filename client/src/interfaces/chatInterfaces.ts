@@ -8,7 +8,7 @@ interface Message {
 
 export interface Chat {
     friendId: string;
-    firendFullName: string;
+    friendFullName: string;
     roomId: string;
     messages: Array<FileMessage | TextMessage>;
 }

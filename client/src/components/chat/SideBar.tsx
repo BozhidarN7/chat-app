@@ -24,11 +24,18 @@ type Props = {
 const SideBar = ({ openChatSpaceHandler, roomId }: Props) => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
+    const [chatSearchQuery, setChatSearchQuery] = useState('');
     const [addFriendClicked, setAddFriendClicked] = useState(false);
     const searchFieldRef = useRef<HTMLInputElement>();
 
     const { currentUser } = useAuth();
-    const chats = useAppSelector((state) => state.chats.chats);
+    let chats = useAppSelector((state) => state.chats.chats).filter((c) =>
+        c.friendFullName.toLowerCase().includes(chatSearchQuery.toLowerCase())
+    );
+
+    const searchChatHandler = (query: string) => {
+        setChatSearchQuery(query);
+    };
 
     const addFriendHandler = () => {
         setAddFriendClicked((prev) => !prev);
@@ -37,6 +44,38 @@ const SideBar = ({ openChatSpaceHandler, roomId }: Props) => {
             searchFieldRef.current.focus();
             dispatch(fetchUsers());
         }
+    };
+
+    const getFriendFullNameFirstPart = (
+        friendFullName: string,
+        query: string
+    ) => {
+        const startPosition = friendFullName
+            .toLowerCase()
+            .indexOf(query.toLocaleLowerCase());
+        return friendFullName.substring(0, startPosition);
+    };
+
+    const getFriendFullNameLastPart = (
+        friendFullName: string,
+        query: string
+    ) => {
+        const startPosition = friendFullName
+            .toLowerCase()
+            .indexOf(query.toLocaleLowerCase());
+        const endPosition = startPosition + query.length;
+        return friendFullName.substring(endPosition);
+    };
+
+    const getFriendFullNameBoldPart = (
+        friendFullName: string,
+        query: string
+    ) => {
+        const startPosition = friendFullName
+            .toLowerCase()
+            .indexOf(query.toLocaleLowerCase());
+        const endPosition = startPosition + query.length;
+        return friendFullName.substring(startPosition, endPosition);
     };
 
     return (
@@ -64,6 +103,7 @@ const SideBar = ({ openChatSpaceHandler, roomId }: Props) => {
                 <SearchField
                     addFriendClicked={addFriendClicked}
                     searchFieldRef={searchFieldRef}
+                    searchChatHandler={searchChatHandler}
                 />
                 <List sx={{ mb: 2 }}>
                     {chats.map((chat: any) => (
@@ -83,7 +123,31 @@ const SideBar = ({ openChatSpaceHandler, roomId }: Props) => {
                                 </ListItemAvatar>
                                 <ListItemText
                                     sx={{ color: theme.palette.primary.main }}
-                                    primary={chat.friendFullName}
+                                    primary={
+                                        <>
+                                            <Typography component="span">
+                                                {getFriendFullNameFirstPart(
+                                                    chat.friendFullName,
+                                                    chatSearchQuery
+                                                )}
+                                            </Typography>
+                                            <Typography
+                                                component="span"
+                                                sx={{ fontWeight: 'bold' }}
+                                            >
+                                                {getFriendFullNameBoldPart(
+                                                    chat.friendFullName,
+                                                    chatSearchQuery
+                                                )}
+                                            </Typography>
+                                            <Typography component="span">
+                                                {getFriendFullNameLastPart(
+                                                    chat.friendFullName,
+                                                    chatSearchQuery
+                                                )}
+                                            </Typography>
+                                        </>
+                                    }
                                     secondary={
                                         currentUser?.fullName ===
                                         chat.friendFullName

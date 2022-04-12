@@ -55,9 +55,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 type Props = {
     addFriendClicked: boolean;
     searchFieldRef: MutableRefObject<HTMLInputElement | undefined>;
+    searchChatHandler: (query: string) => void;
 };
 
-const SearchField = ({ addFriendClicked, searchFieldRef }: Props) => {
+const SearchField = ({
+    addFriendClicked,
+    searchFieldRef,
+    searchChatHandler,
+}: Props) => {
     const [searchValue, setSearchField] = useState('');
     const [matchedUsers, setMatchedUsers] = useState<User[]>([]);
     const matchingUsersRef = useRef(null);
@@ -66,8 +71,13 @@ const SearchField = ({ addFriendClicked, searchFieldRef }: Props) => {
 
     const searchHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const currentSearch = e.target.value;
-        setSearchField(currentSearch);
-        setMatchedUsers(filterUsers(users, currentSearch, currentUser!.id));
+        if (addFriendClicked) {
+            setSearchField(currentSearch);
+            setMatchedUsers(filterUsers(users, currentSearch, currentUser!.id));
+        } else {
+            searchChatHandler(currentSearch);
+            setSearchField(currentSearch);
+        }
     };
 
     return (
