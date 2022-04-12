@@ -38,7 +38,9 @@ type Props = {
 
 export const ChatProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();
+
     const [connection, setConnection] = useState<HubConnection>();
+    let count = 0;
 
     const { currentUser } = useAuth();
 
@@ -47,6 +49,8 @@ export const ChatProvider = ({ children }: Props) => {
     }, []);
 
     const openChatRoom = async (roomId: string) => {
+        // setCount((prev) => prev + 1);\
+        count++;
         connection?.on('PreviousConversation', (roomId, messages, files) => {
             const combine = [...messages, ...files].sort(
                 (a, b) =>
@@ -55,13 +59,30 @@ export const ChatProvider = ({ children }: Props) => {
             );
             dispatch(previousMessagesAdded({ roomId, messages: combine }));
         });
+
+        if (count > 1) {
+            connection?.off('ReceiveMessage');
+            connection?.off('EditMessage');
+            connection?.off('DeleteMessage');
+        }
+
         await connection?.invoke('OpenChatRoom', {
             roomId,
             fullName: `${currentUser?.id}`,
         });
+
         connection?.on('ReceiveMessage', (roomId: string, message) => {
             dispatch(newMessageAdded({ roomId, message }));
         });
+
+        connection?.on('EditMessage', (messageId, roomId, newText) => {
+            dispatch(messageEdited({ messageId, roomId, newText }));
+        });
+
+        connection?.on('DeleteMessage', (messageId, roomId) => {
+            dispatch(messageDeleted({ messageId, roomId }));
+        });
+
         connection?.off('PreviousConversation');
     };
 
@@ -109,13 +130,7 @@ export const ChatProvider = ({ children }: Props) => {
         userId: string,
         newText: string
     ) => {
-        connection?.on('EditMessage', (messageId, roomId) => {
-            dispatch(messageEdited({ messageId, roomId, newText }));
-        });
-
         await editMessageApi(messageId, userId, { newText });
-
-        // connection?.off('EditMessage');
     };
 
     const deleteMessage = async (
@@ -123,13 +138,7 @@ export const ChatProvider = ({ children }: Props) => {
         userId: string,
         type: string
     ) => {
-        connection?.on('DeleteMessage', (messageId, roomId) => {
-            dispatch(messageDeleted({ messageId, roomId }));
-        });
-
         await deleteMessageApi(messageId, userId, type);
-
-        // connection?.off('DeleteMessage');
     };
 
     const value = {

@@ -57,6 +57,7 @@ const NotificationMenu = ({ notificationMenuRef }: Props) => {
                 left: -210,
                 color: 'black',
                 overflowY: 'scroll',
+                zIndex: 10,
             }}
         >
             {newFriendShipRequests.map((nfr) => (

@@ -93,7 +93,7 @@ namespace ChatApp.WebAPI.Controllers
             {
                 Message message = await messageService.GetMessageAsync(id);
                 await messageService.EditMessageAsync(id, model.NewText);
-                await hubContext.Clients.Group(message.RoomId.ToString()).SendAsync("EditMessage", id, message.RoomId.ToString());
+                await hubContext.Clients.Group(message.RoomId.ToString()).SendAsync("EditMessage", id, message.RoomId.ToString(), model.NewText);
             }
             catch (Exception ex)
             {
