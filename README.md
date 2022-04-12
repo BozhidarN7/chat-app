@@ -2,7 +2,7 @@
 
 ## SoftUni project for the ASP.NET Core - February 2022 course
 
-### The project consist of server which is a web api written on ASP.NET Core and a client written on React + Typescript.
+### The project consist of server which is a web api written on ASP.NET Core and a client written on React + TypeScript.
 
 ## Client
 
