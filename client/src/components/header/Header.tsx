@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import AppBar from '@mui/material/AppBar';
@@ -52,20 +52,16 @@ const Header = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Button
-                        sx={{ flexGrow: 1 }}
-                        color="inherit"
-                        component={RouterLink}
-                        to="/"
+
+                    <Typography
+                        onClick={() => navigate('/')}
+                        variant="h6"
+                        component="div"
+                        sx={{ flexGrow: 1, cursor: 'pointer' }}
                     >
-                        <Typography
-                            variant="h6"
-                            component="div"
-                            sx={{ flexGrow: 1 }}
-                        >
-                            ChatApp
-                        </Typography>
-                    </Button>
+                        ChatApp
+                    </Typography>
+
                     {currentUser?.id ? (
                         <>
                             <Box

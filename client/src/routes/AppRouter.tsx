@@ -6,6 +6,7 @@ import HomePage from 'pages/HomePage';
 import SignInPage from 'pages/SignInPage';
 import SignUpPage from 'pages/SignUpPage';
 import ProfilePage from 'pages/ProfilePage';
+import AdminPage from 'pages/AdminPage';
 
 const AppRouter = () => {
     return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
             <Route path="/profile" element={isLogged(ProfilePage)} />
             <Route path="/login" element={isGuest(SignInPage)} />
             <Route path="/register" element={isGuest(SignUpPage)} />
+            <Route path="/dashboard" element={isLogged(AdminPage)} />
         </Routes>
     );
 };
