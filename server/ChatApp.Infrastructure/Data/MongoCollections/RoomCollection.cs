@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ChatApp.Infrastructure.Data.MongoModels
+namespace ChatApp.Infrastructure.Data.Collections
 {
     [BsonIgnoreExtraElements]
     public class RoomCollection

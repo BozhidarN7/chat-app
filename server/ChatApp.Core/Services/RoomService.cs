@@ -3,7 +3,7 @@ using ChatApp.Core.Contracts;
 using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data;
-using ChatApp.Infrastructure.Data.MongoModels;
+using ChatApp.Infrastructure.Data.Collections;
 using ChatApp.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;

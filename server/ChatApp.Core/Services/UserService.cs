@@ -5,6 +5,9 @@ using ChatApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ChatApp.Core.Models.OutputDTOs;
+using Microsoft.AspNetCore.Http;
+using MongoDB.Driver;
+using ChatApp.Infrastructure.Data.MongoCollections;
 
 namespace ChatApp.Core.Services
 {
@@ -12,9 +15,12 @@ namespace ChatApp.Core.Services
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IApplicationDbRepository repo;
+        private readonly IMongoCollection<UserCollection> userCollection;
 
-        public UserService(UserManager<ApplicationUser> userManager, IApplicationDbRepository repo)
+        public UserService(IMongoClient mongoClient, UserManager<ApplicationUser> userManager, IApplicationDbRepository repo)
         {
+            IMongoDatabase database = mongoClient.GetDatabase("chat-app");
+            userCollection = database.GetCollection<UserCollection>("users");
             this.userManager = userManager;
             this.repo = repo;
         }
@@ -122,6 +128,49 @@ namespace ChatApp.Core.Services
             }
 
             return chats;
+        }
+
+        public async Task<string> SaveUserProfileImageAsync(string id, IFormFile file)
+        {
+            UserCollection user = await userCollection.Find(u => u.UserId == id).FirstOrDefaultAsync();
+
+            byte[] photo = await ConverFileToByteArrayAsync(file);
+
+            if (photo == null)
+            {
+                return null;
+            }
+
+            if (user != null)
+            {
+                UpdateDefinition<UserCollection> update = Builders<UserCollection>.Update.Set(u => u.Photo, photo);
+                await userCollection.FindOneAndUpdateAsync(u => u.UserId == id, update);
+            }
+            else
+            {
+                UserCollection newUser = new UserCollection()
+                {
+                    UserId = id,
+                    Photo = photo
+                };
+
+                await userCollection.InsertOneAsync(newUser);
+            }
+
+            return Convert.ToBase64String(photo);
+        }
+        private async Task<byte[]> ConverFileToByteArrayAsync(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(memoryStream);
+                    byte[] fileBytes = memoryStream.ToArray();
+                    return fileBytes;
+                }
+            }
+            return null;
         }
     }
 }

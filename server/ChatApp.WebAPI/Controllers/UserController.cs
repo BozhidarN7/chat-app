@@ -3,6 +3,7 @@ using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.WebAPI.ModelBinders;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -123,6 +124,35 @@ namespace ChatApp.WebAPI.Controllers
                 message = "Data received successfully",
                 data = chats
             });
+        }
+
+        [HttpPost("{id}/photo"),Authorize]
+        public async Task<IActionResult> SaveUserProfileImage(string id, [FromForm] IFormFile photo)
+        {
+            try
+            {
+                string profileImageString = await userService.SaveUserProfileImageAsync(id, photo);
+
+                if (profileImageString == null)
+                {
+                    throw new Exception();
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Photo saved successfully",
+                    data = new
+                    {
+                        profileImage = profileImageString
+                    }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Did not manage to save photo");
+            }
         }
     }
 }

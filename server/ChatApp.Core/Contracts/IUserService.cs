@@ -1,5 +1,6 @@
 ﻿using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace ChatApp.Core.Contracts
 {
@@ -14,5 +15,7 @@ namespace ChatApp.Core.Contracts
         Task<IEnumerable<FriendshipsDTO>> GetNewFriendshipRequestsAsync(string id);
 
         Task<IEnumerable<ChatDTO>> GetUserChatRoomsAsync(string id);
+
+        Task<string> SaveUserProfileImageAsync(string id, IFormFile file);
     }
 }
