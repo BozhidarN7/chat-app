@@ -154,5 +154,33 @@ namespace ChatApp.WebAPI.Controllers
                 return BadRequest("Did not manage to save photo");
             }
         }
+        [HttpGet("{id}/photo"), Authorize]
+        public async Task<IActionResult> GetUserProfileImage(string id)
+        {
+            try
+            {
+                string profileImageString = await userService.GetUserProfileImageAsync(id);
+
+                if (profileImageString == null)
+                {
+                    throw new Exception();
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Photo returned successfully",
+                    data = new
+                    {
+                        profileImage = profileImageString
+                    }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Did not manage to get photo");
+            }
+        }
     }
 }

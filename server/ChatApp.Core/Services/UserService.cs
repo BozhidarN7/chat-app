@@ -159,6 +159,18 @@ namespace ChatApp.Core.Services
 
             return Convert.ToBase64String(photo);
         }
+        public async Task<string> GetUserProfileImageAsync(string id)
+        {
+            UserCollection user = await userCollection.Find(u => u.UserId == id).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return Convert.ToBase64String(user.Photo);
+        }
+
         private async Task<byte[]> ConverFileToByteArrayAsync(IFormFile file)
         {
             if (file != null && file.Length > 0)
@@ -172,5 +184,6 @@ namespace ChatApp.Core.Services
             }
             return null;
         }
+
     }
 }
