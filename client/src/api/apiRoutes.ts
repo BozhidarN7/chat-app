@@ -17,7 +17,8 @@ const users = {
         return `${baseUrl}/users`;
     },
     getFriendsURL: (id: string) => `${baseUrl}/users/${id}/friends`,
-    getNewFriendShipRequestsURL: (id: string) => `${baseUrl}/users/${id}/friendship-requests/new`,
+    getNewFriendShipRequestsURL: (id: string) =>
+        `${baseUrl}/users/${id}/friendship-requests/new`,
     getChatsURL: (id: string) => `${baseUrl}/users/${id}/rooms`,
     saveUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
     getUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
@@ -43,12 +44,17 @@ const rooms = {
     sendFileURL: (roomId: string) => `${baseUrl}/rooms/${roomId}/files`,
 };
 
+const admin = {
+    getMessagesStatisticURL: () => `${baseUrl}/admin/statisics/messages`,
+};
+
 const routes = {
     ...authRoutes,
     ...users,
     ...friendshipRequests,
     ...messages,
     ...rooms,
+    ...admin,
 };
 
 export default routes;

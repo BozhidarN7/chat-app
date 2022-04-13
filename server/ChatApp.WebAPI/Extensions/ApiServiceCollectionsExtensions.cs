@@ -23,6 +23,7 @@ namespace ChatApp.WebAPI.Extensions
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IUserRoomService, UserRoomService>();
             services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IAdminService, AdminService>();
 
             return services;
         }

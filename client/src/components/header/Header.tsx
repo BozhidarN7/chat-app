@@ -113,6 +113,15 @@ const Header = () => {
                                     </Avatar>
                                 )}
                             </IconButton>
+                            {currentUser.roles.includes('admin') ? (
+                                <Button
+                                    color="inherit"
+                                    onClick={() => navigate('dashboard')}
+                                >
+                                    Dashboard
+                                </Button>
+                            ) : null}
+
                             <Button color="inherit" onClick={() => logout()}>
                                 logout
                             </Button>
