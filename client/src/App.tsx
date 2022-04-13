@@ -70,7 +70,10 @@ function App() {
 
                 dispatch(fetchNewFriendRequests(currentUser.id));
                 dispatch(fetchChats(currentUser.id));
-                dispatch(profileImageChanged(data.data.profileImage));
+
+                if (data.success) {
+                    dispatch(profileImageChanged(data.data.profileImage));
+                }
             }
         })();
     }, [currentUser, dispatch]);

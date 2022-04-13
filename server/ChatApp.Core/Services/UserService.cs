@@ -171,6 +171,11 @@ namespace ChatApp.Core.Services
             return Convert.ToBase64String(user.Photo);
         }
 
+        public async Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user)
+        {
+            return await userManager.GetRolesAsync(user);
+        }
+
         private async Task<byte[]> ConverFileToByteArrayAsync(IFormFile file)
         {
             if (file != null && file.Length > 0)

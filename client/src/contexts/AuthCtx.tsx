@@ -127,6 +127,7 @@ export const AuthProvider = ({ children }: Props) => {
                 firstName: userData.firstName,
                 lastName: userData.lastName,
                 fullName: `${userData.firstName} ${userData.lastName}`,
+                roles: userData.roles,
             })
         );
     };

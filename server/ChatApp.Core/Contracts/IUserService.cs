@@ -19,5 +19,7 @@ namespace ChatApp.Core.Contracts
         Task<string> SaveUserProfileImageAsync(string id, IFormFile file);
 
         Task<string> GetUserProfileImageAsync(string id);
+
+        Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user);
     }
 }

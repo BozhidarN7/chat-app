@@ -42,6 +42,11 @@ namespace ChatApp.Core.Services
 
                 await userManager.UpdateAsync(user);
 
+                IEnumerable<string> roles = token.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToList();
+
                 return new LoggedUerDTO
                 {
                     User = new UserDTO
@@ -49,11 +54,12 @@ namespace ChatApp.Core.Services
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email
+                        Email = user.Email,
+                        Roles = roles
                     },
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     RefreshToken = refreshfreshToken,
-                    Expiration = token.ValidTo
+                    Expiration = token.ValidTo,
                 };
             }
 
@@ -81,17 +87,29 @@ namespace ChatApp.Core.Services
             user.PasswordHash = ph.HashPassword(user, credentials.Password);
             await userManager.AddClaimAsync(user, new Claim(ClaimTypes.NameIdentifier, user.Id));
 
-            JwtSecurityToken token = await CreateTokenAsync();
             string refreshfreshToken = GenerateRefreshToken();
-
             _ = int.TryParse(config["JwtSettings:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
 
             user.RefreshToken = refreshfreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays);
 
+            IdentityUserRole<string> userRole = new IdentityUserRole<string>
+            {
+                RoleId = "user_role",
+                UserId = user.Id,
+            };
+
             await repo.AddAsync(user);
+            await repo.AddAsync(userRole);
 
             int res = await repo.SaveChangesAsync();
+
+            JwtSecurityToken token = await CreateTokenAsync();
+
+            IEnumerable<string> roles = token.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
 
             if (res > 0)
             {
@@ -102,11 +120,12 @@ namespace ChatApp.Core.Services
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        Email = user.Email
+                        Email = user.Email,
+                        Roles = roles
                     },
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     RefreshToken = refreshfreshToken,
-                    Expiration = token.ValidTo
+                    Expiration = token.ValidTo,
                 };
             }
             return null;

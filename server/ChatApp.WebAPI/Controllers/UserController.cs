@@ -21,7 +21,6 @@ namespace ChatApp.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
-
             (ApplicationUser user, bool isSuccessful) = await userService.GetUserAsync(id);
 
             if (!isSuccessful) return BadRequest();
@@ -39,6 +38,7 @@ namespace ChatApp.WebAPI.Controllers
                         LastName = user.LastName,
                         FullName = user.FullName,
                         Email = user.Email,
+                        Roles =await  userService.GetUserRolesAsync(user)
                     },
                 }
             });
@@ -163,7 +163,11 @@ namespace ChatApp.WebAPI.Controllers
 
                 if (profileImageString == null)
                 {
-                    throw new Exception();
+                    return Ok(new
+                    {
+                        suceess = false,
+                        message = "User does not have profile image"
+                    });
                 }
 
                 return Ok(new
