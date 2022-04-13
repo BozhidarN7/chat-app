@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 
 import MessageOptionsMenu from 'components/menus/MessageOptionsMenu';
 import { useChat } from 'contexts/ChatCtx';
+import { useAppSelector } from 'app/hooks';
 
 type Props = {
     message: string;
@@ -39,11 +40,13 @@ const Message = ({
     const openMessageOptionsMenu = Boolean(anchorEl);
 
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
-    console.log(currentUser);
+    const profileImage = useAppSelector((state) => state.users.profileImage);
 
     const isLocalUser = currentUser.fullName.trim() === senderFullName.trim();
 
-    const openMessageOptionsMenuHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    const openMessageOptionsMenuHandler = (
+        e: React.MouseEvent<HTMLDivElement>
+    ) => {
         e.preventDefault();
         if (senderId !== currentUser.id) return;
         if (e.type === 'contextmenu') setAnchorEl(e.currentTarget);
@@ -76,18 +79,33 @@ const Message = ({
                 alignSelf: isLocalUser ? 'flex-end' : 'center',
             }}
         >
-            <Avatar
-                sx={{
-                    width: 56,
-                    height: 56,
-                    fontSize: 18,
-                    mr: 1,
-                    mt: 2,
-                    alignSelf: 'center',
-                }}
-            >
-                {`${senderFullName[0]}${senderFullName.split(' ')[1][0]}`}
-            </Avatar>
+            {profileImage && isLocalUser ? (
+                <Avatar
+                    sx={{
+                        width: 36,
+                        height: 36,
+                        fontSize: 18,
+                        mr: 1,
+                        mt: 2,
+                        alignSelf: 'center',
+                    }}
+                    src={`data:image/jpeg;base64,${profileImage}`}
+                />
+            ) : (
+                <Avatar
+                    sx={{
+                        width: 36,
+                        height: 36,
+                        fontSize: 18,
+                        mr: 1,
+                        mt: 2,
+                        alignSelf: 'center',
+                    }}
+                >
+                    {`${senderFullName[0]}${senderFullName.split(' ')[1][0]}`}
+                </Avatar>
+            )}
+
             <Box>
                 <Typography sx={{ fontSize: 13 }}>{senderFullName}</Typography>
                 {type === 'file' ? (
@@ -138,12 +156,17 @@ const Message = ({
                         {openEditField ? (
                             <>
                                 <TextField
-                                    onChange={(e) => setEditValue(e.currentTarget.value)}
+                                    onChange={(e) =>
+                                        setEditValue(e.currentTarget.value)
+                                    }
                                     value={editValue}
                                     variant="standard"
                                     sx={{ mr: 4 }}
                                 />
-                                <Button onClick={editHandler} variant="contained">
+                                <Button
+                                    onClick={editHandler}
+                                    variant="contained"
+                                >
                                     Edit
                                 </Button>
                             </>
@@ -153,7 +176,9 @@ const Message = ({
                 <MessageOptionsMenu
                     anchorEl={anchorEl}
                     openMessageOptionsMenu={openMessageOptionsMenu}
-                    closeMessageOptionsMenuHandler={closeMessageOptionsMenuHandler}
+                    closeMessageOptionsMenuHandler={
+                        closeMessageOptionsMenuHandler
+                    }
                 />
 
                 {/* <Typography sx={{ fontSize: 13 }}>{dateAndTime}</Typography> */}

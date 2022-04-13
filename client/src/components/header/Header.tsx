@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
+import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
@@ -21,7 +22,10 @@ const Header = () => {
     const notificationMenuRef = useRef(null);
     const [showNotificationMenu, setShowNotificationMenu] = useState(false);
     const { currentUser, logout } = useAuth();
-    const newFriendShipRequests = useAppSelector((state) => state.users.newFriendshipRequests);
+    const profileImage = useAppSelector((state) => state.users.profileImage);
+    const newFriendShipRequests = useAppSelector(
+        (state) => state.users.newFriendshipRequests
+    );
 
     const showNotificationMenuHandler = () => {
         setShowNotificationMenu(true);
@@ -39,11 +43,26 @@ const Header = () => {
         >
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
                         <MenuIcon />
                     </IconButton>
-                    <Button sx={{ flexGrow: 1 }} color="inherit" component={RouterLink} to="/">
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <Button
+                        sx={{ flexGrow: 1 }}
+                        color="inherit"
+                        component={RouterLink}
+                        to="/"
+                    >
+                        <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{ flexGrow: 1 }}
+                        >
                             ChatApp
                         </Typography>
                     </Button>
@@ -56,38 +75,64 @@ const Header = () => {
                             >
                                 <IconButton color="inherit">
                                     <Badge
-                                        badgeContent={newFriendShipRequests.length}
+                                        badgeContent={
+                                            newFriendShipRequests.length
+                                        }
                                         color="secondary"
-                                        sx={{ mr: 2 }}
                                     >
                                         <NotificationsIcon color="inherit" />
                                     </Badge>
                                 </IconButton>
 
                                 <CSSTransition
-                                    in={showNotificationMenu && newFriendShipRequests.length > 0}
+                                    in={
+                                        showNotificationMenu &&
+                                        newFriendShipRequests.length > 0
+                                    }
                                     timeout={300}
                                     unmountOnExit
                                     classNames="alert"
                                     nodeRef={notificationMenuRef}
                                 >
-                                    <NotificationMenu notificationMenuRef={notificationMenuRef} />
+                                    <NotificationMenu
+                                        notificationMenuRef={
+                                            notificationMenuRef
+                                        }
+                                    />
                                 </CSSTransition>
                             </Box>
 
-                            <Button color="inherit" onClick={() => navigate('/profile')}>
-                                profile
-                            </Button>
+                            <IconButton
+                                color="inherit"
+                                onClick={() => navigate('/profile')}
+                            >
+                                {profileImage ? (
+                                    <Avatar
+                                        sx={{ width: 24, height: 24 }}
+                                        src={`data:image/jpeg;base64,${profileImage}`}
+                                    />
+                                ) : (
+                                    <Avatar sx={{ width: 24, height: 24 }}>
+                                        {currentUser.fullName[0].toUpperCase()}
+                                    </Avatar>
+                                )}
+                            </IconButton>
                             <Button color="inherit" onClick={() => logout()}>
                                 logout
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Button color="inherit" onClick={() => navigate('/login')}>
+                            <Button
+                                color="inherit"
+                                onClick={() => navigate('/login')}
+                            >
                                 Login
                             </Button>
-                            <Button color="inherit" onClick={() => navigate('/register')}>
+                            <Button
+                                color="inherit"
+                                onClick={() => navigate('/register')}
+                            >
                                 Register
                             </Button>
                         </>

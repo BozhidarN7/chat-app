@@ -12,7 +12,11 @@ import AppRouter from 'routes/AppRouter';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import { fetchNewFriendRequests, fetchNewFriendRequest } from 'features/usersSlice';
+import {
+    fetchNewFriendRequests,
+    fetchNewFriendRequest,
+    profileImageChanged,
+} from 'features/usersSlice';
 import { getUserProfileImage } from 'services/userService';
 import { fetchChats, newChatAdded } from 'features/chatsSlice';
 
@@ -21,7 +25,7 @@ function App() {
     const { saveConnection, connection } = useChat();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const token = localStorage.getItem('token');
-    const { currentUser, saveUserProfileImage } = useAuth();
+    const { currentUser } = useAuth();
     useEffect(() => {
         (async () => {
             if (token) {
@@ -62,28 +66,14 @@ function App() {
     useEffect(() => {
         (async () => {
             if (currentUser) {
-                dispatch(fetchNewFriendRequests(currentUser.id));
-            }
-        })();
-    }, [currentUser, dispatch, saveUserProfileImage]);
+                const data = await getUserProfileImage(currentUser.id);
 
-    useEffect(() => {
-        (async () => {
-            if (currentUser) {
+                dispatch(fetchNewFriendRequests(currentUser.id));
                 dispatch(fetchChats(currentUser.id));
+                dispatch(profileImageChanged(data.data.profileImage));
             }
         })();
     }, [currentUser, dispatch]);
-
-    // useEffect(() => {
-    //     (async () => {
-    //         if (currentUser) {
-    //             console.log('here');
-    //             const data = await getUserProfileImage(currentUser.id);
-    //             saveUserProfileImage(data.data.profileImage);
-    //         }
-    //     })();
-    // }, [currentUser, saveUserProfileImage]);
 
     // useEffect(() => {
     //     const accessToken = localStorage.getItem('token');

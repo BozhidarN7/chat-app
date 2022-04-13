@@ -7,12 +7,14 @@ import { getAllUsers, getNewFriendShipRequests } from 'services/userService';
 interface UsersSliceInterface {
     users: User[];
     newFriendshipRequests: FriendshipRequest[];
+    profileImage: string | null;
     status: string;
 }
 
 const initialState: UsersSliceInterface = {
     users: [],
     newFriendshipRequests: [],
+    profileImage: null,
     status: 'idle',
 };
 
@@ -45,6 +47,9 @@ const usersSlice = createSlice({
             state.newFriendshipRequests = state.newFriendshipRequests.filter(
                 (fs) => fs.friendshipId !== action.payload
             );
+        },
+        profileImageChanged(state, action) {
+            state.profileImage = action.payload;
         },
     },
     extraReducers(builder) {
@@ -83,6 +88,7 @@ const usersSlice = createSlice({
     },
 });
 
-export const { friendshipRequestDeleted } = usersSlice.actions;
+export const { friendshipRequestDeleted, profileImageChanged } =
+    usersSlice.actions;
 
 export default usersSlice.reducer;
