@@ -20,6 +20,7 @@ const users = {
     getNewFriendShipRequestsURL: (id: string) => `${baseUrl}/users/${id}/friendship-requests/new`,
     getChatsURL: (id: string) => `${baseUrl}/users/${id}/rooms`,
     saveUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
+    getUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
 };
 
 const friendshipRequests = {

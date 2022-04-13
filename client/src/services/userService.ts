@@ -39,6 +39,10 @@ export const saveUserProfileImage = async (id: string, data: FormData) => {
     return await requester.post(routes.saveUserProfileImageURL(id), data);
 };
 
+export const getUserProfileImage = async (id: string) => {
+    return await requester.get(routes.saveUserProfileImageURL(id));
+};
+
 export const filterUsers = (users: User[], query: string, currentUserId: string) => {
     return users
         .filter((u) => u.fullName.toLowerCase().includes(query.toLowerCase()) && u.id !== currentUserId)

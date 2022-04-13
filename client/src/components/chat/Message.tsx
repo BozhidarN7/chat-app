@@ -39,6 +39,7 @@ const Message = ({
     const openMessageOptionsMenu = Boolean(anchorEl);
 
     const currentUser = JSON.parse(localStorage.getItem('userInfo')!);
+    console.log(currentUser);
 
     const isLocalUser = currentUser.fullName.trim() === senderFullName.trim();
 

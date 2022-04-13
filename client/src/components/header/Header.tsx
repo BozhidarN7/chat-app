@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import AppBar from '@mui/material/AppBar';
@@ -21,9 +21,7 @@ const Header = () => {
     const notificationMenuRef = useRef(null);
     const [showNotificationMenu, setShowNotificationMenu] = useState(false);
     const { currentUser, logout } = useAuth();
-    const newFriendShipRequests = useAppSelector(
-        (state) => state.users.newFriendshipRequests
-    );
+    const newFriendShipRequests = useAppSelector((state) => state.users.newFriendshipRequests);
 
     const showNotificationMenuHandler = () => {
         setShowNotificationMenu(true);
@@ -41,22 +39,14 @@ const Header = () => {
         >
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
+                    <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1 }}
-                    >
-                        ChatApp
-                    </Typography>
+                    <Button sx={{ flexGrow: 1 }} color="inherit" component={RouterLink} to="/">
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            ChatApp
+                        </Typography>
+                    </Button>
                     {currentUser?.id ? (
                         <>
                             <Box
@@ -66,9 +56,7 @@ const Header = () => {
                             >
                                 <IconButton color="inherit">
                                     <Badge
-                                        badgeContent={
-                                            newFriendShipRequests.length
-                                        }
+                                        badgeContent={newFriendShipRequests.length}
                                         color="secondary"
                                         sx={{ mr: 2 }}
                                     >
@@ -77,27 +65,17 @@ const Header = () => {
                                 </IconButton>
 
                                 <CSSTransition
-                                    in={
-                                        showNotificationMenu &&
-                                        newFriendShipRequests.length > 0
-                                    }
+                                    in={showNotificationMenu && newFriendShipRequests.length > 0}
                                     timeout={300}
                                     unmountOnExit
                                     classNames="alert"
                                     nodeRef={notificationMenuRef}
                                 >
-                                    <NotificationMenu
-                                        notificationMenuRef={
-                                            notificationMenuRef
-                                        }
-                                    />
+                                    <NotificationMenu notificationMenuRef={notificationMenuRef} />
                                 </CSSTransition>
                             </Box>
 
-                            <Button
-                                color="inherit"
-                                onClick={() => navigate('/profile')}
-                            >
+                            <Button color="inherit" onClick={() => navigate('/profile')}>
                                 profile
                             </Button>
                             <Button color="inherit" onClick={() => logout()}>
@@ -106,16 +84,10 @@ const Header = () => {
                         </>
                     ) : (
                         <>
-                            <Button
-                                color="inherit"
-                                onClick={() => navigate('/login')}
-                            >
+                            <Button color="inherit" onClick={() => navigate('/login')}>
                                 Login
                             </Button>
-                            <Button
-                                color="inherit"
-                                onClick={() => navigate('/register')}
-                            >
+                            <Button color="inherit" onClick={() => navigate('/register')}>
                                 Register
                             </Button>
                         </>
