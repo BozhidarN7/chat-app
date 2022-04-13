@@ -1,17 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
 
 import { RegisterUser, LoginUser, User } from 'interfaces/userInterfaces';
-import {
-    registerUser,
-    loginUser,
-    revokeRefreshToken,
-} from 'services/authService';
+import { registerUser, loginUser, revokeRefreshToken } from 'services/authService';
 import { getUser } from 'services/userService';
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
 interface AuthCtxInterface {
     currentUser: User | null;
     token: TokenProps;
+    saveUserProfileImage: any;
     signUp: any;
     signIn: any;
     logout: any;
@@ -118,6 +115,12 @@ export const AuthProvider = ({ children }: Props) => {
         localStorage.removeItem('refreshToken');
     };
 
+    const saveUserProfileImage = (profileImage: string) => {
+        setCurrentUser((prev) => {
+            return { ...prev, profileImage } as User;
+        });
+    };
+
     const setDataInLocalStorage = (userData: User) => {
         localStorage.setItem(
             'userInfo',
@@ -134,13 +137,10 @@ export const AuthProvider = ({ children }: Props) => {
     const value = {
         currentUser,
         token,
+        saveUserProfileImage,
         signUp,
         signIn,
         logout,
     };
-    return (
-        <AuthCtx.Provider value={value}>
-            {!isAuthLoading && children}
-        </AuthCtx.Provider>
-    );
+    return <AuthCtx.Provider value={value}>{!isAuthLoading && children}</AuthCtx.Provider>;
 };

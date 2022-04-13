@@ -17,9 +17,9 @@ const users = {
         return `${baseUrl}/users`;
     },
     getFriendsURL: (id: string) => `${baseUrl}/users/${id}/friends`,
-    getNewFriendShipRequestsURL: (id: string) =>
-        `${baseUrl}/users/${id}/friendship-requests/new`,
+    getNewFriendShipRequestsURL: (id: string) => `${baseUrl}/users/${id}/friendship-requests/new`,
     getChatsURL: (id: string) => `${baseUrl}/users/${id}/rooms`,
+    saveUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
 };
 
 const friendshipRequests = {

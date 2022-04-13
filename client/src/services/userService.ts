@@ -14,11 +14,7 @@ export const getFriends = async (id: string) => {
     return await requester.get(routes.getFriendsURL(id));
 };
 
-export const debounceGetMatchedUsers = async (
-    matchedUsers: User[],
-    query: string,
-    timeout: number = 300
-) => {
+export const debounceGetMatchedUsers = async (matchedUsers: User[], query: string, timeout: number = 300) => {
     let timer: number = 0;
 
     clearTimeout(timer);
@@ -39,17 +35,13 @@ export const getChats = async (id: string) => {
     return await requester.get(routes.getChatsURL(id));
 };
 
-export const filterUsers = (
-    users: User[],
-    query: string,
-    currentUserId: string
-) => {
+export const saveUserProfileImage = async (id: string, data: FormData) => {
+    return await requester.post(routes.saveUserProfileImageURL(id), data);
+};
+
+export const filterUsers = (users: User[], query: string, currentUserId: string) => {
     return users
-        .filter(
-            (u) =>
-                u.fullName.toLowerCase().includes(query.toLowerCase()) &&
-                u.id !== currentUserId
-        )
+        .filter((u) => u.fullName.toLowerCase().includes(query.toLowerCase()) && u.id !== currentUserId)
         .sort((a, b) => {
             const nameA = a.fullName.toLowerCase();
             const nameB = b.fullName.toLowerCase();

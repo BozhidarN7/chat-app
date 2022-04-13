@@ -17,6 +17,7 @@ export interface User {
     lastName: string;
     email: string;
     fullName: string;
+    profileImage: string | null;
 }
 
 export interface Token {

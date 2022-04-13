@@ -1,9 +1,9 @@
 ﻿using ChatApp.Core.Contracts;
+using ChatApp.Core.Models;
 using ChatApp.Core.Models.OutputDTOs;
 using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.WebAPI.ModelBinders;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.WebAPI.Controllers
@@ -116,7 +116,7 @@ namespace ChatApp.WebAPI.Controllers
         [HttpGet("{id}/rooms"), Authorize]
         public async Task<IActionResult> GetUserChatRooms(string id)
         {
-           IEnumerable<ChatDTO> chats =  await userService.GetUserChatRoomsAsync(id);
+            IEnumerable<ChatDTO> chats = await userService.GetUserChatRoomsAsync(id);
 
             return Ok(new
             {
@@ -126,12 +126,12 @@ namespace ChatApp.WebAPI.Controllers
             });
         }
 
-        [HttpPost("{id}/photo"),Authorize]
-        public async Task<IActionResult> SaveUserProfileImage(string id, [FromForm] IFormFile photo)
+        [HttpPost("{id}/photo"), Authorize]
+        public async Task<IActionResult> SaveUserProfileImage(string id, [FromForm] UserProfileImageModel model)
         {
             try
             {
-                string profileImageString = await userService.SaveUserProfileImageAsync(id, photo);
+                string profileImageString = await userService.SaveUserProfileImageAsync(id, model.Photo);
 
                 if (profileImageString == null)
                 {
