@@ -46,6 +46,9 @@ const rooms = {
 
 const admin = {
     getMessagesStatisticURL: () => `${baseUrl}/admin/statisics/messages`,
+    getNewlyRegisterUsers: () => `${baseUrl}/admin/statistics/new-users`,
+    getUsersWithMostMessages: () =>
+        `${baseUrl}/admin/statistics/users/messages`,
 };
 
 const routes = {

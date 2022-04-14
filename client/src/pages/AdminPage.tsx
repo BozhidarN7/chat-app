@@ -11,6 +11,8 @@ import {
 
 import Header from 'components/header/Header';
 import MessagesChart from 'components/charts/MessagesChart';
+import NewUsersChart from 'components/charts/NewUsersChart';
+import UsersWithMostMessagesChart from 'components/charts/UsersWithMostMessagesChart';
 
 const data = [
     { argument: 1, value: 10 },
@@ -28,36 +30,10 @@ const AdminPage = () => {
                         <MessagesChart />
                     </Grid>
                     <Grid item xs={6}>
-                        <Paper>
-                            <Typography sx={{ m: 2 }} variant="h6">
-                                User statistics
-                            </Typography>
-                            <Chart data={data}>
-                                <ArgumentAxis />
-                                <ValueAxis />
-
-                                <LineSeries
-                                    valueField="value"
-                                    argumentField="argument"
-                                />
-                            </Chart>
-                        </Paper>
+                        <NewUsersChart />
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography sx={{ m: 2 }} variant="h6">
-                            User statistics
-                        </Typography>
-                        <Paper>
-                            <Chart data={data}>
-                                <ArgumentAxis />
-                                <ValueAxis />
-
-                                <LineSeries
-                                    valueField="value"
-                                    argumentField="argument"
-                                />
-                            </Chart>
-                        </Paper>
+                        <UsersWithMostMessagesChart />
                     </Grid>
                     <Grid item xs={6}>
                         <Typography sx={{ m: 2 }} variant="h6">

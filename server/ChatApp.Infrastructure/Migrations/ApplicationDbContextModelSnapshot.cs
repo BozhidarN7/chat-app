@@ -49,7 +49,7 @@ namespace ChatApp.Infrastructure.Migrations
 
                     b.HasIndex("UserSendId");
 
-                    b.ToTable("Friendships");
+                    b.ToTable("Friendships", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Infrastructure.Data.Identity.ApplicationUser", b =>
@@ -343,7 +343,7 @@ namespace ChatApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Infrastructure.Data.Room", b =>
@@ -354,7 +354,7 @@ namespace ChatApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Infrastructure.Data.UserRoom", b =>
@@ -369,7 +369,7 @@ namespace ChatApp.Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("UsersRooms");
+                    b.ToTable("UsersRooms", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
