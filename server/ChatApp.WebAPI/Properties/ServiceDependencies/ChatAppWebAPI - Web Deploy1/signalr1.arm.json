@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('ChatAppWebAPIvault', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('ChatAppWebAPI1', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -49,21 +49,16 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "ChatAppWebAPIvault",
-              "type": "Microsoft.KeyVault/vaults",
-              "location": "[parameters('resourceLocation')]",
-              "properties": {
-                "sku": {
-                  "family": "A",
-                  "name": "Standard"
-                },
-                "tenantId": "4a06d40c-e447-42be-baef-dd0421ed10bd",
-                "accessPolicies": [],
-                "enabledForDeployment": true,
-                "enabledForDiskEncryption": true,
-                "enabledForTemplateDeployment": true
+              "sku": {
+                "name": "Free_F1",
+                "tier": "Free",
+                "size": "F1",
+                "capacity": 1
               },
-              "apiVersion": "2016-10-01"
+              "location": "[parameters('resourceLocation')]",
+              "name": "ChatAppWebAPI1",
+              "type": "Microsoft.SignalRService/SignalR",
+              "apiVersion": "2018-10-01"
             }
           ]
         }
@@ -71,6 +66,6 @@
     }
   ],
   "metadata": {
-    "_dependencyType": "secrets.keyVault"
+    "_dependencyType": "signalr.azure"
   }
 }
