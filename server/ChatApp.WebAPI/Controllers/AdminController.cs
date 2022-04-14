@@ -70,5 +70,30 @@ namespace ChatApp.WebAPI.Controllers
                 return BadRequest("Did not manage to get data");
             }
         }
+
+        [HttpGet("statistics/users/messages")]
+        public async Task<IActionResult> GetUsersWithMostMessages()
+        {
+            try
+            {
+                IEnumerable<UsersWithMostMessagesDTO> users = await adminService.GetUsersWithMostMessagesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        count = users.Count(),
+                        users
+                    }
+                });
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Did not manage to get data");
+            }
+        }
     }
 }

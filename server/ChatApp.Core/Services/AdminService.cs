@@ -85,6 +85,21 @@ namespace ChatApp.Core.Services
                 .ToList();
 
         }
-    
+
+        public async Task<IEnumerable<UsersWithMostMessagesDTO>> GetUsersWithMostMessagesAsync()
+        {
+            return (await repo.All<Message>()
+                .Include(m => m.User)
+                .ToListAsync())
+                .GroupBy(m => m.User)
+                .Select(m => new UsersWithMostMessagesDTO
+                {
+                    FullName = m.Key.FullName,
+                    TotalMessages = m.Count()
+                })
+                .OrderByDescending(u => u.TotalMessages)
+                .Take(GlobalConstants.UsersWithMostMessages)
+                .ToList();
+        }
     }
 }

@@ -7,5 +7,7 @@ namespace ChatApp.Core.Contracts
         public Task<IEnumerable<MessagesStatisticDTO>> GetMessagesStatisticAsync();
 
         public Task<IEnumerable<NewUsersStatisticDTO>> GetNewlyRegisterUsersAsync();
+
+        public Task<IEnumerable<UsersWithMostMessagesDTO>> GetUsersWithMostMessagesAsync();
     }
 }
