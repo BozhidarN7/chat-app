@@ -2,6 +2,7 @@
 using ChatApp.Core.Contracts;
 using ChatApp.Core.Models.OutputDTOs.StatisticsDTOs;
 using ChatApp.Infrastructure.Data;
+using ChatApp.Infrastructure.Data.Identity;
 using ChatApp.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,5 +50,41 @@ namespace ChatApp.Core.Services
                 .ToList();
 
         }
+
+        public async Task<IEnumerable<NewUsersStatisticDTO>> GetNewlyRegisterUsersAsync()
+        {
+            List<NewUsersStatisticDTO> statistic = (await repo.All<ApplicationUser>()
+                 .ToListAsync())
+                 .GroupBy(au => au.CreatedAt.Date)
+                 .OrderBy(au => au.Key)
+                 .TakeLast(GlobalConstants.LastNDaysNewUsers)
+                 .Select(au => new NewUsersStatisticDTO
+                 {
+                     Date = au.Key,
+                     TotalUsers = au.Count()
+                 })
+                 .ToList();
+
+
+            int count = statistic.Count();
+            for (int i = 0; i <= GlobalConstants.LastNDaysNewUsers; i++)
+            {
+                if (statistic.FirstOrDefault(s => s.Date == statistic[count - 1].Date.AddDays(-(i + 1))) == null)
+                {
+                    statistic.Add(new NewUsersStatisticDTO
+                    {
+                        Date = statistic[count - 1].Date.AddDays(-(i + 1)),
+                        TotalUsers = 0
+                    });
+                }
+            }
+
+            return statistic
+                .OrderBy(s => s.Date)
+                .TakeLast(GlobalConstants.LastNDaysNewUsers)
+                .ToList();
+
+        }
+    
     }
 }

@@ -54,6 +54,7 @@ namespace ChatApp.Infrastructure.Data
                 "Desislava Genova"
             };
             List<ApplicationUser> users = new List<ApplicationUser>();
+            Random rnd = new Random();
             for (int i = 0; i < names.Length; i++)
             {
                 ApplicationUser user = new ApplicationUser
@@ -64,7 +65,8 @@ namespace ChatApp.Infrastructure.Data
                     FullName = names[i],
                     Email = $"test{i + 3}@abv.bg",
                     NormalizedEmail = $"test{i + 3}@abv.bg".ToUpperInvariant(),
-                    SecurityStamp = Guid.NewGuid().ToString()
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.Now.AddDays(rnd.Next(1, 3))
                 };
                 user.PasswordHash = ph.HashPassword(user, "asdfasdf");
                 users.Add(user);

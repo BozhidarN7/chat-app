@@ -28,5 +28,7 @@ namespace ChatApp.Infrastructure.Data.Identity
         public ICollection<Friendship> FriendShips { get; set; }
 
         public ICollection<UserRoom> UsersRooms { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }

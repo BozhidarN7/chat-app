@@ -45,5 +45,30 @@ namespace ChatApp.WebAPI.Controllers
 
             }
         }
+
+        [HttpGet("statistics/new-users")]
+        public async Task<IActionResult> GetNewlyRegisterUsers()
+        {
+            try
+            {
+               IEnumerable<NewUsersStatisticDTO> users =  await adminService.GetNewlyRegisterUsersAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        count = users.Count(),
+                        users
+                    }
+                });
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Did not manage to get data");
+            }
+        }
     }
 }
