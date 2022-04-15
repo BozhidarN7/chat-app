@@ -24,7 +24,7 @@ import { toast } from 'react-toastify';
 const ProfilePage = () => {
     const dispatch = useAppDispatch();
 
-    const [photo, setPhoto] = useState<File | null>();
+    const [photo, setPhoto] = useState<File | null>(null);
     const [oldPassword, setOldPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -73,9 +73,13 @@ const ProfilePage = () => {
                 <Grid container>
                     <Grid item xs={4}>
                         <Box>
-                            {profileImage ? (
+                            {profileImage || photo ? (
                                 <img
-                                    src={`data:image/jpeg;base64,${profileImage}`}
+                                    src={
+                                        photo
+                                            ? URL.createObjectURL(photo)
+                                            : `data:image/jpeg;base64,${profileImage}`
+                                    }
                                     alt=""
                                     style={{ width: '227px', height: '227px' }}
                                 />

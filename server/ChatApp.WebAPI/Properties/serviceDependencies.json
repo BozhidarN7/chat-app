@@ -1,13 +1,5 @@
 {
   "dependencies": {
-    "identityapp1": {
-      "type": "identityapp",
-      "connectionId": "AzureAD:ClientSecret"
-    },
-    "secrets1": {
-      "type": "secrets",
-      "connectionId": "VaultUri"
-    },
     "signalr1": {
       "type": "signalr",
       "connectionId": "Azure:SignalR:ConnectionString"
@@ -15,6 +7,11 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:OfficeConnection"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:HomeConnection",
+      "dynamicId": null
     }
   }
 }

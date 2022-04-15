@@ -9,6 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import 'react-toastify/dist/ReactToastify.css';
 
 import AppRouter from 'routes/AppRouter';
+import { baseUrl } from 'api/apiRoutes';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
@@ -30,7 +31,7 @@ function App() {
         (async () => {
             if (token) {
                 const connection = new HubConnectionBuilder()
-                    .withUrl('https://localhost:44325/api/v1/chat', {
+                    .withUrl(`${baseUrl}/chat`, {
                         accessTokenFactory: () => token,
                     })
                     .withAutomaticReconnect()

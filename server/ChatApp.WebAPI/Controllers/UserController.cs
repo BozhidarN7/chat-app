@@ -18,7 +18,7 @@ namespace ChatApp.WebAPI.Controllers
             this.userService = userService;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
         public async Task<IActionResult> GetUser(string id)
         {
             (ApplicationUser user, bool isSuccessful) = await userService.GetUserAsync(id);
@@ -38,7 +38,7 @@ namespace ChatApp.WebAPI.Controllers
                         LastName = user.LastName,
                         FullName = user.FullName,
                         Email = user.Email,
-                        Roles =await  userService.GetUserRolesAsync(user)
+                        Roles = await userService.GetUserRolesAsync(user)
                     },
                 }
             });

@@ -1,4 +1,6 @@
-export const baseUrl = 'https://localhost:44325/api/v1';
+export const baseUrl = process.env.NODE_ENV
+    ? 'https://localhost:44325/api/v1'
+    : 'https://chatappwebapi.azurewebsites.net/api/v1';
 
 const authRoutes = {
     registerURL: () => `${baseUrl}/auth/register`,
