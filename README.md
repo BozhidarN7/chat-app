@@ -1,4 +1,4 @@
-# Chat App
+# Chat App - https://chatappclient.azurewebsites.net/
 
 ## SoftUni project for the ASP.NET Core - February 2022 course
 
