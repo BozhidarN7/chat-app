@@ -52,7 +52,7 @@ const SignInPage = () => {
         }
         toast.success(message);
 
-        navigate('/');
+        navigate('/chat');
     };
 
     return (

@@ -7,7 +7,7 @@ const isAdmin = (WrapperComponent: () => JSX.Element) => {
         const { currentUser } = useAuth();
 
         if (!currentUser || !currentUser.roles.includes('admin')) {
-            return <Navigate to="/" replace={true} />;
+            return <Navigate to="/chat" replace={true} />;
         }
         return <WrapperComponent {...props} />;
     };

@@ -7,7 +7,7 @@ const isGuest = (WrapperComponent: () => JSX.Element) => {
         const { currentUser } = useAuth();
 
         if (currentUser) {
-            return <Navigate to="/" replace={true} />;
+            return <Navigate to="/chat" replace={true} />;
         }
 
         return <WrapperComponent {...props} />;

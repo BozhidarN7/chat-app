@@ -75,7 +75,7 @@ const SignUpPage = () => {
 
         toast.success(message);
 
-        navigate('/');
+        navigate('/chat');
     };
 
     return (

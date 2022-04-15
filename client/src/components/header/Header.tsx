@@ -54,7 +54,7 @@ const Header = () => {
                     </IconButton>
 
                     <Typography
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate('/chat')}
                         variant="h6"
                         component="div"
                         sx={{ flexGrow: 1, cursor: 'pointer' }}
