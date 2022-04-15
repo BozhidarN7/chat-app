@@ -116,7 +116,7 @@ const Header = () => {
                             {currentUser.roles.includes('admin') ? (
                                 <Button
                                     color="inherit"
-                                    onClick={() => navigate('dashboard')}
+                                    onClick={() => navigate('/dashboard')}
                                 >
                                     Dashboard
                                 </Button>

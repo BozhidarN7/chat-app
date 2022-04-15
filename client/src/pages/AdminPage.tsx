@@ -36,9 +36,6 @@ const AdminPage = () => {
                         <UsersWithMostMessagesChart />
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography sx={{ m: 2 }} variant="h6">
-                            User statistics
-                        </Typography>
                         <Paper>
                             <Chart data={data}>
                                 <ArgumentAxis />
