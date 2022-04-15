@@ -24,11 +24,9 @@ const UsersWithMostMessagesChart = () => {
                     const date = new Date(u.date);
                     return {
                         ...u,
-                        date: `${
-                            date.getDate() < 10 ? '0' : ''
-                        }${date.getDate()}/${date.getMonth() < 9 ? '0' : ''}${
-                            date.getMonth() + 1
-                        }`,
+                        date: `${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${
+                            date.getMonth() < 9 ? '0' : ''
+                        }${date.getMonth() + 1}`,
                     };
                 })
             );
@@ -48,10 +46,7 @@ const UsersWithMostMessagesChart = () => {
                 <ArgumentAxis />
                 <ValueAxis />
 
-                <BarSeries
-                    valueField="totalMessages"
-                    argumentField="fullName"
-                />
+                <BarSeries valueField="totalMessages" argumentField="fullName" />
 
                 <Title text="Users with most messages sent (top 7 users)" />
                 <EventTracker />

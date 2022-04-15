@@ -11,6 +11,13 @@
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/chatappwebapidbserver1/databases/ChatApp.WebAPI_db",
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:OfficeConnection"
+    },
+    "mssql2": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/chatappwebapidbserver1/databases/ChatApp.WebAPI_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:HomeConnection",
+      "dynamicId": null
     }
   }
 }

@@ -1,4 +1,5 @@
 export const baseUrl = 'https://localhost:44325/api/v1';
+// export const baseUrl = 'https://chatappwebapi.azurewebsites.net/api/v1';
 
 const authRoutes = {
     registerURL: () => `${baseUrl}/auth/register`,
@@ -17,8 +18,7 @@ const users = {
         return `${baseUrl}/users`;
     },
     getFriendsURL: (id: string) => `${baseUrl}/users/${id}/friends`,
-    getNewFriendShipRequestsURL: (id: string) =>
-        `${baseUrl}/users/${id}/friendship-requests/new`,
+    getNewFriendShipRequestsURL: (id: string) => `${baseUrl}/users/${id}/friendship-requests/new`,
     getChatsURL: (id: string) => `${baseUrl}/users/${id}/rooms`,
     saveUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
     getUserProfileImageURL: (id: string) => `${baseUrl}/users/${id}/photo`,
@@ -47,8 +47,7 @@ const rooms = {
 const admin = {
     getMessagesStatisticURL: () => `${baseUrl}/admin/statisics/messages`,
     getNewlyRegisterUsers: () => `${baseUrl}/admin/statistics/new-users`,
-    getUsersWithMostMessages: () =>
-        `${baseUrl}/admin/statistics/users/messages`,
+    getUsersWithMostMessages: () => `${baseUrl}/admin/statistics/users/messages`,
 };
 
 const routes = {

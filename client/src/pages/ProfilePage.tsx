@@ -32,9 +32,7 @@ const ProfilePage = () => {
     const profileImage = useAppSelector((state) => state.users.profileImage);
     const { currentUser } = useAuth();
 
-    const changeFileHandler = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const changeFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
 
@@ -46,10 +44,7 @@ const ProfilePage = () => {
         if (photo) {
             const formData = new FormData();
             formData.append('photo', photo);
-            const data = await saveUserProfileImageAPI(
-                currentUser?.id!,
-                formData
-            );
+            const data = await saveUserProfileImageAPI(currentUser?.id!, formData);
 
             dispatch(profileImageChanged(data.data.profileImage));
 
@@ -63,11 +58,7 @@ const ProfilePage = () => {
         <>
             <Header />
             <Container sx={{ mt: 2 }} maxWidth="md">
-                <Typography
-                    sx={{ textAlign: 'center', mb: 2 }}
-                    variant="h3"
-                    component="h1"
-                >
+                <Typography sx={{ textAlign: 'center', mb: 2 }} variant="h3" component="h1">
                     Profile info
                 </Typography>
                 <Grid container>
@@ -97,18 +88,11 @@ const ProfilePage = () => {
                             sx={{ display: 'none' }}
                         />
                         <Button variant="contained">
-                            <InputLabel
-                                sx={{ cursor: 'pointer', color: 'white' }}
-                                htmlFor="file-upload"
-                            >
+                            <InputLabel sx={{ cursor: 'pointer', color: 'white' }} htmlFor="file-upload">
                                 Upload image
                             </InputLabel>
                         </Button>
-                        <Button
-                            sx={{ ml: 2 }}
-                            variant="contained"
-                            onClick={savePhotoHandler}
-                        >
+                        <Button sx={{ ml: 2 }} variant="contained" onClick={savePhotoHandler}>
                             Save
                         </Button>
                     </Grid>
@@ -155,18 +139,8 @@ const ProfilePage = () => {
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={() =>
-                                                    setOldPassword(
-                                                        (prev) => !prev
-                                                    )
-                                                }
-                                            >
-                                                {oldPassword ? (
-                                                    <VisibilityOffIcon />
-                                                ) : (
-                                                    <VisibilityIcon />
-                                                )}
+                                            <IconButton onClick={() => setOldPassword((prev) => !prev)}>
+                                                {oldPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                             </IconButton>
                                         </InputAdornment>
                                     ),
@@ -184,18 +158,8 @@ const ProfilePage = () => {
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={() =>
-                                                    setShowPassword(
-                                                        (prev) => !prev
-                                                    )
-                                                }
-                                            >
-                                                {showPassword ? (
-                                                    <VisibilityOffIcon />
-                                                ) : (
-                                                    <VisibilityIcon />
-                                                )}
+                                            <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+                                                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                             </IconButton>
                                         </InputAdornment>
                                     ),
@@ -214,11 +178,7 @@ const ProfilePage = () => {
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
-                                                onClick={() =>
-                                                    setShowConfirmPassword(
-                                                        (prev) => !prev
-                                                    )
-                                                }
+                                                onClick={() => setShowConfirmPassword((prev) => !prev)}
                                             >
                                                 {showConfirmPassword ? (
                                                     <VisibilityOffIcon />
@@ -230,12 +190,7 @@ const ProfilePage = () => {
                                     ),
                                 }}
                             />
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
+                            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                                 Edit
                             </Button>
                         </Grid>
