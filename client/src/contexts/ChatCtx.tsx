@@ -3,16 +3,8 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import {
-    messageDeleted,
-    messageEdited,
-    newMessageAdded,
-    previousMessagesAdded,
-} from 'features/chatsSlice';
-import {
-    deleteMessage as deleteMessageApi,
-    editMessage as editMessageApi,
-} from 'services/messageService';
+import { messageDeleted, messageEdited, newMessageAdded, previousMessagesAdded } from 'features/chatsSlice';
+import { deleteMessage as deleteMessageApi, editMessage as editMessageApi } from 'services/messageService';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
@@ -48,13 +40,10 @@ export const ChatProvider = ({ children }: Props) => {
     }, []);
 
     const openChatRoom = async (roomId: string) => {
-        // setCount((prev) => prev + 1);\
         count++;
         connection?.on('PreviousConversation', (roomId, messages, files) => {
             const combine = [...messages, ...files].sort(
-                (a, b) =>
-                    (new Date(a.messageDateAndTime) as any) -
-                    (new Date(b.messageDateAndTime) as any)
+                (a, b) => (new Date(a.messageDateAndTime) as any) - (new Date(b.messageDateAndTime) as any)
             );
             dispatch(previousMessagesAdded({ roomId, messages: combine }));
         });
@@ -102,19 +91,11 @@ export const ChatProvider = ({ children }: Props) => {
         await connection?.invoke('AcceptFriendship', friendshipId);
     };
 
-    const editMessage = async (
-        messageId: string,
-        userId: string,
-        newText: string
-    ) => {
+    const editMessage = async (messageId: string, userId: string, newText: string) => {
         await editMessageApi(messageId, userId, { newText });
     };
 
-    const deleteMessage = async (
-        messageId: string,
-        userId: string,
-        type: string
-    ) => {
+    const deleteMessage = async (messageId: string, userId: string, type: string) => {
         await deleteMessageApi(messageId, userId, type);
     };
 

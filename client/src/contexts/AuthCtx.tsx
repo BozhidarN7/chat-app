@@ -1,17 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 
 import { RegisterUser, LoginUser, User } from 'interfaces/userInterfaces';
-import {
-    registerUser,
-    loginUser,
-    revokeRefreshToken,
-} from 'services/authService';
+import { registerUser, loginUser, revokeRefreshToken } from 'services/authService';
 import { getUser } from 'services/userService';
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
 interface AuthCtxInterface {
     currentUser: User | null;
-    token: TokenProps;
+    token: string | null;
     signUp: any;
     signIn: any;
     logout: any;
@@ -27,15 +23,15 @@ type Props = {
     children: React.ReactNode[] | React.ReactNode;
 };
 
-type TokenProps = {
-    token: string;
-    tokenExpirationDate: Date;
-    refreshToken: string;
-};
+// type TokenProps = {
+//     token: string;
+//     tokenExpirationDate: Date;
+//     refreshToken: string;
+// };
 
 export const AuthProvider = ({ children }: Props) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [token, setToken] = useState<TokenProps>({} as TokenProps);
+    const [token, setToken] = useState<string | null>(null);
     const [isAuthLoading, setIsAuthLoading] = useState(true);
 
     useEffect(() => {
@@ -49,6 +45,7 @@ export const AuthProvider = ({ children }: Props) => {
             getUser(userInfoData.id).then((res) => {
                 setCurrentUser(res.data.user);
                 setIsAuthLoading(false);
+                setToken(token);
                 inMemoryJwtService.setToken({
                     token,
                     refreshToken,
@@ -73,7 +70,7 @@ export const AuthProvider = ({ children }: Props) => {
                 refreshToken: outputData.data.refreshToken,
                 expiration: outputData.data.expiration,
             });
-
+            setToken(outputData.data.token);
             setDataInLocalStorage(outputData.data.user);
 
             return outputData.message;
@@ -95,7 +92,7 @@ export const AuthProvider = ({ children }: Props) => {
                 refreshToken: outputData.data.refreshToken,
                 expiration: outputData.data.expiration,
             });
-
+            setToken(outputData.data.token);
             setDataInLocalStorage(outputData.data.user);
 
             return outputData.message;
@@ -112,7 +109,7 @@ export const AuthProvider = ({ children }: Props) => {
         revokeRefreshToken(currentUser.id);
         inMemoryJwtService.deleteToken();
         setCurrentUser(null);
-        setToken({} as TokenProps);
+        setToken(null);
         localStorage.removeItem('userInfo');
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
@@ -139,9 +136,5 @@ export const AuthProvider = ({ children }: Props) => {
         signIn,
         logout,
     };
-    return (
-        <AuthCtx.Provider value={value}>
-            {!isAuthLoading && children}
-        </AuthCtx.Provider>
-    );
+    return <AuthCtx.Provider value={value}>{!isAuthLoading && children}</AuthCtx.Provider>;
 };

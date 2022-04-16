@@ -13,11 +13,7 @@ import { baseUrl } from 'api/apiRoutes';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import {
-    fetchNewFriendRequests,
-    fetchNewFriendRequest,
-    profileImageChanged,
-} from 'features/usersSlice';
+import { fetchNewFriendRequests, fetchNewFriendRequest, profileImageChanged } from 'features/usersSlice';
 import { getUserProfileImage } from 'services/userService';
 import { fetchChats, newChatAdded } from 'features/chatsSlice';
 
@@ -25,8 +21,7 @@ function App() {
     const dispatch = useAppDispatch();
     const { saveConnection, connection } = useChat();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const token = localStorage.getItem('token');
-    const { currentUser } = useAuth();
+    const { currentUser, token } = useAuth();
     useEffect(() => {
         (async () => {
             if (token) {

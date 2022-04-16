@@ -117,14 +117,16 @@ namespace ChatApp.Core.Services
                     .Include(ur => ur.Room)
                     .FirstOrDefaultAsync(ur => ur.RoomId == current.RoomId && ur.UserId != current.UserId);
 
-                chats.Add(new ChatDTO
+                if (shared != null)
                 {
-                    FriendFullName = shared.User.FullName!,
-                    FriendId = shared.UserId,
-                    RoomId = shared.RoomId.ToString(),
-                    Messages = new List<MessageDTO>()
-                });
-
+                    chats.Add(new ChatDTO
+                    {
+                        FriendFullName = shared.User.FullName!,
+                        FriendId = shared.UserId,
+                        RoomId = shared.RoomId.ToString(),
+                        Messages = new List<MessageDTO>()
+                    });
+                }
             }
 
             return chats;

@@ -71,12 +71,7 @@ const SignInPage = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{ mt: 1 }}
-                >
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
                         required
@@ -99,16 +94,8 @@ const SignInPage = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() =>
-                                            setShowPassword((prev) => !prev)
-                                        }
-                                    >
-                                        {showPassword ? (
-                                            <VisibilityOffIcon />
-                                        ) : (
-                                            <VisibilityIcon />
-                                        )}
+                                    <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+                                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                                     </IconButton>
                                 </InputAdornment>
                             ),
@@ -134,11 +121,7 @@ const SignInPage = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link
-                                component={RouterLink}
-                                to="/register"
-                                variant="body2"
-                            >
+                            <Link component={RouterLink} to="/register" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
