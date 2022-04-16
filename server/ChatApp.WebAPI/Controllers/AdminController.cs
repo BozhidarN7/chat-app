@@ -35,7 +35,7 @@ namespace ChatApp.WebAPI.Controllers
                 });
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(new
                 {
@@ -51,7 +51,7 @@ namespace ChatApp.WebAPI.Controllers
         {
             try
             {
-               IEnumerable<NewUsersStatisticDTO> users =  await adminService.GetNewlyRegisterUsersAsync();
+                IEnumerable<NewUsersStatisticDTO> users = await adminService.GetNewlyRegisterUsersAsync();
 
                 return Ok(new
                 {

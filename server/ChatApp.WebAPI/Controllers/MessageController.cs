@@ -67,7 +67,7 @@ namespace ChatApp.WebAPI.Controllers
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Did not manage to delete message");
             }

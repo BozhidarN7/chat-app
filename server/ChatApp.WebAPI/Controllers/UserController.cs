@@ -21,109 +21,145 @@ namespace ChatApp.WebAPI.Controllers
         [HttpGet("{id}"), Authorize]
         public async Task<IActionResult> GetUser(string id)
         {
-            (ApplicationUser user, bool isSuccessful) = await userService.GetUserAsync(id);
-
-            if (!isSuccessful) return BadRequest();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Data received successfully",
-                data = new
+
+                (ApplicationUser user, bool isSuccessful) = await userService.GetUserAsync(id);
+
+                if (!isSuccessful) return NotFound();
+
+                return Ok(new
                 {
-                    user = new UserDTO
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
                     {
-                        Id = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        FullName = user.FullName,
-                        Email = user.Email,
-                        Roles = await userService.GetUserRolesAsync(user)
-                    },
-                }
-            });
+                        user = new UserDTO
+                        {
+                            Id = user.Id,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            FullName = user.FullName,
+                            Email = user.Email,
+                            Roles = await userService.GetUserRolesAsync(user)
+                        },
+                    }
+                });
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong");
+            }
         }
 
         [HttpGet, Authorize]
         public async Task<IActionResult> GetAllUsers([ModelBinder(BinderType = typeof(QueryStringModelBinder))] string fullName = "")
         {
-            IEnumerable<ApplicationUser> users = await userService.GetAllUsersAsync(fullName);
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Data received successfully",
-                data = new
-                {
-                    users = users.Select(user => new UserDTO
-                    {
-                        Id = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        FullName = user.FullName
-                    })
-                }
+                IEnumerable<ApplicationUser> users = await userService.GetAllUsersAsync(fullName);
 
-            });
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        users = users.Select(user => new UserDTO
+                        {
+                            Id = user.Id,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Email = user.Email,
+                            FullName = user.FullName
+                        })
+                    }
+
+                });
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong");
+            }
         }
         [HttpGet("{id}/friends"), Authorize]
         public async Task<IActionResult> GetFriends(string id)
         {
-            IEnumerable<FriendsDTO> users = await userService.GetFriendsAsync(id);
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Data received successfully",
-                data = new
-                {
-                    users = users.Select(user => new FriendsDTO
-                    {
-                        Id = user.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        FullName = user.FullName,
-                        RoomId = user.RoomId
-                    })
-                }
+                IEnumerable<FriendsDTO> users = await userService.GetFriendsAsync(id);
 
-            });
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        users = users.Select(user => new FriendsDTO
+                        {
+                            Id = user.Id,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Email = user.Email,
+                            FullName = user.FullName,
+                            RoomId = user.RoomId
+                        })
+                    }
+
+                });
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong");
+            }
         }
 
         [HttpGet("{id}/friendship-requests/new"), Authorize]
         public async Task<IActionResult> GetNewFriendshipRequests(string id)
         {
-            IEnumerable<FriendshipsDTO> requests = await userService.GetNewFriendshipRequestsAsync(id);
+            try
+            {
+                IEnumerable<FriendshipsDTO> requests = await userService.GetNewFriendshipRequestsAsync(id);
 
-            if (requests == null)
+                if (requests == null)
+                {
+                    return BadRequest("Something went wrong");
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        FriendShipRequests = requests
+                    }
+                });
+            }
+            catch (Exception)
             {
                 return BadRequest("Something went wrong");
             }
-
-            return Ok(new
-            {
-                success = true,
-                message = "Data received successfully",
-                data = new
-                {
-                    FriendShipRequests = requests
-                }
-            });
         }
 
         [HttpGet("{id}/rooms"), Authorize]
         public async Task<IActionResult> GetUserChatRooms(string id)
         {
-            IEnumerable<ChatDTO> chats = await userService.GetUserChatRoomsAsync(id);
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Data received successfully",
-                data = chats
-            });
+                IEnumerable<ChatDTO> chats = await userService.GetUserChatRoomsAsync(id);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = chats
+                });
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong");
+            }
         }
 
         [HttpPost("{id}/photo"), Authorize]
@@ -149,7 +185,7 @@ namespace ChatApp.WebAPI.Controllers
                 });
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Did not manage to save photo");
             }
@@ -181,7 +217,7 @@ namespace ChatApp.WebAPI.Controllers
                 });
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Did not manage to get photo");
             }

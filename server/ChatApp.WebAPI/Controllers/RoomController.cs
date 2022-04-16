@@ -35,7 +35,6 @@ namespace ChatApp.WebAPI.Controllers
             {
                 bool isUserAuthorizedToViewMessages = await userRoomService.IsUserInRoomAsync(roomId, userId);
 
-
                 if (!isUserAuthorizedToViewMessages)
                 {
                     return Unauthorized("You are not allowed to view this messages");
@@ -55,7 +54,7 @@ namespace ChatApp.WebAPI.Controllers
                     }
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Did not manage to return messages");
             }
@@ -76,7 +75,7 @@ namespace ChatApp.WebAPI.Controllers
                     message = "File uploaded successfully",
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Did not manage to upload file");
             }
@@ -100,7 +99,7 @@ namespace ChatApp.WebAPI.Controllers
                     }
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Did not manage to get files");
             }

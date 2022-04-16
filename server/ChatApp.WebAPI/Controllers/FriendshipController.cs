@@ -20,36 +20,50 @@ namespace ChatApp.WebAPI.Controllers
         [HttpGet("new/{friendshipId}"), Authorize]
         public async Task<IActionResult> GetNewFriendshipRequest(string friendshipId)
         {
-            FriendshipsDTO request = await friendshipService.GetNewFriendshipRequestAsync(friendshipId);
+            try
+            {
+                FriendshipsDTO request = await friendshipService.GetNewFriendshipRequestAsync(friendshipId);
 
-            if (request == null)
+                if (request == null)
+                {
+                    return BadRequest("Something went wrong");
+
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Data received successfully",
+                    data = new
+                    {
+                        FriendshipRequest = request
+                    }
+                });
+            }
+            catch (Exception)
             {
                 return BadRequest("Something went wrong");
-
             }
-
-            return Ok(new
-            {
-                success = true,
-                message = "Data received successfully",
-                data = new
-                {
-                    FriendshipRequest = request
-                }
-            });
         }
 
         [HttpPost("{friendshipId}")]
         public async Task<IActionResult> AnswerToFriendshipRequest(string friendshipId, [FromBody] FriendshipAnswer answer)
         {
-            string res = await friendshipService.AnsewrToFriendshipRequestAsync(friendshipId, answer.Answer);
-
-            if (res != "")
+            try
             {
-                return BadRequest(res);
-            }
+                string res = await friendshipService.AnsewrToFriendshipRequestAsync(friendshipId, answer.Answer);
 
-            return NoContent();
+                if (res != "")
+                {
+                    return BadRequest(res);
+                }
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong");
+            }
         }
     }
 }
