@@ -1,13 +1,7 @@
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import {
-    ArgumentAxis,
-    ValueAxis,
-    Chart,
-    LineSeries,
-} from '@devexpress/dx-react-chart-material-ui';
+import { ArgumentAxis, ValueAxis, Chart, LineSeries } from '@devexpress/dx-react-chart-material-ui';
 
 import Header from 'components/header/Header';
 import MessagesChart from 'components/charts/MessagesChart';
@@ -41,10 +35,7 @@ const AdminPage = () => {
                                 <ArgumentAxis />
                                 <ValueAxis />
 
-                                <LineSeries
-                                    valueField="value"
-                                    argumentField="argument"
-                                />
+                                <LineSeries valueField="value" argumentField="argument" />
                             </Chart>
                         </Paper>
                     </Grid>

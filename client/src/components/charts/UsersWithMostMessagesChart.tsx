@@ -18,20 +18,24 @@ const UsersWithMostMessagesChart = () => {
     const [statistic, setStatistic] = useState(null);
 
     useEffect(() => {
+        let isMounted = true;
         getUsersWithMostMessages().then((data) => {
-            setStatistic(
-                data.data.users.map((u: any) => {
-                    const date = new Date(u.date);
-                    return {
-                        ...u,
-                        date: `${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${
-                            date.getMonth() < 9 ? '0' : ''
-                        }${date.getMonth() + 1}`,
-                    };
-                })
-            );
+            if (isMounted) {
+                setStatistic(
+                    data.data.users.map((u: any) => {
+                        const date = new Date(u.date);
+                        return {
+                            ...u,
+                            date: `${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${
+                                date.getMonth() < 9 ? '0' : ''
+                            }${date.getMonth() + 1}`,
+                        };
+                    })
+                );
+            }
         });
         return () => {
+            isMounted = false;
             setStatistic(null);
         };
     }, []);

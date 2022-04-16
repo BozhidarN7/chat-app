@@ -18,22 +18,24 @@ const MessagesChart = () => {
     const [statistic, setStatistic] = useState(null);
 
     useEffect(() => {
+        let isMounted = true;
         getMessagesStatistic().then((data) => {
-            setStatistic(
-                data.data.messages.map((s: any) => {
-                    const date = new Date(s.date);
-                    return {
-                        ...s,
-                        date: `${
-                            date.getDate() < 10 ? '0' : ''
-                        }${date.getDate()}/${date.getMonth() < 9 ? '0' : ''}${
-                            date.getMonth() + 1
-                        }`,
-                    };
-                })
-            );
+            if (isMounted) {
+                setStatistic(
+                    data.data.messages.map((s: any) => {
+                        const date = new Date(s.date);
+                        return {
+                            ...s,
+                            date: `${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${
+                                date.getMonth() < 9 ? '0' : ''
+                            }${date.getMonth() + 1}`,
+                        };
+                    })
+                );
+            }
         });
         return () => {
+            isMounted = false;
             setStatistic(null);
         };
     }, []);
