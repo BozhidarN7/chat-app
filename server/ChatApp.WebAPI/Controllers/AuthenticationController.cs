@@ -105,7 +105,7 @@ namespace ChatApp.WebAPI.Controllers
                 {
                     success = true,
                     message = "Token updated successfully",
-                    data = tokenModel
+                    data = newTokenModel
                 });
             }
             catch (Exception)

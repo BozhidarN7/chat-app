@@ -145,8 +145,7 @@ namespace ChatApp.Core.Services
             }
 
             string email = principal.Claims
-                .FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")
-                .Value;
+                .FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
 
             user = await userManager.FindByEmailAsync(email);
 
