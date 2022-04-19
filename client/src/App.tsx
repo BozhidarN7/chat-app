@@ -13,7 +13,11 @@ import { baseUrl } from 'api/apiRoutes';
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { useAppDispatch } from 'app/hooks';
-import { fetchNewFriendRequests, fetchNewFriendRequest, profileImageChanged } from 'features/usersSlice';
+import {
+    fetchNewFriendRequests,
+    fetchNewFriendRequest,
+    profileImageChanged,
+} from 'features/usersSlice';
 import { getUserProfileImage } from 'services/userService';
 import { fetchChats, newChatAdded } from 'features/chatsSlice';
 

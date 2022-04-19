@@ -9,6 +9,8 @@ import SignUpPage from 'pages/SignUpPage';
 import ProfilePage from 'pages/ProfilePage';
 import AdminPage from 'pages/AdminPage';
 import LandingPage from 'pages/LandingPage';
+import NotificationPage from 'pages/NotificationPage';
+import isMobileUser from 'guards/isMobileUser';
 
 const AppRouter = () => {
     return (
@@ -19,6 +21,10 @@ const AppRouter = () => {
             <Route path="/login" element={isGuest(SignInPage)} />
             <Route path="/register" element={isGuest(SignUpPage)} />
             <Route path="/dashboard" element={isAdmin(AdminPage)} />
+            <Route
+                path="/notifications"
+                element={isMobileUser(NotificationPage)}
+            />
         </Routes>
     );
 };

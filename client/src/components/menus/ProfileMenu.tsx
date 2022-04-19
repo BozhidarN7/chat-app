@@ -46,6 +46,7 @@ const ProfileMenu = () => {
 
     const openNotificationsHandler = () => {
         setAnchorElUser(null);
+        navigate('/notifications');
     };
 
     return (

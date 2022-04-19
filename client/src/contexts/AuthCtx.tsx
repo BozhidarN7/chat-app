@@ -1,7 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 
 import { RegisterUser, LoginUser, User } from 'interfaces/userInterfaces';
-import { registerUser, loginUser, revokeRefreshToken } from 'services/authService';
+import {
+    registerUser,
+    loginUser,
+    revokeRefreshToken,
+} from 'services/authService';
 import { getUser } from 'services/userService';
 import inMemoryJwtService from 'services/inMemoryJwtService';
 
@@ -44,13 +48,13 @@ export const AuthProvider = ({ children }: Props) => {
             const userInfoData = JSON.parse(userInfo);
             getUser(userInfoData.id).then((res) => {
                 setCurrentUser(res.data.user);
-                setIsAuthLoading(false);
                 setToken(token);
                 inMemoryJwtService.setToken({
                     token,
                     refreshToken,
                     expiration: new Date(expiration),
                 });
+                setIsAuthLoading(false);
             });
         } else {
             setIsAuthLoading(false);
@@ -136,5 +140,9 @@ export const AuthProvider = ({ children }: Props) => {
         signIn,
         logout,
     };
-    return <AuthCtx.Provider value={value}>{!isAuthLoading && children}</AuthCtx.Provider>;
+    return (
+        <AuthCtx.Provider value={value}>
+            {!isAuthLoading && children}
+        </AuthCtx.Provider>
+    );
 };
