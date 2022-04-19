@@ -12,20 +12,27 @@ import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useChat } from 'contexts/ChatCtx';
 import { useAppSelector } from 'app/hooks';
 import NotificationMenu from 'components/menus/NotificationMenu';
+import ProfileMenu from 'components/menus/ProfileMenu';
 
 const Header = () => {
     const navigate = useNavigate();
+    const theme = useTheme();
     const notificationMenuRef = useRef(null);
     const [showNotificationMenu, setShowNotificationMenu] = useState(false);
     const { currentUser, logout } = useAuth();
     const { connection } = useChat();
     const profileImage = useAppSelector((state) => state.users.profileImage);
-    const newFriendShipRequests = useAppSelector((state) => state.users.newFriendshipRequests);
+    const newFriendShipRequests = useAppSelector(
+        (state) => state.users.newFriendshipRequests
+    );
+    const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
     const showNotificationMenuHandler = () => {
         setShowNotificationMenu(true);
@@ -51,7 +58,13 @@ const Header = () => {
         >
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
                         <MenuIcon />
                     </IconButton>
 
@@ -64,13 +77,13 @@ const Header = () => {
                         ChatApp
                     </Typography>
 
-                    {currentUser ? (
+                    {currentUser && !isSmall ? (
                         <Typography variant="body1" sx={{ flexGrow: 1 }}>
                             Welcome, {currentUser.fullName}
                         </Typography>
                     ) : null}
 
-                    {currentUser?.id ? (
+                    {currentUser?.id && !isSmall ? (
                         <>
                             <Box
                                 sx={{ position: 'relative' }}
@@ -78,23 +91,38 @@ const Header = () => {
                                 onMouseLeave={hideNotificationMenuHandler}
                             >
                                 <IconButton color="inherit">
-                                    <Badge badgeContent={newFriendShipRequests.length} color="secondary">
+                                    <Badge
+                                        badgeContent={
+                                            newFriendShipRequests.length
+                                        }
+                                        color="secondary"
+                                    >
                                         <NotificationsIcon color="inherit" />
                                     </Badge>
                                 </IconButton>
 
                                 <CSSTransition
-                                    in={showNotificationMenu && newFriendShipRequests.length > 0}
+                                    in={
+                                        showNotificationMenu &&
+                                        newFriendShipRequests.length > 0
+                                    }
                                     timeout={300}
                                     unmountOnExit
                                     classNames="alert"
                                     nodeRef={notificationMenuRef}
                                 >
-                                    <NotificationMenu notificationMenuRef={notificationMenuRef} />
+                                    <NotificationMenu
+                                        notificationMenuRef={
+                                            notificationMenuRef
+                                        }
+                                    />
                                 </CSSTransition>
                             </Box>
 
-                            <IconButton color="inherit" onClick={() => navigate('/profile')}>
+                            <IconButton
+                                color="inherit"
+                                onClick={() => navigate('/profile')}
+                            >
                                 {profileImage ? (
                                     <Avatar
                                         sx={{ width: 24, height: 24 }}
@@ -107,25 +135,40 @@ const Header = () => {
                                 )}
                             </IconButton>
                             {currentUser.roles.includes('admin') ? (
-                                <Button color="inherit" onClick={() => navigate('/dashboard')}>
+                                <Button
+                                    color="inherit"
+                                    onClick={() => navigate('/dashboard')}
+                                >
                                     Dashboard
                                 </Button>
                             ) : null}
 
-                            <Button color="inherit" onClick={() => logoutHandler()}>
+                            <Button
+                                color="inherit"
+                                onClick={() => logoutHandler()}
+                            >
                                 logout
                             </Button>
                         </>
                     ) : (
+                        <ProfileMenu />
+                    )}
+                    {!currentUser ? (
                         <>
-                            <Button color="inherit" onClick={() => navigate('/login')}>
+                            <Button
+                                color="inherit"
+                                onClick={() => navigate('/login')}
+                            >
                                 Login
                             </Button>
-                            <Button color="inherit" onClick={() => navigate('/register')}>
+                            <Button
+                                color="inherit"
+                                onClick={() => navigate('/register')}
+                            >
                                 Register
                             </Button>
                         </>
-                    )}
+                    ) : null}
                 </Toolbar>
             </AppBar>
         </Box>
