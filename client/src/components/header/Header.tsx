@@ -74,7 +74,6 @@ const Header = () => {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
-                        disabled={!isSmall ? true : false}
                     >
                         <MenuIcon />
                     </IconButton>

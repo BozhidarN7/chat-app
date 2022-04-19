@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
+import { useTheme } from '@mui/material/styles';
+import { useMediaQuery } from '@mui/material';
 
 import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
@@ -18,12 +20,14 @@ type Props = {
 };
 
 const MessageInput = ({ roomId }: Props) => {
+    const theme = useTheme();
     const { sendMessage } = useChat();
     const { currentUser } = useAuth();
     const [message, setMessage] = useState<string>('');
     const areChatsOpen = useAppSelector((state) =>
         selectAreChatsShown(state.chats)
     );
+    const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
     const changeFileHandler = async (
         e: React.ChangeEvent<HTMLInputElement>
@@ -57,7 +61,7 @@ const MessageInput = ({ roomId }: Props) => {
         }
     };
 
-    if (areChatsOpen) {
+    if (!roomId || (isSmall && areChatsOpen)) {
         return null;
     }
 
@@ -66,7 +70,7 @@ const MessageInput = ({ roomId }: Props) => {
             sx={{
                 position: 'fixed',
                 bottom: 0,
-                width: { xs: '100%', sm: '75%' },
+                width: areChatsOpen ? '75%' : '100%',
                 bgcolor: 'white',
                 maxHeight: 150,
                 zIndex: 10,
