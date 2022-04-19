@@ -2,19 +2,33 @@ import { useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Slide from '@mui/material/Slide';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import Header from 'components/header/Header';
 import SideBar from 'components/chat/SideBar';
 import MessagesZone from 'components/chat/MessagesZone';
 import MessageInput from 'components/chat/MessageInput';
 import { useChat } from 'contexts/ChatCtx';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { selectAreChatsShown, showChatsBtnClicked } from 'features/chatsSlice';
 
 const HomePage = () => {
-    const [roomId, setRoomId] = useState<string>();
+    const theme = useTheme();
+    const dispatch = useAppDispatch();
 
+    const [roomId, setRoomId] = useState<string>();
     const { openChatRoom } = useChat();
+    const areChatsShown = useAppSelector((state) =>
+        selectAreChatsShown(state.chats)
+    );
+    const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
     const openChatSpaceHandler = async (roomId: string) => {
+        if (isSmall) {
+            dispatch(showChatsBtnClicked(!areChatsShown));
+        }
         setRoomId(roomId);
         await openChatRoom(roomId);
     };
@@ -23,16 +37,30 @@ const HomePage = () => {
         <>
             <Header />
             <Grid container>
-                <Grid
-                    item
-                    xs={3}
-                    sx={{ height: '93.2vh', overflowY: 'scroll' }}
+                <Slide
+                    direction="right"
+                    in={areChatsShown}
+                    mountOnEnter
+                    unmountOnExit
+                    {...(isSmall
+                        ? { timeout: { enter: 500, exit: 500 } }
+                        : { timeout: 0 })}
                 >
-                    <SideBar
-                        openChatSpaceHandler={openChatSpaceHandler}
-                        roomId={roomId}
-                    />
-                </Grid>
+                    <Grid
+                        item
+                        xs={isSmall ? (areChatsShown ? 12 : 0) : 3}
+                        sx={{
+                            height: '93.2vh',
+                            overflowY: 'scroll',
+                            width: 0,
+                        }}
+                    >
+                        <SideBar
+                            openChatSpaceHandler={openChatSpaceHandler}
+                            roomId={roomId}
+                        />
+                    </Grid>
+                </Slide>
                 <Grid item sx={{ height: '90vh' }} xs={true}>
                     {roomId ? (
                         <MessagesZone roomId={roomId} />

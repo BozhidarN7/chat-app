@@ -17,13 +17,15 @@ import { useTheme } from '@mui/material/styles';
 
 import { useAuth } from 'contexts/AuthCtx';
 import { useChat } from 'contexts/ChatCtx';
-import { useAppSelector } from 'app/hooks';
+import { useAppSelector, useAppDispatch } from 'app/hooks';
+import { selectAreChatsShown, showChatsBtnClicked } from 'features/chatsSlice';
 import NotificationMenu from 'components/menus/NotificationMenu';
 import ProfileMenu from 'components/menus/ProfileMenu';
 
 const Header = () => {
     const navigate = useNavigate();
     const theme = useTheme();
+    const dispatch = useAppDispatch();
     const notificationMenuRef = useRef(null);
     const [showNotificationMenu, setShowNotificationMenu] = useState(false);
     const { currentUser, logout } = useAuth();
@@ -31,6 +33,9 @@ const Header = () => {
     const profileImage = useAppSelector((state) => state.users.profileImage);
     const newFriendShipRequests = useAppSelector(
         (state) => state.users.newFriendshipRequests
+    );
+    const areChatsShown = useAppSelector((state) =>
+        selectAreChatsShown(state.chats)
     );
     const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -50,6 +55,10 @@ const Header = () => {
         logout();
     };
 
+    const openCloseSideBarHandler = () => {
+        dispatch(showChatsBtnClicked(!areChatsShown));
+    };
+
     return (
         <Box
             sx={{
@@ -59,11 +68,13 @@ const Header = () => {
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
+                        onClick={openCloseSideBarHandler}
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
+                        disabled={!isSmall ? true : false}
                     >
                         <MenuIcon />
                     </IconButton>

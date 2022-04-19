@@ -10,6 +10,8 @@ import { useChat } from 'contexts/ChatCtx';
 import { useAuth } from 'contexts/AuthCtx';
 import { sendFile } from 'services/messageService';
 import UploadFileButton from 'components/common/buttons/UploadFileButton';
+import { useAppSelector } from 'app/hooks';
+import { selectAreChatsShown } from 'features/chatsSlice';
 
 type Props = {
     roomId: string | undefined;
@@ -19,6 +21,9 @@ const MessageInput = ({ roomId }: Props) => {
     const { sendMessage } = useChat();
     const { currentUser } = useAuth();
     const [message, setMessage] = useState<string>('');
+    const areChatsOpen = useAppSelector((state) =>
+        selectAreChatsShown(state.chats)
+    );
 
     const changeFileHandler = async (
         e: React.ChangeEvent<HTMLInputElement>
@@ -52,12 +57,16 @@ const MessageInput = ({ roomId }: Props) => {
         }
     };
 
+    if (areChatsOpen) {
+        return null;
+    }
+
     return (
         <Box
             sx={{
                 position: 'fixed',
                 bottom: 0,
-                width: '75%',
+                width: { xs: '100%', sm: '75%' },
                 bgcolor: 'white',
                 maxHeight: 150,
                 zIndex: 10,

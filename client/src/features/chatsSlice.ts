@@ -5,11 +5,13 @@ import { getChats } from 'services/userService';
 interface ChatInterface {
     chats: Chat[];
     status: string;
+    areChatsShown: boolean;
 }
 
 const initialState: ChatInterface = {
     chats: [],
     status: 'idle',
+    areChatsShown: true,
 };
 
 export const fetchChats = createAsyncThunk(
@@ -65,6 +67,9 @@ const chatsSlice = createSlice({
                 .find((chat) => chat.roomId === action.payload.roomId)
                 ?.messages.unshift(...action.payload.messages);
         },
+        showChatsBtnClicked(state, action) {
+            state.areChatsShown = action.payload;
+        },
     },
     extraReducers(builder) {
         builder.addCase(fetchChats.pending, (state, action) => {
@@ -84,6 +89,10 @@ export const {
     previousMessagesAdded,
     messageDeleted,
     messageEdited,
+    showChatsBtnClicked,
 } = chatsSlice.actions;
+
+export const selectAreChatsShown = (state: ChatInterface) =>
+    state.areChatsShown;
 
 export default chatsSlice.reducer;
