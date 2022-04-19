@@ -1,9 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
 import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material/styles';
+import { useMediaQuery } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { ThemeContext } from '@emotion/react';
 
 const useStyles: any = makeStyles((theme: any) => ({
     root: {
@@ -43,9 +48,35 @@ const useStyles: any = makeStyles((theme: any) => ({
         fontSize: '4rem',
     },
 }));
+
+const AuthButtons = () => {
+    const navigate = useNavigate();
+
+    return (
+        <>
+            <Button
+                onClick={() => navigate('/login')}
+                sx={{ mr: 2, mt: { sm: 0, xs: 2 }, color: 'white' }}
+                variant="text"
+            >
+                Sign In
+            </Button>
+            <Button
+                onClick={() => navigate('/register')}
+                sx={{ color: 'white', mt: { sm: 0, xs: 2 } }}
+                variant="text"
+            >
+                Sign Up
+            </Button>
+        </>
+    );
+};
+
 const LandingPageHeader = () => {
     const navigate = useNavigate();
     const classes = useStyles();
+    const theme = useTheme();
+    const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <>
@@ -56,35 +87,44 @@ const LandingPageHeader = () => {
                     elevation={0}
                 >
                     <Toolbar className={classes.appbarWrapper}>
-                        <h1
-                            onClick={() => navigate('/')}
-                            className={classes.appbarTitle}
-                        >
-                            Chat<span className={classes.colorText}>App</span>
-                        </h1>
-                        <Button
-                            onClick={() => navigate('/login')}
-                            sx={{ mr: 2, color: 'white' }}
-                            variant="text"
-                        >
-                            Sign In
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/register')}
-                            sx={{ color: 'white' }}
-                            variant="text"
-                        >
-                            Sign Up
-                        </Button>
+                        {!isSmall ? (
+                            <h1
+                                onClick={() => navigate('/')}
+                                className={classes.appbarTitle}
+                            >
+                                Chat
+                                <span className={classes.colorText}>App</span>
+                            </h1>
+                        ) : null}
+
+                        {!isSmall ? <AuthButtons /> : null}
                     </Toolbar>
                 </AppBar>
 
-                <div className={classes.container}>
-                    <h1 className={classes.title}>
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography
+                        component="h1"
+                        sx={{
+                            color: '#fff',
+                            fontSize: {
+                                lg: '4.5rem',
+                                md: '3.5rem',
+                                sm: '3rem',
+                                xs: '2rem',
+                            },
+                        }}
+                    >
                         Welcome to <br />
-                        Chat<span className={classes.colorText}>App.</span>
-                    </h1>
-                </div>
+                        Chat
+                        <Typography
+                            component="span"
+                            sx={{ color: '#5AFF3D', fontSize: 'inherit' }}
+                        >
+                            App.
+                        </Typography>
+                    </Typography>
+                    {isSmall ? <AuthButtons /> : null}
+                </Box>
             </div>
         </>
     );
