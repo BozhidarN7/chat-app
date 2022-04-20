@@ -1,5 +1,12 @@
+import ReactCrop, {
+    PixelCrop,
+    Crop,
+    makeAspectCrop,
+    centerCrop,
+} from 'react-image-crop';
+
 import Container from '@mui/material/Container';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -24,6 +31,9 @@ import { toast } from 'react-toastify';
 const ProfilePage = () => {
     const dispatch = useAppDispatch();
 
+    const [crop, setCrop] = useState<Crop>();
+    const [completeCrop, setCompleteCrop] = useState<PixelCrop>();
+    const [aspect, setAspect] = useState<number | undefined>(16 / 9);
     const [photo, setPhoto] = useState<File | null>(null);
     const [oldPassword, setOldPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -59,6 +69,31 @@ const ProfilePage = () => {
         }
     };
 
+    const centerAspectCrop = (
+        mediaWidth: number,
+        mediaHeight: number,
+        aspect: number
+    ) => {
+        return centerCrop(
+            makeAspectCrop(
+                {
+                    unit: '%',
+                    width: 90,
+                },
+                aspect,
+                mediaWidth,
+                mediaHeight
+            ),
+            mediaWidth,
+            mediaHeight
+        );
+    };
+
+    const onImageLoadHandler = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const { width, height } = e.currentTarget;
+        setCrop(centerAspectCrop(width, height, 16 / 9));
+    };
+
     return (
         <>
             <Header />
@@ -70,19 +105,37 @@ const ProfilePage = () => {
                 >
                     Profile info
                 </Typography>
-                <Grid container>
-                    <Grid item xs={4}>
+                <Grid
+                    container
+                    sx={{ flexDirection: { md: 'row', xs: 'column' } }}
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Grid item md={4} xs={true} sx={{ mb: { md: 0, xs: 2 } }}>
                         <Box>
                             {profileImage || photo ? (
-                                <img
-                                    src={
-                                        photo
-                                            ? URL.createObjectURL(photo)
-                                            : `data:image/jpeg;base64,${profileImage}`
+                                <ReactCrop
+                                    crop={crop}
+                                    onChange={(_, percentCrop) =>
+                                        setCrop(percentCrop)
                                     }
-                                    alt=""
-                                    style={{ width: '227px', height: '227px' }}
-                                />
+                                    // onComplete={(c) => setCompleteCrop(c)}
+                                    // aspect={aspect}
+                                >
+                                    <img
+                                        src={
+                                            photo
+                                                ? URL.createObjectURL(photo)
+                                                : `data:image/jpeg;base64,${profileImage}`
+                                        }
+                                        alt=""
+                                        style={{
+                                            width: '227px',
+                                            height: '227px',
+                                        }}
+                                        // onLoad={onImageLoadHandler}
+                                    />
+                                </ReactCrop>
                             ) : (
                                 <AccountBoxIcon
                                     sx={{
@@ -116,7 +169,14 @@ const ProfilePage = () => {
                             Save
                         </Button>
                     </Grid>
-                    <Grid component="form" container item xs={6} spacing={2}>
+                    <Grid
+                        component="form"
+                        container
+                        item
+                        md={6}
+                        xs={true}
+                        spacing={2}
+                    >
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 autoComplete="given-name"
