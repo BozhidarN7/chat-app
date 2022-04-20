@@ -1,8 +1,8 @@
 import ReactCrop, {
-    PixelCrop,
+    // PixelCrop,
+    // makeAspectCrop,
+    // centerCrop,
     Crop,
-    makeAspectCrop,
-    centerCrop,
 } from 'react-image-crop';
 
 import Container from '@mui/material/Container';
@@ -32,8 +32,8 @@ const ProfilePage = () => {
     const dispatch = useAppDispatch();
 
     const [crop, setCrop] = useState<Crop>();
-    const [completeCrop, setCompleteCrop] = useState<PixelCrop>();
-    const [aspect, setAspect] = useState<number | undefined>(16 / 9);
+    // const [completeCrop, setCompleteCrop] = useState<PixelCrop>();
+    // const [aspect, setAspect] = useState<number | undefined>(16 / 9);
     const [photo, setPhoto] = useState<File | null>(null);
     const [oldPassword, setOldPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -69,30 +69,30 @@ const ProfilePage = () => {
         }
     };
 
-    const centerAspectCrop = (
-        mediaWidth: number,
-        mediaHeight: number,
-        aspect: number
-    ) => {
-        return centerCrop(
-            makeAspectCrop(
-                {
-                    unit: '%',
-                    width: 90,
-                },
-                aspect,
-                mediaWidth,
-                mediaHeight
-            ),
-            mediaWidth,
-            mediaHeight
-        );
-    };
+    // const centerAspectCrop = (
+    //     mediaWidth: number,
+    //     mediaHeight: number,
+    //     aspect: number
+    // ) => {
+    //     return centerCrop(
+    //         makeAspectCrop(
+    //             {
+    //                 unit: '%',
+    //                 width: 90,
+    //             },
+    //             aspect,
+    //             mediaWidth,
+    //             mediaHeight
+    //         ),
+    //         mediaWidth,
+    //         mediaHeight
+    //     );
+    // };
 
-    const onImageLoadHandler = (e: React.SyntheticEvent<HTMLImageElement>) => {
-        const { width, height } = e.currentTarget;
-        setCrop(centerAspectCrop(width, height, 16 / 9));
-    };
+    // const onImageLoadHandler = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    //     const { width, height } = e.currentTarget;
+    //     setCrop(centerAspectCrop(width, height, 16 / 9));
+    // };
 
     return (
         <>
