@@ -39,12 +39,11 @@ const HomePage = () => {
             <Grid container>
                 <Slide
                     direction="right"
+                    appear={false}
                     in={areChatsShown}
                     mountOnEnter
                     unmountOnExit
-                    {...(isSmall
-                        ? { timeout: { enter: 500, exit: 500 } }
-                        : { timeout: 0 })}
+                    timeout={500}
                 >
                     <Grid
                         item
