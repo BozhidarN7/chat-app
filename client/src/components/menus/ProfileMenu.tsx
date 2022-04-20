@@ -8,16 +8,30 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import Badge, { BadgeProps } from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
 
 import { useAppSelector } from 'app/hooks';
 import { useAuth } from 'contexts/AuthCtx';
 import { useChat } from 'contexts/ChatCtx';
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+    '& .MuiBadge-badge': {
+        right: -3,
+        top: -4,
+        border: `2px solid ${theme.palette.background.paper}`,
+        padding: '0 4px',
+    },
+}));
 
 const ProfileMenu = () => {
     const navigate = useNavigate();
 
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const profileImage = useAppSelector((state) => state.users.profileImage);
+    const newFriendShipRequests = useAppSelector(
+        (state) => state.users.newFriendshipRequests
+    );
     const { logout } = useAuth();
     const { connection } = useChat();
 
@@ -53,10 +67,15 @@ const ProfileMenu = () => {
         <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open profile menu">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                        sx={{ width: 24, height: 24 }}
-                        src={`data:image/jpeg;base64,${profileImage}`}
-                    />
+                    <Badge
+                        badgeContent={newFriendShipRequests.length}
+                        color="secondary"
+                    >
+                        <Avatar
+                            sx={{ width: 24, height: 24 }}
+                            src={`data:image/jpeg;base64,${profileImage}`}
+                        />
+                    </Badge>
                 </IconButton>
             </Tooltip>
             <Menu
@@ -76,7 +95,14 @@ const ProfileMenu = () => {
                 onClose={handleCloseUserMenu}
             >
                 <MenuItem onClick={openNotificationsHandler}>
-                    <Typography textAlign="center">Notifications</Typography>
+                    <StyledBadge
+                        badgeContent={newFriendShipRequests.length}
+                        color="secondary"
+                    >
+                        <Typography textAlign="center">
+                            Notifications
+                        </Typography>
+                    </StyledBadge>
                 </MenuItem>
                 <MenuItem onClick={openProfilePageHandler}>
                     <Typography textAlign="center">Profile</Typography>

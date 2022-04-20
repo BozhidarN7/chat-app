@@ -1,24 +1,24 @@
 import { Navigate } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
-import { useMediaQuery } from '@mui/material';
 
 import { useAuth } from 'contexts/AuthCtx';
+import useWindowDismensions from 'hooks/useWindowDismensions';
 
 const isMobileUser = (WrapperComponent: () => JSX.Element) => {
     const ComponentWrapper = (props: any) => {
-        // const theme = useTheme();
-        const isSmall = useMediaQuery((theme: any) =>
-            theme.breakpoints.down('sm')
-        );
+        const { width } = useWindowDismensions();
         const { currentUser } = useAuth();
-        console.log(isSmall);
+
+        if (!width) return <Navigate to="/chat" replace={true} />;
+        const isSmall = width < 600 ? true : false;
+
         if (!currentUser) {
             return <Navigate to="/login" replace={true} />;
         }
 
-        // if (!isSmall) {
-        //     return <Navigate to="/chat" replace={true} />;
-        // }
+        if (!isSmall) {
+            return <Navigate to="/chat" replace={true} />;
+        }
+
         return <WrapperComponent {...props} />;
     };
 

@@ -1,5 +1,3 @@
-import { toast } from 'react-toastify';
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,38 +6,17 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import Header from 'components/header/Header';
-import { useAppSelector, useAppDispatch } from 'app/hooks';
-import { friendshipRequestDeleted } from 'features/usersSlice';
-import { acceptRejectFriendshipRequest } from 'services/friendshipRequestsService';
-import { useChat } from 'contexts/ChatCtx';
+import { useAppSelector } from 'app/hooks';
+
+import useFriendshipRequest from 'hooks/useFriendshipRequest';
 
 const NotificationPage = () => {
-    const dispatch = useAppDispatch();
-    const { acceptFriendship } = useChat();
     const newFriendShipRequests = useAppSelector(
         (state) => state.users.newFriendshipRequests
     );
 
-    const acceptFriendshipHandler = async (friendshipId: string) => {
-        try {
-            await acceptRejectFriendshipRequest(true, friendshipId);
-            await dispatch(friendshipRequestDeleted(friendshipId));
-            await acceptFriendship(friendshipId);
-            toast.success('Friendship request accepted');
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const rejectFriendshipHandler = async (friendshipId: string) => {
-        try {
-            await acceptRejectFriendshipRequest(false, friendshipId);
-            dispatch(friendshipRequestDeleted(friendshipId));
-            toast.success('Friendship request rejected');
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    const { acceptFriendshipHandler, rejectFriendshipHandler } =
+        useFriendshipRequest();
 
     return (
         <Box>
