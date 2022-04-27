@@ -23,7 +23,7 @@ const RegisterScreen = ({ navigation }: Props) => {
             <Input placeholder="Password *" />
             <Input placeholder="Repeat Password *" />
 
-            <View style={tw`w-4/5 flex-row mb-4`}>
+            <View style={tw`w-4/5 flex-row mb-2`}>
                 <CheckBox
                     style={tw`border-2`}
                     value={wantUpdates}

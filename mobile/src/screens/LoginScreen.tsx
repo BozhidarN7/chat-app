@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import tw from 'twrnc';
-import { View, Text, TextInput, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 
 import Input from 'src/components/common/inputs/Input';
+import axios from 'axios';
 
 type Props = {
     navigation: any;
@@ -14,12 +15,54 @@ const LoginScreen = ({ navigation }: Props) => {
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
 
+    const loginHandler = async () => {
+        if (!email || !password) {
+            return;
+        }
+
+        axios
+            .post('https://10.10.63.49:44325/api/v1/auth/login', {
+                email,
+                password,
+            })
+            .then((data) => console.log(data.data))
+            .catch((err) => console.log(err));
+
+        // try {
+        //     const res = await fetch(
+        //         'https://chatappwebapi.azurewebsites.net/api/v1/auth/login',
+        //         {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify({ email, password }),
+        //         }
+        //     );
+        //     // const data = await res.json();
+        //     console.log(res);
+        //     // console.log(data);
+        // } catch (err) {
+        //     console.log(err);
+        // }
+    };
+
     return (
         <View style={tw`flex-1 items-center justify-center`}>
             <Icon color="#ab47bc" size={50} name="lock" />
             <Text style={tw`text-3xl`}>Sign in</Text>
-            <Input placeholder="Email" />
-            <Input placeholder="Password" />
+            <Input
+                value={email}
+                setValue={setEmail}
+                placeholder="Email"
+                secure={false}
+            />
+            <Input
+                value={password}
+                setValue={setPassword}
+                placeholder="Password"
+                secure={true}
+            />
 
             <Ripple
                 style={tw`w-4/5 bg-blue-500 py-2 shadow-md rounded-md`}
@@ -27,6 +70,7 @@ const LoginScreen = ({ navigation }: Props) => {
                 rippleSize={500}
                 rippleSequential={true}
                 rippleCentered={true}
+                onPress={loginHandler}
             >
                 <Text style={tw`text-white text-center uppercase`}>
                     Sign in

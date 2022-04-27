@@ -97,15 +97,15 @@ namespace ChatApp.WebAPI.Extensions
             {
                 options.AddPolicy(cors.GetSection("Allowed").Value, builder =>
                 {
-                builder.WithOrigins("http://localhost:3000")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+                    builder.WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
 
-                builder.WithOrigins("https://chatappclient.azurewebsites.net")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+                    builder.WithOrigins("https://chatappclient.azurewebsites.net")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
             });
 

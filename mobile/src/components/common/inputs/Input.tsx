@@ -4,9 +4,12 @@ import { TextInput } from 'react-native';
 
 type Props = {
     placeholder: string;
+    value: string;
+    secure: boolean;
+    setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Input = ({ placeholder }: Props) => {
+const Input = ({ placeholder, value, secure, setValue }: Props) => {
     const [focus, setFocus] = useState(false);
     return (
         <TextInput
@@ -15,6 +18,9 @@ const Input = ({ placeholder }: Props) => {
                 focus && ' border-blue-500'
             )}
             placeholder={placeholder}
+            value={value}
+            secureTextEntry={secure}
+            onChangeText={setValue}
             onFocus={() => setFocus((prev) => !prev)}
             onBlur={() => setFocus((prev) => !prev)}
         />
