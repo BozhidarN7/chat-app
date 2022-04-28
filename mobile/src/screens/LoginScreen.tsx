@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import tw from 'twrnc';
-import { View, Text, Pressable } from 'react-native';
 import Ripple from 'react-native-material-ripple';
+import { View, Text, Pressable } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 import Input from 'src/components/common/inputs/Input';
 import axios from 'axios';
@@ -20,12 +21,13 @@ const LoginScreen = ({ navigation }: Props) => {
             return;
         }
 
-        const data = axios
+        axios
             .post('https://chatappwebapi.azurewebsites.net/api/v1/auth/login', {
                 email,
                 password,
             })
-            .then((data) => {
+            .then(async (data) => {
+                await SecureStore.setItemAsync('token', data.data.data.token);
                 navigation.navigate('Home');
             })
             .catch((err) => console.log(err));
@@ -66,6 +68,11 @@ const LoginScreen = ({ navigation }: Props) => {
                 </Text>
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Register')}>
+                <Text style={tw`text-blue-500 underline`}>
+                    Don't have an account? Sign Up
+                </Text>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate('Home')}>
                 <Text style={tw`text-blue-500 underline`}>
                     Don't have an account? Sign Up
                 </Text>
