@@ -20,31 +20,15 @@ const LoginScreen = ({ navigation }: Props) => {
             return;
         }
 
-        axios
-            .post('https://10.10.63.49:44325/api/v1/auth/login', {
+        const data = axios
+            .post('https://chatappwebapi.azurewebsites.net/api/v1/auth/login', {
                 email,
                 password,
             })
-            .then((data) => console.log(data.data))
+            .then((data) => {
+                navigation.navigate('Home');
+            })
             .catch((err) => console.log(err));
-
-        // try {
-        //     const res = await fetch(
-        //         'https://chatappwebapi.azurewebsites.net/api/v1/auth/login',
-        //         {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify({ email, password }),
-        //         }
-        //     );
-        //     // const data = await res.json();
-        //     console.log(res);
-        //     // console.log(data);
-        // } catch (err) {
-        //     console.log(err);
-        // }
     };
 
     return (

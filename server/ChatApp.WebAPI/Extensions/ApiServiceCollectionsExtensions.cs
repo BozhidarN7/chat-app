@@ -97,6 +97,11 @@ namespace ChatApp.WebAPI.Extensions
             {
                 options.AddPolicy(cors.GetSection("Allowed").Value, builder =>
                 {
+                    builder.WithOrigins("http://10.0.2.2:8081")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+
                     builder.WithOrigins("http://localhost:3000")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
