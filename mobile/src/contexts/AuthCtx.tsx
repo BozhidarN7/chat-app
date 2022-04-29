@@ -3,7 +3,11 @@ import { ActivityIndicator, View, Text } from 'react-native';
 import tw from 'twrnc';
 import * as SecureStore from 'expo-secure-store';
 
-import { User, LoginCredentials } from 'src/interfaces/userInterfaces';
+import {
+    User,
+    LoginCredentials,
+    RegisterCredential,
+} from 'src/interfaces/userInterfaces';
 import * as authService from 'src/services/authService';
 import * as userService from 'src/services/userService';
 import Spinner from 'src/components/common/genneral/Spinner';
@@ -13,6 +17,7 @@ interface AuthCtxInterface {
     token: string | null;
     isSignIn: boolean;
     signIn: any;
+    signUp: any;
     logout: any;
 }
 
@@ -53,6 +58,20 @@ const AuthProvider = ({ children }: Props) => {
         const user = data.data.user;
         const token = data.data.token;
 
+        await setUserInfo(user, token);
+    };
+
+    const signUp = async (registerCredential: RegisterCredentials) => {
+        const res = await authService.signUp(registerCredential);
+        const data = res.data;
+
+        const user = data.data.user;
+        const token = data.data.token;
+
+        await setUserInfo(user, token);
+    };
+
+    const setUserInfo = async (user: User, token: string) => {
         setCurrentUser(user);
         setToken(token);
         setIsSignIn(true);
@@ -75,6 +94,7 @@ const AuthProvider = ({ children }: Props) => {
         isSignIn,
         token,
         signIn,
+        signUp,
         logout,
     };
 
