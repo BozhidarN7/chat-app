@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import tw from 'twrnc';
+// import tw from 'twrnc';
+import tw from '../../tailwind';
 import Ripple from 'react-native-material-ripple';
 import { View, Text, Pressable, ActivityIndicator, Modal } from 'react-native';
 
@@ -38,7 +39,7 @@ const LoginScreen = ({ navigation }: Props) => {
             <View
                 style={tw.style(
                     `flex-1 items-center justify-center`,
-                    loading && 'opacity-30'
+                    loading && 'black-rgba'
                 )}
             >
                 <Icon color="#ab47bc" size={50} name="lock" />

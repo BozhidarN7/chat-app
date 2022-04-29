@@ -54,6 +54,7 @@ namespace ChatApp.Core.Services
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
+                        FullName = user.FullName,
                         Email = user.Email,
                         Roles = roles
                     },
@@ -121,6 +122,7 @@ namespace ChatApp.Core.Services
                         Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
+                        FullName = user.FullName,
                         Email = user.Email,
                         Roles = roles
                     },

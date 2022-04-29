@@ -43,6 +43,7 @@ const AuthProvider = ({ children }: Props) => {
                 const user = JSON.parse(userData);
                 const res = await userService.getUser(user.id);
                 const data = res.data;
+
                 setCurrentUser(data.data.user);
                 setToken(token);
                 setIsSignIn(true);
@@ -56,6 +57,7 @@ const AuthProvider = ({ children }: Props) => {
         const data = res.data;
 
         const user = data.data.user;
+        user.fullName = `${user.firstName} ${user.lastName}`;
         const token = data.data.token;
 
         await setUserInfo(user, token);
@@ -66,6 +68,7 @@ const AuthProvider = ({ children }: Props) => {
         const data = res.data;
 
         const user = data.data.user;
+        user.fullName = `${user.firstName} ${user.lastName}`;
         const token = data.data.token;
 
         await setUserInfo(user, token);
