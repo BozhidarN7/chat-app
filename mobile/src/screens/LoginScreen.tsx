@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import tw from 'twrnc';
 import Ripple from 'react-native-material-ripple';
-import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, Modal } from 'react-native';
 
 import Input from 'src/components/common/inputs/Input';
+import Spinner from 'src/components/common/genneral/Spinner';
 import { useAuth } from 'src/contexts/AuthCtx';
 
 type Props = {
@@ -28,12 +29,18 @@ const LoginScreen = ({ navigation }: Props) => {
             await signIn({ email, password });
         } catch (err) {
             console.log(err);
+            setLoading(false);
         }
     };
 
     return (
         <>
-            <View style={tw`flex-1 items-center justify-center`}>
+            <View
+                style={tw.style(
+                    `flex-1 items-center justify-center`,
+                    loading && 'opacity-30'
+                )}
+            >
                 <Icon color="#ab47bc" size={50} name="lock" />
                 <Text style={tw`text-3xl`}>Sign in</Text>
                 <Input
@@ -74,10 +81,14 @@ const LoginScreen = ({ navigation }: Props) => {
                 </Pressable>
             </View>
             {loading ? (
-                <View style={tw`flex-1 items-center justify-center`}>
-                    <ActivityIndicator size="large" />
-                    <Text>Loading</Text>
-                </View>
+                <Modal
+                    transparent={true}
+                    animationType="none"
+                    visible={loading}
+                    style={tw`z-10`}
+                >
+                    <Spinner text="Login in" />
+                </Modal>
             ) : null}
         </>
     );

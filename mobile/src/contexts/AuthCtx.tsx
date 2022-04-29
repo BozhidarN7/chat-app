@@ -6,6 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { User, LoginCredentials } from 'src/interfaces/userInterfaces';
 import * as authService from 'src/services/authService';
 import * as userService from 'src/services/userService';
+import Spinner from 'src/components/common/genneral/Spinner';
 
 interface AuthCtxInterface {
     currentUser: User;
@@ -79,14 +80,7 @@ const AuthProvider = ({ children }: Props) => {
 
     return (
         <AuthCtx.Provider value={value}>
-            {isAuthLoading ? (
-                <View style={tw`flex-1 items-center justify-center`}>
-                    <ActivityIndicator size="large" />
-                    <Text>Loading</Text>
-                </View>
-            ) : (
-                children
-            )}
+            {isAuthLoading ? <Spinner text="Loading" /> : children}
         </AuthCtx.Provider>
     );
 };
