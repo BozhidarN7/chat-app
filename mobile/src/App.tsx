@@ -8,10 +8,15 @@
 
 import React from 'react';
 
+import AuthProvider from 'src/contexts/AuthCtx';
 import AppNavigation from 'src/navigations/AppNavigation';
 
 const App = () => {
-    return <AppNavigation />;
+    return (
+        <AuthProvider>
+            <AppNavigation />
+        </AuthProvider>
+    );
 };
 
 export default App;

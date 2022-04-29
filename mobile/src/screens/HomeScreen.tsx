@@ -8,7 +8,7 @@ const HomeScreen = () => {
     useEffect(() => {
         (async () => {
             const t = await SecureStore.getItemAsync('token');
-            setToken(t);
+            setToken(t!);
         })();
     });
 
