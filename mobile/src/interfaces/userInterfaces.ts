@@ -1,14 +1,18 @@
-export interface LoginCredentials {
-    email: string;
-    password: string;
-}
+declare module 'userInterfaces' {
+    interface LoginCredentials {
+        email: string;
+        password: string;
+    }
 
-export interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    fullName: string;
-    profileImage: string | null;
-    roles: string[];
+    interface User {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        fullName: string;
+        profileImage: string | null;
+        roles: string[];
+    }
+
+    export = User;
 }

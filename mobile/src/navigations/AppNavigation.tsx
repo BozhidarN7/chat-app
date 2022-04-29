@@ -25,7 +25,12 @@ const AppNavigation = () => {
                         <Stack.Screen
                             name="Login"
                             component={LoginScreen}
-                            options={{ title: 'Login' }}
+                            options={{
+                                title: 'Login',
+                                animationTypeForReplace: isSignIn
+                                    ? 'push'
+                                    : 'pop',
+                            }}
                         />
                         <Stack.Screen
                             name="Register"

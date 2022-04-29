@@ -1,15 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { ActivityIndicator, View, Text } from 'react-native';
+import tw from 'twrnc';
 import * as SecureStore from 'expo-secure-store';
 
-import { LoginCredentials, User } from 'src/interfaces/userInterfaces';
+import { User, LoginCredentials } from 'src/interfaces/userInterfaces';
 import * as authService from 'src/services/authService';
 import * as userService from 'src/services/userService';
 
 interface AuthCtxInterface {
     currentUser: User;
-    token: string;
+    token: string | null;
     isSignIn: boolean;
     signIn: any;
+    logout: any;
 }
 
 const AuthCtx = React.createContext<AuthCtxInterface>({} as AuthCtxInterface);
@@ -57,16 +60,33 @@ const AuthProvider = ({ children }: Props) => {
         await SecureStore.setItemAsync('user', JSON.stringify(user));
     };
 
+    const logout = async () => {
+        setCurrentUser({} as User);
+        setToken(null);
+        setIsSignIn(false);
+
+        await SecureStore.deleteItemAsync('token');
+        await SecureStore.deleteItemAsync('user');
+    };
+
     const value = {
         currentUser,
         isSignIn,
         token,
         signIn,
+        logout,
     };
 
     return (
         <AuthCtx.Provider value={value}>
-            {!isAuthLoading && children}
+            {isAuthLoading ? (
+                <View style={tw`flex-1 items-center justify-center`}>
+                    <ActivityIndicator size="large" />
+                    <Text>Loading</Text>
+                </View>
+            ) : (
+                children
+            )}
         </AuthCtx.Provider>
     );
 };
