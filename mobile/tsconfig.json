@@ -16,7 +16,7 @@
     "include": [
         "src",
         "src/App.tsxsrc/index.jsx.js",
-        "tailwind.js",
+        "src/lib/tailwind.ts",
         "tailwind.config.js"
     ],
     "exclude": [

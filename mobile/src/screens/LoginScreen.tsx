@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-// import tw from 'twrnc';
-import tw from '../../tailwind';
+import tw from 'twrnc';
 import Ripple from 'react-native-material-ripple';
 import { View, Text, Pressable, ActivityIndicator, Modal } from 'react-native';
 
-import Input from 'src/components/common/inputs/Input';
-import Spinner from 'src/components/common/genneral/Spinner';
+import Input from 'src/components/inputs/Input';
+import Spinner from 'src/components/common/Spinner';
 import { useAuth } from 'src/contexts/AuthCtx';
 
 type Props = {
@@ -39,7 +38,7 @@ const LoginScreen = ({ navigation }: Props) => {
             <View
                 style={tw.style(
                     `flex-1 items-center justify-center`,
-                    loading && 'black-rgba'
+                    loading && 'opacity-30'
                 )}
             >
                 <Icon color="#ab47bc" size={50} name="lock" />

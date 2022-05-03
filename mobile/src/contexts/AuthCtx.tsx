@@ -10,7 +10,7 @@ import {
 } from 'src/interfaces/userInterfaces';
 import * as authService from 'src/services/authService';
 import * as userService from 'src/services/userService';
-import Spinner from 'src/components/common/genneral/Spinner';
+import Spinner from 'src/components/common/Spinner';
 
 interface AuthCtxInterface {
     currentUser: User;
@@ -39,6 +39,7 @@ const AuthProvider = ({ children }: Props) => {
         (async () => {
             const token = await SecureStore.getItemAsync('token');
             const userData = await SecureStore.getItemAsync('user');
+
             if (token && userData) {
                 const user = JSON.parse(userData);
                 const res = await userService.getUser(user.id);

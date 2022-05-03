@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ripple from 'react-native-material-ripple';
 import CheckBox from '@react-native-community/checkbox';
 
-import Input from 'src/components/common/inputs/Input';
+import Input from 'src/components/inputs/Input';
 import { useAuth } from 'src/contexts/AuthCtx';
-import Spinner from 'src/components/common/genneral/Spinner';
+import Spinner from 'src/components/common/Spinner';
 
 type Props = {
     navigation: any;

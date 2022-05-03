@@ -1,34 +1,46 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { Text, View, Button } from 'react-native';
+import React, { useState, useLayoutEffect } from 'react';
+import { Text, View, Button, Alert } from 'react-native';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { NavigationScreenProp } from 'react-navigation';
-import * as SecureStore from 'expo-secure-store';
+import tw from 'twrnc';
 
-import { useAuth } from 'src/contexts/AuthCtx';
+import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
 
 type Props = {
     navigation: NavigationScreenProp<any, any>;
 };
 
 const HomeScreen = ({ navigation }: Props) => {
-    const [token, setToken] = useState('');
+    const [visible, setVisible] = useState(false);
 
-    const { logout } = useAuth(0);
+    const showMenuHandler = () => {
+        console.log('here');
+        setVisible(true);
+    };
+
+    const closeMenuHandler = () => {
+        setVisible(false);
+    };
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: () => <Button onPress={logout} title="Logout" />,
+            headerRight: () => <UserAvatarMenu />,
         });
     }, [navigation]);
-    useEffect(() => {
-        (async () => {
-            const t = await SecureStore.getItemAsync('token');
-            setToken(t!);
-        })();
-    });
 
     return (
-        <View>
-            <Text>{token}</Text>
+        <View style={tw`h-full w-full`}>
+            <Menu
+                visible={visible}
+                anchor={<Text onPress={showMenuHandler}>Show menu</Text>}
+                onRequestClose={closeMenuHandler}
+            >
+                <MenuItem>Menu Item 1</MenuItem>
+                <MenuItem>Menu Item 1</MenuItem>
+                <MenuItem>Menu Item 1</MenuItem>
+                <MenuDivider />
+                <MenuItem>Menu Item 1</MenuItem>
+            </Menu>
         </View>
     );
 };

@@ -1,11 +1,15 @@
 import { plugin } from 'twrnc';
 
 export default {
+    content: [],
+    theme: {
+        extend: {},
+    },
     plugins: [
         plugin(({ addUtilities }) => {
             addUtilities({
-                'black-rgba': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                black_rgba: {
+                    backgroundColor: `rgba(0,0,0,0.5)`,
                 },
             });
         }),
