@@ -16,17 +16,19 @@ const AppNavigation = () => {
     return (
         <NavigationContainer>
             {isSignIn ? (
-                <Stack.Navigator initialRouteName="Home">
-                    <Stack.Screen
-                        name="Home"
-                        component={HomeScreen}
-                        options={{
-                            title: `Welcome, ${currentUser.fullName}`,
-                            headerTitleAlign: 'center',
-                            headerTitleStyle: tw`text-base`,
-                        }}
-                    />
-                </Stack.Navigator>
+                <>
+                    <Stack.Navigator initialRouteName="Home">
+                        <Stack.Screen
+                            name="Home"
+                            component={HomeScreen}
+                            options={{
+                                title: `Welcome, ${currentUser.fullName}`,
+                                headerTitleAlign: 'center',
+                                headerTitleStyle: tw`text-base`,
+                            }}
+                        />
+                    </Stack.Navigator>
+                </>
             ) : (
                 <Stack.Navigator initialRouteName="Login">
                     <Stack.Screen

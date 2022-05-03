@@ -20,7 +20,7 @@ const UserAvatarMenu = () => {
     };
 
     return (
-        <View>
+        <View style={tw`mr-2`}>
             <Menu
                 visible={visible}
                 anchor={
