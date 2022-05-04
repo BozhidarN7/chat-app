@@ -1,14 +1,7 @@
 import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
-import {
-    Text,
-    View,
-    DrawerLayoutAndroid,
-    Button,
-    Dimensions,
-} from 'react-native';
+import { DrawerLayoutAndroid, Dimensions } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { NavigationScreenProp } from 'react-navigation';
-import tw from 'twrnc';
 
 import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
 import ChatsList from 'src/components/chat/ChatsList';

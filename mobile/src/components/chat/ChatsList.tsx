@@ -50,13 +50,18 @@ const ChatsList = () => {
 
     return (
         <View>
-            <View style={tw`py-2 pl-4 flex-1`}>
+            <View style={tw`py-2 pl-4 flex-row justify-between`}>
                 <Text style={tw`text-2xl`}>Chats</Text>
-                <Pressable>
-                    <View style={tw`bg-pink-700 rounded-full w-10`}>
+                <View style={tw`bg-pink-800 rounded-full w-9 h-9 mr-4`}>
+                    <Pressable
+                        android_ripple={{
+                            color: 'pink',
+                            borderless: true,
+                        }}
+                    >
                         <Ionicons name="add-outline" size={36} color="white" />
-                    </View>
-                </Pressable>
+                    </Pressable>
+                </View>
             </View>
             <FlatList data={chats} renderItem={renderItem} />
         </View>
