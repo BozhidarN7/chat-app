@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
+        "baseUrl": "./src",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
@@ -14,7 +14,7 @@
         "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "src",
+        "./src",
         "src/App.tsxsrc/index.jsx.js",
         "src/lib/tailwind.ts",
         "tailwind.config.js"

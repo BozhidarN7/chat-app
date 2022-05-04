@@ -7,6 +7,7 @@ import LoginScreen from 'src/screens/LoginScreen';
 import RegisterScreen from 'src/screens/RegisterScreen';
 import HomeScreen from 'src/screens/HomeScreen';
 import { useAuth } from 'src/contexts/AuthCtx';
+import ChatScreen from '../screens/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,10 +18,10 @@ const AppNavigation = () => {
         <NavigationContainer>
             {isSignIn ? (
                 <>
-                    <Stack.Navigator initialRouteName="Home">
+                    <Stack.Navigator initialRouteName="Chat">
                         <Stack.Screen
-                            name="Home"
-                            component={HomeScreen}
+                            name="Chat"
+                            component={ChatScreen}
                             options={{
                                 title: `Welcome, ${currentUser.fullName}`,
                                 headerTitleAlign: 'center',

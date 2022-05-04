@@ -17,7 +17,7 @@ type Props = {
     navigation: NavigationScreenProp<any, any>;
 };
 
-const HomeScreen = ({ navigation }: Props) => {
+const ChatScreen = ({ navigation }: Props) => {
     const drawer = useRef(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -57,4 +57,4 @@ const HomeScreen = ({ navigation }: Props) => {
     );
 };
 
-export default HomeScreen;
+export default ChatScreen;

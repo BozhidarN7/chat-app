@@ -5,6 +5,7 @@ import { Menu, MenuItem } from 'react-native-material-menu';
 import tw from 'twrnc';
 
 import { useAuth } from 'src/contexts/AuthCtx';
+import Avatar from '../common/Avatar';
 
 const UserAvatarMenu = () => {
     const [visible, setVisible] = useState(false);
@@ -20,19 +21,12 @@ const UserAvatarMenu = () => {
     };
 
     return (
-        <View style={tw`mr-2`}>
+        <View>
             <Menu
                 visible={visible}
                 anchor={
                     <Pressable onPress={showMenuHandler}>
-                        <View style={tw`w-11 h-11 rounded-full`}>
-                            <Image
-                                style={tw`w-11 h-11 rounded-full`}
-                                source={{
-                                    uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                }}
-                            />
-                        </View>
+                        <Avatar />
                     </Pressable>
                 }
                 onRequestClose={closeMenuHandler}

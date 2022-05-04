@@ -7,9 +7,12 @@
  */
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Provider } from 'react-redux';
 import { LogBox } from 'react-native';
-import AuthProvider from 'src/contexts/AuthCtx';
-import AppNavigation from 'src/navigations/AppNavigation';
+
+import { store } from './app/store';
+import AuthProvider from './contexts/AuthCtx';
+import InitialComponent from './InitialComponent';
 
 LogBox.ignoreLogs([
     "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
@@ -17,9 +20,11 @@ LogBox.ignoreLogs([
 
 const App = () => {
     return (
-        <AuthProvider>
-            <AppNavigation />
-        </AuthProvider>
+        <Provider store={store}>
+            <AuthProvider>
+                <InitialComponent />
+            </AuthProvider>
+        </Provider>
     );
 };
 

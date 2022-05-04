@@ -6,8 +6,8 @@ import * as SecureStore from 'expo-secure-store';
 import {
     User,
     LoginCredentials,
-    RegisterCredential,
-} from 'src/interfaces/userInterfaces';
+    RegisterCredentials,
+} from '../interfaces/userInterfaces';
 import * as authService from 'src/services/authService';
 import * as userService from 'src/services/userService';
 import Spinner from 'src/components/common/Spinner';
