@@ -1,10 +1,19 @@
 import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
-import { DrawerLayoutAndroid, Dimensions } from 'react-native';
+import {
+    DrawerLayoutAndroid,
+    Dimensions,
+    View,
+    Text,
+    ScrollView,
+} from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { NavigationScreenProp } from 'react-navigation';
+import tw from 'twrnc';
 
 import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
+import Avatar from '../components/common/Avatar';
 import ChatsList from 'src/components/chat/ChatsList';
+import Message from '../components/chat/Message';
 import { useChat } from '../contexts/ChatCtx';
 import { useAppSelector } from '../app/hooks';
 
@@ -65,7 +74,12 @@ const ChatScreen = ({ navigation }: Props) => {
             drawerWidth={Dimensions.get('window').width}
             drawerPosition="left"
             renderNavigationView={chatsView}
-        ></DrawerLayoutAndroid>
+        >
+            <ScrollView style={tw`flex-1 mx-1 my-2`}>
+                <Message />
+                <Message />
+            </ScrollView>
+        </DrawerLayoutAndroid>
     );
 };
 

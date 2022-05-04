@@ -21,7 +21,7 @@ const ChatsList = ({ openChatSpaceHandler }: Props) => {
                 <Ripple onPress={openChatSpaceHandler.bind(null, item.roomId)}>
                     <View style={tw`flex-1 flex-row py-2 px-5`}>
                         <View>
-                            <Avatar />
+                            <Avatar size={11} />
                         </View>
                         <View style={tw`ml-4`}>
                             <Text style={tw`text-base text-blue-700`}>
@@ -36,7 +36,7 @@ const ChatsList = ({ openChatSpaceHandler }: Props) => {
                 <Ripple>
                     <View style={tw`flex-1 flex-row py-2 px-5`}>
                         <View>
-                            <Avatar />
+                            <Avatar size={11} />
                         </View>
                         <View style={tw`ml-4`}>
                             <Text style={tw`text-base text-blue-700`}>

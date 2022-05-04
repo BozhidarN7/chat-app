@@ -26,7 +26,7 @@ const UserAvatarMenu = () => {
                 visible={visible}
                 anchor={
                     <Pressable onPress={showMenuHandler}>
-                        <Avatar />
+                        <Avatar size={11} />
                     </Pressable>
                 }
                 onRequestClose={closeMenuHandler}
