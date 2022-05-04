@@ -5,6 +5,8 @@ import { NavigationScreenProp } from 'react-navigation';
 
 import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
 import ChatsList from 'src/components/chat/ChatsList';
+import { useChat } from '../contexts/ChatCtx';
+import { useAppSelector } from '../app/hooks';
 
 type Props = {
     navigation: NavigationScreenProp<any, any>;
@@ -13,6 +15,21 @@ type Props = {
 const ChatScreen = ({ navigation }: Props) => {
     const drawer = useRef(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [roomId, setRoomId] = useState<string>();
+
+    const { openChatRoom } = useChat();
+    const messages = useAppSelector((state) =>
+        state.chats.chats.find((chat) => chat.roomId === roomId)
+    )?.messages;
+
+    const openChatSpaceHandler = async (roomId: string) => {
+        if (drawer.current) {
+            drawer.current.closeDrawer();
+        }
+
+        setRoomId(roomId);
+        await openChatRoom(roomId);
+    };
 
     useEffect(() => {
         if (!drawer.current) return;
@@ -38,7 +55,9 @@ const ChatScreen = ({ navigation }: Props) => {
         });
     }, [navigation]);
 
-    const chatsView = () => <ChatsList />;
+    const chatsView = () => (
+        <ChatsList openChatSpaceHandler={openChatSpaceHandler} />
+    );
 
     return (
         <DrawerLayoutAndroid
@@ -46,7 +65,7 @@ const ChatScreen = ({ navigation }: Props) => {
             drawerWidth={Dimensions.get('window').width}
             drawerPosition="left"
             renderNavigationView={chatsView}
-        />
+        ></DrawerLayoutAndroid>
     );
 };
 

@@ -27,7 +27,13 @@ export const fetchChats = createAsyncThunk(
 const chatsSlice = createSlice({
     name: 'chats',
     initialState,
-    reducers: {},
+    reducers: {
+        previousMessagesAdded(state, action) {
+            state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            )!.messages = action.payload.messages;
+        },
+    },
     extraReducers(builder) {
         builder.addCase(fetchChats.pending, (state, action) => {
             state.status = 'loading';
@@ -38,5 +44,7 @@ const chatsSlice = createSlice({
         });
     },
 });
+
+export const { previousMessagesAdded } = chatsSlice.actions;
 
 export default chatsSlice.reducer;

@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@heroicons/react": "^1.0.6",
+    "@microsoft/signalr": "^6.0.4",
     "@react-native-community/checkbox": "^0.5.12",
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.10",

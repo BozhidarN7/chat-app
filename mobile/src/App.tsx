@@ -12,6 +12,7 @@ import { LogBox } from 'react-native';
 
 import { store } from './app/store';
 import AuthProvider from './contexts/AuthCtx';
+import ChatProvider from './contexts/ChatCtx';
 import InitialComponent from './InitialComponent';
 
 LogBox.ignoreLogs([
@@ -22,7 +23,9 @@ const App = () => {
     return (
         <Provider store={store}>
             <AuthProvider>
-                <InitialComponent />
+                <ChatProvider>
+                    <InitialComponent />
+                </ChatProvider>
             </AuthProvider>
         </Provider>
     );

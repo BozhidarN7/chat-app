@@ -8,14 +8,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppSelector } from '../../app/hooks';
 import Avatar from '../common/Avatar';
 
-const ChatsList = () => {
+type Props = {
+    openChatSpaceHandler: () => void;
+};
+
+const ChatsList = ({ openChatSpaceHandler }: Props) => {
     const chats = useAppSelector((state) => state.chats.chats);
 
     const renderItem = ({ item }: any) => {
         return (
             <>
-                <Ripple>
-                    <View style={tw`flex-1 flex-row py-2 px-4`}>
+                <Ripple onPress={openChatSpaceHandler.bind(null, item.roomId)}>
+                    <View style={tw`flex-1 flex-row py-2 px-5`}>
                         <View>
                             <Avatar />
                         </View>
@@ -30,7 +34,7 @@ const ChatsList = () => {
                     </View>
                 </Ripple>
                 <Ripple>
-                    <View style={tw`flex-1 flex-row py-2 px-4`}>
+                    <View style={tw`flex-1 flex-row py-2 px-5`}>
                         <View>
                             <Avatar />
                         </View>
@@ -50,9 +54,9 @@ const ChatsList = () => {
 
     return (
         <View>
-            <View style={tw`py-2 pl-4 flex-row justify-between`}>
+            <View style={tw`py-2 pl-5 flex-row justify-between`}>
                 <Text style={tw`text-2xl`}>Chats</Text>
-                <View style={tw`bg-pink-800 rounded-full w-9 h-9 mr-4`}>
+                <View style={tw`bg-pink-800 rounded-full w-9 h-9 mr-5`}>
                     <Pressable
                         android_ripple={{
                             color: 'pink',
