@@ -15,37 +15,37 @@ const InitialComponent = () => {
     const { currentUser, token } = useAuth();
     const { saveConnection } = useChat();
 
-    useEffect(() => {
-        (async () => {
-            if (token) {
-                const connection = new HubConnectionBuilder()
-                    .withUrl(`${baseUrl}/chat`, {
-                        accessTokenFactory: () => token,
-                    })
-                    .withAutomaticReconnect()
-                    .configureLogging(LogLevel.Information)
-                    .build();
+    // useEffect(() => {
+    //     (async () => {
+    //         if (token) {
+    //             const connection = new HubConnectionBuilder()
+    //                 .withUrl(`${baseUrl}/chat`, {
+    //                     accessTokenFactory: () => token,
+    //                 })
+    //                 .withAutomaticReconnect()
+    //                 .configureLogging(LogLevel.Information)
+    //                 .build();
 
-                await connection.start();
-                saveConnection(connection);
-            }
-        })();
-    }, []);
+    //             await connection.start();
+    //             saveConnection(connection);
+    //         }
+    //     })();
+    // }, []);
 
-    useEffect(() => {
-        (async () => {
-            if (currentUser) {
-                const res = await getUserProfileImage(currentUser.id);
-                const data = res.data;
+    // useEffect(() => {
+    //     (async () => {
+    //         if (currentUser) {
+    //             const res = await getUserProfileImage(currentUser.id);
+    //             const data = res.data;
 
-                dispatch(fetchChats(currentUser.id));
+    //             dispatch(fetchChats(currentUser.id));
 
-                if (data.success) {
-                    dispatch(profileImageChanged(data.data.profileImage));
-                }
-            }
-        })();
-    }, []);
+    //             if (data.success) {
+    //                 dispatch(profileImageChanged(data.data.profileImage));
+    //             }
+    //         }
+    //     })();
+    // }, []);
 
     return <AppNavigation />;
 };

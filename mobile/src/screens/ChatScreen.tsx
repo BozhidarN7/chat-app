@@ -11,7 +11,7 @@ import { NavigationScreenProp } from 'react-navigation';
 import tw from 'twrnc';
 
 import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
-import Avatar from '../components/common/Avatar';
+import SearchField from '../components/common/SearchField';
 import ChatsList from 'src/components/chat/ChatsList';
 import Message from '../components/chat/Message';
 import { useChat } from '../contexts/ChatCtx';
@@ -56,6 +56,7 @@ const ChatScreen = ({ navigation }: Props) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => <UserAvatarMenu />,
+            headerTitle: () => <SearchField />,
             headerLeft: () => (
                 <Entypo
                     onPress={() => setIsDrawerOpen((prev) => !prev)}
