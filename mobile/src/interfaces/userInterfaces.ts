@@ -19,3 +19,9 @@ export interface RegisterCredentials {
     password: string;
     repeatPassword: string;
 }
+
+export interface FriendshipRequest {
+    friendshipId: string;
+    senderId: string;
+    senderFullName: string;
+}

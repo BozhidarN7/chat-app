@@ -4,7 +4,9 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useAppDispatch } from './app/hooks';
 import { useAuth } from './contexts/AuthCtx';
 import { useChat } from './contexts/ChatCtx';
+import { getUserProfileImage } from './services/userService';
 import { fetchChats } from './features/chatsSlice';
+import { profileImageChanged } from './features/usersSlice';
 import AppNavigation from './navigations/AppNavigation';
 import { baseUrl } from './api/apiRoutes';
 
@@ -33,7 +35,14 @@ const InitialComponent = () => {
     useEffect(() => {
         (async () => {
             if (currentUser) {
+                const res = await getUserProfileImage(currentUser.id);
+                const data = res.data;
+
                 dispatch(fetchChats(currentUser.id));
+
+                if (data.success) {
+                    dispatch(profileImageChanged(data.data.profileImage));
+                }
             }
         })();
     }, []);
