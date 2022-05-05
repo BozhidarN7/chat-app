@@ -16,6 +16,7 @@ import ChatsList from 'src/components/chat/ChatsList';
 import Message from '../components/chat/Message';
 import { useChat } from '../contexts/ChatCtx';
 import { useAppSelector } from '../app/hooks';
+import { FileMessage, TextMessage } from '../interfaces/chatInterfaces';
 
 type Props = {
     navigation: NavigationScreenProp<any, any>;
@@ -76,8 +77,38 @@ const ChatScreen = ({ navigation }: Props) => {
             renderNavigationView={chatsView}
         >
             <ScrollView style={tw`flex-1 mx-1 my-2`}>
-                <Message />
-                <Message />
+                {messages?.map((message) => {
+                    const type = message.messageType;
+
+                    if (type === 'file') {
+                        message = message as FileMessage;
+                        return (
+                            <Message
+                                senderFullName={message.senderFullName}
+                                message={message.file}
+                                messageId={message.id}
+                                senderId={message.senderId}
+                                dateAndTime={message.messageDateAndTime}
+                                type={type}
+                                key={message.id}
+                            />
+                        );
+                    } else {
+                        message = message as TextMessage;
+
+                        return (
+                            <Message
+                                senderFullName={message.senderFullName}
+                                message={message.message}
+                                messageId={message.id}
+                                senderId={message.senderId}
+                                dateAndTime={message.messageDateAndTime}
+                                type={type}
+                                key={message.id}
+                            />
+                        );
+                    }
+                })}
             </ScrollView>
         </DrawerLayoutAndroid>
     );
