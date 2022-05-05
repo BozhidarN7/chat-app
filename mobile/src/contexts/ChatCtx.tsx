@@ -6,6 +6,7 @@ import { useAuth } from './AuthCtx';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
+    loadingChat: boolean;
     saveConnection: any;
     openChatRoom: any;
 }
@@ -21,6 +22,7 @@ type Props = {
 const ChatProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();
     const [connection, setConnection] = useState<HubConnection>();
+    const [loadingChat, setLoadingChat] = useState(false);
 
     const { currentUser } = useAuth();
 
@@ -29,6 +31,7 @@ const ChatProvider = ({ children }: Props) => {
     }, []);
 
     const openChatRoom = async (roomId: string) => {
+        setLoadingChat(true);
         connection?.on('PreviousConversation', (roomId, messages, files) => {
             const combine = [...messages, ...files].sort(
                 (a, b) =>
@@ -36,6 +39,7 @@ const ChatProvider = ({ children }: Props) => {
                     (new Date(b.messageDateAndTime) as any)
             );
             dispatch(previousMessagesAdded({ roomId, messages: combine }));
+            setLoadingChat(false);
         });
 
         await connection?.invoke('OpenChatRoom', {
@@ -46,6 +50,7 @@ const ChatProvider = ({ children }: Props) => {
 
     const value = {
         connection,
+        loadingChat,
         saveConnection,
         openChatRoom,
     };

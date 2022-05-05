@@ -27,18 +27,18 @@ const ChatScreen = ({ navigation }: Props) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [roomId, setRoomId] = useState<string>();
 
-    const { openChatRoom } = useChat();
+    const { openChatRoom, loadingChat } = useChat();
     const messages = useAppSelector((state) =>
         state.chats.chats.find((chat) => chat.roomId === roomId)
     )?.messages;
 
     const openChatSpaceHandler = async (roomId: string) => {
+        setRoomId(roomId);
+
+        await openChatRoom(roomId);
         if (drawer.current) {
             drawer.current.closeDrawer();
         }
-
-        setRoomId(roomId);
-        await openChatRoom(roomId);
     };
 
     useEffect(() => {
@@ -47,7 +47,9 @@ const ChatScreen = ({ navigation }: Props) => {
         if (isDrawerOpen) {
             drawer.current.openDrawer();
         } else {
-            drawer.current.closeDrawer();
+            if (!loadingChat) {
+                drawer.current.closeDrawer();
+            }
         }
     }, [isDrawerOpen]);
 
@@ -77,6 +79,9 @@ const ChatScreen = ({ navigation }: Props) => {
             renderNavigationView={chatsView}
         >
             <ScrollView style={tw`flex-1 mx-1 my-2`}>
+                {!roomId ? (
+                    <Text style={tw`text-base`}>Open a chat from the menu</Text>
+                ) : null}
                 {messages?.map((message) => {
                     const type = message.messageType;
 

@@ -10,7 +10,7 @@ const Spinner = ({ text }: Props) => {
     return (
         <View style={tw`flex-1 items-center justify-center`}>
             <ActivityIndicator size="large" />
-            <Text>Login in</Text>
+            <Text>{text}</Text>
         </View>
     );
 };
