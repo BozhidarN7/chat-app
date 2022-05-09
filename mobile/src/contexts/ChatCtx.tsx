@@ -9,6 +9,7 @@ interface ChatCtxInterface {
     loadingChat: boolean;
     saveConnection: any;
     openChatRoom: any;
+    sendFriendRequest: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -48,11 +49,16 @@ const ChatProvider = ({ children }: Props) => {
         });
     };
 
+    const sendFriendRequest = async (userId: string) => {
+        await connection?.invoke('SendFriendRequest', currentUser?.id, userId);
+    };
+
     const value = {
         connection,
         loadingChat,
         saveConnection,
         openChatRoom,
+        sendFriendRequest,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

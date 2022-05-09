@@ -5,7 +5,9 @@ import tw from 'twrnc';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchUsers } from '../../features/usersSlice';
+import { useChat } from '../../contexts/ChatCtx';
 import Avatar from '../common/Avatar';
+import ConfirmModal from '../modals/ConfirmModal';
 
 type Props = {
     userSearchQuery: string;
@@ -16,6 +18,9 @@ const UsersList = ({ userSearchQuery }: Props) => {
 
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
     const [selectedUserFullName, setSelectedUserFullName] = useState('');
+    const [selectedUserId, setSelectedUserId] = useState('');
+
+    const { sendFriendRequest } = useChat();
 
     const users = useAppSelector((state) => state.users.users).filter((u) =>
         u.fullName.toLowerCase().includes(userSearchQuery.toLowerCase())
@@ -25,13 +30,23 @@ const UsersList = ({ userSearchQuery }: Props) => {
         dispatch(fetchUsers());
     }, []);
 
-    const openConfirmModalHandler = (userFullName: string) => {
+    const openConfirmModalHandler = (userId: string, userFullName: string) => {
         setIsConfirmModalOpen(true);
         setSelectedUserFullName(userFullName);
+        setSelectedUserId(userId);
     };
 
     const closeConfirmModalHandler = () => {
         setIsConfirmModalOpen(false);
+    };
+
+    const sendFriendRequestHandler = async () => {
+        setIsConfirmModalOpen(false);
+        try {
+            await sendFriendRequest(selectedUserId);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     const getUserFullNameFirstPart = (fullName: string) => {
@@ -64,10 +79,14 @@ const UsersList = ({ userSearchQuery }: Props) => {
     };
 
     return (
-        <ScrollView>
+        <ScrollView style={tw`pl-2`}>
             {users.map((user) => (
                 <Ripple
-                    onPress={openConfirmModalHandler.bind(null, user.fullName)}
+                    onPress={openConfirmModalHandler.bind(
+                        null,
+                        user.id,
+                        user.fullName
+                    )}
                     key={user.id}
                 >
                     <View
@@ -93,40 +112,12 @@ const UsersList = ({ userSearchQuery }: Props) => {
                     </View>
                 </Ripple>
             ))}
-            <Modal
-                transparent={true}
-                animationType="slide"
-                visible={isConfirmModalOpen}
-            >
-                <View style={tw`flex-1 justify-center items-center`}>
-                    <View
-                        style={tw`w-5/6 p-2 shadow-black bg-white rounded-lg`}
-                    >
-                        <Text
-                            style={tw`text-base text-center text-black`}
-                        >{`Are you sure you want to send a friend request to ${selectedUserFullName}`}</Text>
-                        <View style={tw`flex flex-row self-center py-2`}>
-                            <Ripple style={tw`py-2 bg-green-600 w-20 mr-2`}>
-                                <Text
-                                    style={tw`text-base text-center text-white rounded`}
-                                >
-                                    Accept
-                                </Text>
-                            </Ripple>
-                            <Ripple
-                                style={tw`py-2 bg-red-600 w-20`}
-                                onPress={closeConfirmModalHandler}
-                            >
-                                <Text
-                                    style={tw`text-base text-center text-white rounded`}
-                                >
-                                    Reject
-                                </Text>
-                            </Ripple>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            <ConfirmModal
+                isConfirmModalOpen={isConfirmModalOpen}
+                acceptHandler={sendFriendRequestHandler}
+                closeConfirmModalHandler={closeConfirmModalHandler}
+                text={`Are you sure you want to send a friend request to ${selectedUserFullName}`}
+            />
         </ScrollView>
     );
 };
