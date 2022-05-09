@@ -62,6 +62,7 @@ const ChatScreen = ({ navigation }: Props) => {
             headerRight: () => <UserAvatarMenu />,
             headerTitle: () => (
                 <SearchField
+                    placeholder="Search a recent chat..."
                     searchValue={chatSearchQuery}
                     setSearchValueHandler={setChatSearchQueryHandler}
                 />

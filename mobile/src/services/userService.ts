@@ -17,28 +17,3 @@ export const getChats = async (id: string) => {
 export const getUserProfileImage = async (id: string) => {
     return await crud.get(routes.saveUserProfileImageURL(id));
 };
-
-export const filterUsers = (
-    users: User[],
-    query: string,
-    currentUserId: string
-) => {
-    return users
-        .filter(
-            (u) =>
-                u.fullName.toLowerCase().includes(query.toLowerCase()) &&
-                u.id !== currentUserId
-        )
-        .sort((a, b) => {
-            const nameA = a.fullName.toLowerCase();
-            const nameB = b.fullName.toLowerCase();
-
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
-        });
-};

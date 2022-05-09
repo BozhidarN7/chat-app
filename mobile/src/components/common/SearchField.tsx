@@ -5,11 +5,16 @@ import { Feather, Entypo } from '@expo/vector-icons';
 import tw from 'twrnc';
 
 type Props = {
+    placeholder: string;
     searchValue: string;
     setSearchValueHandler: (query: string) => void;
 };
 
-const SearchField = ({ setSearchValueHandler, searchValue }: Props) => {
+const SearchField = ({
+    setSearchValueHandler,
+    placeholder,
+    searchValue,
+}: Props) => {
     const [showCross, setShowCross] = useState(false);
 
     const deleteCloseHandler = () => {
@@ -37,7 +42,7 @@ const SearchField = ({ setSearchValueHandler, searchValue }: Props) => {
                 />
                 <TextInput
                     style={tw`w-3/4`}
-                    placeholder="Search for recent chat..."
+                    placeholder={placeholder}
                     onChangeText={setSearchValueHandler}
                     onFocus={searchFieldFocusHandler}
                     value={searchValue}

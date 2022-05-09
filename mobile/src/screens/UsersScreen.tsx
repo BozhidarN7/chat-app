@@ -21,6 +21,7 @@ const UsersScreen = ({ navigation }: Props) => {
             headerRight: () => <UserAvatarMenu />,
             headerTitle: () => (
                 <SearchField
+                    placeholder="Find someone..."
                     searchValue={userSearchQuery}
                     setSearchValueHandler={setUserSearchQueryHandler}
                 />
@@ -29,7 +30,7 @@ const UsersScreen = ({ navigation }: Props) => {
     }, [navigation, userSearchQuery]);
     return (
         <View>
-            <UsersList />
+            <UsersList userSearchQuery={userSearchQuery} />
         </View>
     );
 };
