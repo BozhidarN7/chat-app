@@ -24,7 +24,7 @@ const Avatar = ({ size }: Props) => {
                 <Ionicons
                     name="person-circle-outline"
                     size={size * 4}
-                    color="black"
+                    style={tw`text-gray-500`}
                 />
             )}
         </View>

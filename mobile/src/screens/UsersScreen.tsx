@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 
-const UsersScreen = () => {
+import UserAvatarMenu from '../components/menus/UserAvatarMenu';
+import SearchField from '../components/common/SearchField';
+import UsersList from '../components/chat/UsersList';
+
+type Props = {
+    navigation: any;
+};
+
+const UsersScreen = ({ navigation }: Props) => {
+    const [userSearchQuery, setUserSearchQuery] = useState('');
+
+    const setUserSearchQueryHandler = (query: string) => {
+        setUserSearchQuery(query);
+    };
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <UserAvatarMenu />,
+            headerTitle: () => (
+                <SearchField
+                    searchValue={userSearchQuery}
+                    setSearchValueHandler={setUserSearchQueryHandler}
+                />
+            ),
+        });
+    }, [navigation, userSearchQuery]);
     return (
         <View>
-            <Text>This is frinds list</Text>
+            <UsersList />
         </View>
     );
 };

@@ -42,9 +42,18 @@ const HomeScreen = () => {
                     title: `Chats`,
                     headerTitleAlign: 'center',
                     headerTitleStyle: tw`text-base`,
+                    headerLeftContainerStyle: tw`pl-2`,
+                    headerRightContainerStyle: tw`pr-2`,
                 }}
             />
-            <Tab.Screen name="Users" component={UsersScreen} />
+            <Tab.Screen
+                name="Users"
+                component={UsersScreen}
+                options={{
+                    headerTitleStyle: tw`text-base`,
+                    headerRightContainerStyle: tw`pr-2`,
+                }}
+            />
         </Tab.Navigator>
     );
 };

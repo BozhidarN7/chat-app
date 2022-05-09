@@ -26,9 +26,9 @@ const SearchField = ({ setSearchValueHandler, searchValue }: Props) => {
     };
 
     return (
-        <View style={tw`w-4/5 right-4.5`}>
+        <View style={tw`w-full`}>
             <View
-                style={tw`flex-1 w-full h-11 flex-row border-2 border-blue-500 rounded-3xl`}
+                style={tw`flex w-full h-11 flex-row border-2 border-blue-500 rounded-3xl`}
             >
                 <Feather
                     style={tw`text-pink-500 self-center mr-1 ml-2`}

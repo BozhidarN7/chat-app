@@ -59,7 +59,7 @@ const ChatsList = ({ openChatSpaceHandler, chatSearchQuery }: Props) => {
     const renderItem = ({ item }: any) => {
         return (
             <Ripple onPress={openChatSpaceHandler.bind(null, item.roomId)}>
-                <View style={tw`flex-1 flex-row py-2 px-5`}>
+                <View style={tw`flex-1 flex-row py-2 px-2`}>
                     <View>
                         <Avatar size={11} />
                     </View>
@@ -99,7 +99,7 @@ const ChatsList = ({ openChatSpaceHandler, chatSearchQuery }: Props) => {
     return (
         <>
             <View>
-                <View style={tw`py-2 pl-5 flex-row justify-between`}>
+                <View style={tw`py-2 pl-2 flex-row justify-between`}>
                     <Text style={tw`text-2xl`}>Chats</Text>
                 </View>
                 <FlatList data={chats} renderItem={renderItem} />
