@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 import tw from 'twrnc';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import { useAppSelector } from '../../app/hooks';
 
@@ -21,8 +21,8 @@ const Avatar = ({ size }: Props) => {
                     }}
                 />
             ) : (
-                <FontAwesome5
-                    name="user-circle"
+                <Ionicons
+                    name="person-circle-outline"
                     size={size * 4}
                     color="black"
                 />

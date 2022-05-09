@@ -1,3 +1,4 @@
+// export const baseUrl = 'https://10.0.2.2:44325/api/v1';
 export const baseUrl = 'https://chatappwebapi.azurewebsites.net/api/v1';
 
 const authRoutes = {

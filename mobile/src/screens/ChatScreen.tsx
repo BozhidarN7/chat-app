@@ -6,7 +6,7 @@ import {
     Text,
     ScrollView,
 } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationScreenProp } from 'react-navigation';
 import tw from 'twrnc';
 
@@ -26,6 +26,7 @@ const ChatScreen = ({ navigation }: Props) => {
     const drawer = useRef(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [roomId, setRoomId] = useState<string>();
+    const [chatSearchQuery, setChatSearchQuery] = useState('');
 
     const { openChatRoom, loadingChat } = useChat();
     const messages = useAppSelector((state) =>
@@ -33,12 +34,15 @@ const ChatScreen = ({ navigation }: Props) => {
     )?.messages;
 
     const openChatSpaceHandler = async (roomId: string) => {
-        setRoomId(roomId);
+        // setRoomId(roomId);
+        // await openChatRoom(roomId);
+        // if (drawer.current) {
+        //     drawer.current.closeDrawer();
+        // }
+    };
 
-        await openChatRoom(roomId);
-        if (drawer.current) {
-            drawer.current.closeDrawer();
-        }
+    const setChatSearchQueryHandler = (query: string) => {
+        setChatSearchQuery(query);
     };
 
     useEffect(() => {
@@ -56,20 +60,28 @@ const ChatScreen = ({ navigation }: Props) => {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => <UserAvatarMenu />,
-            headerTitle: () => <SearchField />,
+            headerTitle: () => (
+                <SearchField
+                    searchValue={chatSearchQuery}
+                    setSearchValueHandler={setChatSearchQueryHandler}
+                />
+            ),
             headerLeft: () => (
-                <Entypo
+                <Ionicons
                     onPress={() => setIsDrawerOpen((prev) => !prev)}
-                    name="menu"
+                    name="menu-outline"
                     size={36}
                     color="black"
                 />
             ),
         });
-    }, [navigation]);
+    }, [navigation, chatSearchQuery]);
 
     const chatsView = () => (
-        <ChatsList openChatSpaceHandler={openChatSpaceHandler} />
+        <ChatsList
+            openChatSpaceHandler={openChatSpaceHandler}
+            chatSearchQuery={chatSearchQuery}
+        />
     );
 
     return (

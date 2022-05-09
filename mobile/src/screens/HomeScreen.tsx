@@ -1,59 +1,51 @@
-import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
-import {
-    Text,
-    View,
-    DrawerLayoutAndroid,
-    Button,
-    Dimensions,
-} from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-import { NavigationScreenProp } from 'react-navigation';
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import tw from 'twrnc';
+import { Ionicons } from '@expo/vector-icons';
 
-import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
-import ChatsList from 'src/components/chat/ChatsList';
+import ChatScreen from './ChatScreen';
+import UsersScreen from './UsersScreen';
+import { useAuth } from '../contexts/AuthCtx';
 
-type Props = {
-    navigation: NavigationScreenProp<any, any>;
-};
+const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({ navigation }: Props) => {
-    const drawer = useRef(null);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-    useEffect(() => {
-        if (!drawer.current) return;
-
-        if (isDrawerOpen) {
-            drawer.current.openDrawer();
-        } else {
-            drawer.current.closeDrawer();
-        }
-    }, [isDrawerOpen]);
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => <UserAvatarMenu />,
-            headerLeft: () => (
-                <Entypo
-                    onPress={() => setIsDrawerOpen((prev) => !prev)}
-                    name="menu"
-                    size={36}
-                    color="black"
-                />
-            ),
-        });
-    }, [navigation]);
-
-    const chatsView = () => <ChatsList />;
-
+const HomeScreen = () => {
+    const { currentUser } = useAuth();
     return (
-        <DrawerLayoutAndroid
-            ref={drawer}
-            drawerWidth={Dimensions.get('window').width}
-            drawerPosition="left"
-            renderNavigationView={chatsView}
-        />
+        <Tab.Navigator
+            initialRouteName="Chat"
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    if (route.name === 'Chat') {
+                        return (
+                            <Ionicons
+                                name="chatbox-outline"
+                                size={size}
+                                color={color}
+                            />
+                        );
+                    }
+                    return (
+                        <Ionicons
+                            name="people-outline"
+                            size={size}
+                            color={color}
+                        />
+                    );
+                },
+            })}
+        >
+            <Tab.Screen
+                name="Chat"
+                component={ChatScreen}
+                options={{
+                    title: `Chats`,
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: tw`text-base`,
+                }}
+            />
+            <Tab.Screen name="Users" component={UsersScreen} />
+        </Tab.Navigator>
     );
 };
 

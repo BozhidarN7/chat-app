@@ -9,6 +9,7 @@ import { fetchChats } from './features/chatsSlice';
 import { profileImageChanged } from './features/usersSlice';
 import AppNavigation from './navigations/AppNavigation';
 import { baseUrl } from './api/apiRoutes';
+import * as SecureStroe from 'expo-secure-store';
 
 const InitialComponent = () => {
     const dispatch = useAppDispatch();

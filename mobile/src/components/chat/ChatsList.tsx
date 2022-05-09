@@ -11,12 +11,50 @@ import Avatar from '../common/Avatar';
 import Spinner from '../common/Spinner';
 
 type Props = {
+    chatSearchQuery: string;
     openChatSpaceHandler: () => void;
 };
 
-const ChatsList = ({ openChatSpaceHandler }: Props) => {
-    const chats = useAppSelector((state) => state.chats.chats);
+const ChatsList = ({ openChatSpaceHandler, chatSearchQuery }: Props) => {
+    const chats = useAppSelector((state) => state.chats.chats).filter((c) =>
+        c.friendFullName
+            .toLowerCase()
+            .includes(chatSearchQuery.toLowerCase().trim())
+    );
+
     const { loadingChat } = useChat();
+
+    const getFriendFullNameFirstPart = (
+        friendFullName: string,
+        query: string
+    ) => {
+        const startPosition = friendFullName
+            .toLowerCase()
+            .indexOf(query.toLocaleLowerCase());
+        return friendFullName.substring(0, startPosition);
+    };
+
+    const getFriendFullNameLastPart = (
+        friendFullName: string,
+        query: string
+    ) => {
+        const startPosition = friendFullName
+            .toLowerCase()
+            .indexOf(query.toLocaleLowerCase());
+        const endPosition = startPosition + query.length;
+        return friendFullName.substring(endPosition);
+    };
+
+    const getFriendFullNameBoldPart = (
+        friendFullName: string,
+        query: string
+    ) => {
+        const startPosition = friendFullName
+            .toLowerCase()
+            .indexOf(query.toLocaleLowerCase());
+        const endPosition = startPosition + query.length;
+        return friendFullName.substring(startPosition, endPosition);
+    };
 
     const renderItem = ({ item }: any) => {
         return (
@@ -27,7 +65,29 @@ const ChatsList = ({ openChatSpaceHandler }: Props) => {
                     </View>
                     <View style={tw`ml-4`}>
                         <Text style={tw`text-base text-blue-700`}>
-                            {item.friendFullName}
+                            {getFriendFullNameFirstPart(
+                                item.friendFullName,
+                                chatSearchQuery
+                            )}
+                            <Text
+                                style={tw.style(
+                                    `text-base text-blue-700`,
+                                    chatSearchQuery !== '' && 'font-bold'
+                                )}
+                            >
+                                {getFriendFullNameBoldPart(
+                                    item.friendFullName,
+                                    chatSearchQuery
+                                )}
+                                <Text
+                                    style={tw`text-base text-blue-700 font-normal`}
+                                >
+                                    {getFriendFullNameLastPart(
+                                        item.friendFullName,
+                                        chatSearchQuery
+                                    )}
+                                </Text>
+                            </Text>
                         </Text>
                         <Text>New friend. Be the first to send message</Text>
                     </View>
@@ -41,20 +101,6 @@ const ChatsList = ({ openChatSpaceHandler }: Props) => {
             <View>
                 <View style={tw`py-2 pl-5 flex-row justify-between`}>
                     <Text style={tw`text-2xl`}>Chats</Text>
-                    <View style={tw`bg-pink-800 rounded-full w-9 h-9 mr-5`}>
-                        <Pressable
-                            android_ripple={{
-                                color: 'pink',
-                                borderless: true,
-                            }}
-                        >
-                            <Ionicons
-                                name="add-outline"
-                                size={36}
-                                color="white"
-                            />
-                        </Pressable>
-                    </View>
                 </View>
                 <FlatList data={chats} renderItem={renderItem} />
             </View>

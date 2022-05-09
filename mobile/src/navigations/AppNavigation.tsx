@@ -3,9 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw from 'twrnc';
 
+import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from 'src/screens/LoginScreen';
 import RegisterScreen from 'src/screens/RegisterScreen';
-import HomeScreen from 'src/screens/HomeScreen';
 import { useAuth } from 'src/contexts/AuthCtx';
 import ChatScreen from '../screens/ChatScreen';
 
@@ -20,10 +20,10 @@ const AppNavigation = () => {
                 <>
                     <Stack.Navigator initialRouteName="Chat">
                         <Stack.Screen
-                            name="Chat"
-                            component={ChatScreen}
+                            name="Home"
+                            component={HomeScreen}
                             options={{
-                                title: `Welcome, ${currentUser.fullName}`,
+                                headerShown: false,
                                 headerTitleAlign: 'center',
                                 headerTitleStyle: tw`text-base`,
                             }}

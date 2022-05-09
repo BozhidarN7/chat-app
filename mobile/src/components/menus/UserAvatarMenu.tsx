@@ -23,6 +23,7 @@ const UserAvatarMenu = () => {
     return (
         <View>
             <Menu
+                style={tw`top-13`}
                 visible={visible}
                 anchor={
                     <Pressable onPress={showMenuHandler}>
