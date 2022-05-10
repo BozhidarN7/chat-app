@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { User, FriendshipRequest } from '../interfaces/userInterfaces';
+import { getNewFriendShipRequest } from '../services/friendshipRequestsService';
 import { getAllUsers, getNewFriendShipRequests } from '../services/userService';
 
 interface UsersSliceInterface {
@@ -34,10 +35,25 @@ export const fetchNewFriendRequests = createAsyncThunk(
     }
 );
 
+export const fetchNewFriendRequest = createAsyncThunk(
+    '/users/fetchNewFriendRequest',
+    async (firendshipId: string) => {
+        const res = await getNewFriendShipRequest(firendshipId);
+        const data = res.data;
+
+        return data.data.friendshipRequest;
+    }
+);
+
 const usersSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
+        friendshipRequestDeleted(state, action) {
+            state.newFriendshipRequests = state.newFriendshipRequests.filter(
+                (fs) => fs.friendshipId !== action.payload
+            );
+        },
         profileImageChanged(state, action) {
             state.profileImage = action.payload;
         },
@@ -68,9 +84,28 @@ const usersSlice = createSlice({
             state.status = 'succeeded';
             state.newFriendshipRequests = action.payload;
         });
+        builder.addCase(fetchNewFriendRequest.pending, (state, action) => {
+            state.status = 'loading';
+        });
+        builder.addCase(fetchNewFriendRequest.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            if (
+                !state.newFriendshipRequests.find(
+                    (fs) => fs.friendshipId === action.payload.friendshipId
+                )
+            ) {
+                state.newFriendshipRequests = [
+                    ...state.newFriendshipRequests,
+                    action.payload,
+                ];
+            } else {
+                state.newFriendshipRequests = [...state.newFriendshipRequests];
+            }
+        });
     },
 });
 
-export const { profileImageChanged } = usersSlice.actions;
+export const { profileImageChanged, friendshipRequestDeleted } =
+    usersSlice.actions;
 
 export default usersSlice.reducer;

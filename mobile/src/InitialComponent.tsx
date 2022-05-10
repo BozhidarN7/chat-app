@@ -5,10 +5,11 @@ import { useAppDispatch } from './app/hooks';
 import { useAuth } from './contexts/AuthCtx';
 import { useChat } from './contexts/ChatCtx';
 import { getUserProfileImage } from './services/userService';
-import { fetchChats } from './features/chatsSlice';
+import { fetchChats, newChatAdded } from './features/chatsSlice';
 import {
     profileImageChanged,
     fetchNewFriendRequests,
+    fetchNewFriendRequest,
 } from './features/usersSlice';
 import AppNavigation from './navigations/AppNavigation';
 import { baseUrl } from './api/apiRoutes';
@@ -19,38 +20,61 @@ const InitialComponent = () => {
     const { currentUser, token } = useAuth();
     const { saveConnection } = useChat();
 
-    // useEffect(() => {
-    //     (async () => {
-    //         if (token) {
-    //             const connection = new HubConnectionBuilder()
-    //                 .withUrl(`${baseUrl}/chat`, {
-    //                     accessTokenFactory: () => token,
-    //                 })
-    //                 .withAutomaticReconnect()
-    //                 .configureLogging(LogLevel.Information)
-    //                 .build();
+    useEffect(() => {
+        (async () => {
+            if (token) {
+                const connection = new HubConnectionBuilder()
+                    .withUrl(`${baseUrl}/chat`, {
+                        accessTokenFactory: () => token,
+                    })
+                    .withAutomaticReconnect()
+                    .configureLogging(LogLevel.Information)
+                    .build();
 
-    //             await connection.start();
-    //             saveConnection(connection);
-    //         }
-    //     })();
-    // }, []);
+                connection?.on('AcceptFriendship', (data) => {
+                    if (currentUser?.fullName !== data.senderFullName) {
+                        dispatch(
+                            newChatAdded({
+                                friendFullName: data.senderFullName,
+                                friendId: data.senderId,
+                                roomId: data.roomId,
+                            })
+                        );
+                    } else {
+                        dispatch(
+                            newChatAdded({
+                                friendFullName: data.receiverFullName,
+                                friendId: data.receiverId,
+                                roomId: data.roomId,
+                            })
+                        );
+                    }
+                });
 
-    // useEffect(() => {
-    //     (async () => {
-    //         if (currentUser) {
-    //             const res = await getUserProfileImage(currentUser.id);
-    //             const data = res.data;
+                connection?.on('ReceiveInvitation', (friendshipId) => {
+                    dispatch(fetchNewFriendRequest(friendshipId));
+                });
+                await connection.start();
+                saveConnection(connection);
+            }
+        })();
+    }, []);
 
-    //             dispatch(fetchNewFriendRequests(currentUser.id));
-    //             dispatch(fetchChats(currentUser.id));
+    useEffect(() => {
+        (async () => {
+            if (currentUser) {
+                const res = await getUserProfileImage(currentUser.id);
+                const data = res.data;
 
-    //             if (data.success) {
-    //                 dispatch(profileImageChanged(data.data.profileImage));
-    //             }
-    //         }
-    //     })();
-    // }, []);
+                dispatch(fetchNewFriendRequests(currentUser.id));
+                dispatch(fetchChats(currentUser.id));
+
+                if (data.success) {
+                    dispatch(profileImageChanged(data.data.profileImage));
+                }
+            }
+        })();
+    }, []);
 
     return <AppNavigation />;
 };

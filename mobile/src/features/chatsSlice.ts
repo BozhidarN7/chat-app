@@ -28,6 +28,9 @@ const chatsSlice = createSlice({
     name: 'chats',
     initialState,
     reducers: {
+        newChatAdded(state, action) {
+            state.chats = [...state.chats, action.payload];
+        },
         previousMessagesAdded(state, action) {
             state.chats.find(
                 (chat) => chat.roomId === action.payload.roomId
@@ -45,6 +48,6 @@ const chatsSlice = createSlice({
     },
 });
 
-export const { previousMessagesAdded } = chatsSlice.actions;
+export const { newChatAdded, previousMessagesAdded } = chatsSlice.actions;
 
 export default chatsSlice.reducer;
