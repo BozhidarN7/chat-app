@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View, Keyboard, Button, Text } from 'react-native';
-import { Feather, Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import tw from 'twrnc';
 
@@ -31,13 +31,13 @@ const SearchField = ({
     };
 
     return (
-        <View style={tw`w-full`}>
+        <View style={tw`w-3/4`}>
             <View
                 style={tw`flex w-full h-11 flex-row border-2 border-blue-500 rounded-3xl`}
             >
-                <Feather
+                <Ionicons
                     style={tw`text-pink-500 self-center mr-1 ml-2`}
-                    name="search"
+                    name="search-outline"
                     size={20}
                 />
                 <TextInput
@@ -48,9 +48,9 @@ const SearchField = ({
                     value={searchValue}
                 />
                 {showCross ? (
-                    <Entypo
+                    <Ionicons
                         style={tw`self-center`}
-                        name="cross"
+                        name="close"
                         size={20}
                         color="black"
                         onPress={deleteCloseHandler}

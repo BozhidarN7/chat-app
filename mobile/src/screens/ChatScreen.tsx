@@ -73,6 +73,7 @@ const ChatScreen = ({ navigation }: Props) => {
                     name="menu-outline"
                     size={36}
                     color="black"
+                    style={tw`-ml-2`}
                 />
             ),
         });

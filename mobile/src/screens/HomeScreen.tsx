@@ -3,14 +3,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import tw from 'twrnc';
 import { Ionicons } from '@expo/vector-icons';
 
-import ChatScreen from './ChatScreen';
-import UsersScreen from './UsersScreen';
-import { useAuth } from '../contexts/AuthCtx';
+import ChatsNavigation from '../navigations/ChatsNavigation';
+import UsersNavigation from '../navigations/UsersNavigation';
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = () => {
-    const { currentUser } = useAuth();
     return (
         <Tab.Navigator
             initialRouteName="Chat"
@@ -36,22 +34,25 @@ const HomeScreen = () => {
             })}
         >
             <Tab.Screen
-                name="Chat"
-                component={ChatScreen}
+                name="ChatsNav"
+                component={ChatsNavigation}
                 options={{
+                    headerShown: false,
                     title: `Chats`,
-                    headerTitleAlign: 'center',
-                    headerTitleStyle: tw`text-base`,
-                    headerLeftContainerStyle: tw`pl-2`,
-                    headerRightContainerStyle: tw`pr-2`,
+                    // headerTitleAlign: 'center',
+                    // headerTitleStyle: tw`text-base`,
+                    // headerLeftContainerStyle: tw`pl-2`,
+                    // headerRightContainerStyle: tw`pr-2`,
                 }}
             />
             <Tab.Screen
-                name="Users"
-                component={UsersScreen}
+                name="UsersNav"
+                component={UsersNavigation}
                 options={{
-                    headerTitleStyle: tw`text-base`,
-                    headerRightContainerStyle: tw`pr-2`,
+                    headerShown: false,
+                    title: 'Users',
+                    // headerTitleStyle: tw`text-base`,
+                    // headerRightContainerStyle: tw`pr-2`,
                 }}
             />
         </Tab.Navigator>

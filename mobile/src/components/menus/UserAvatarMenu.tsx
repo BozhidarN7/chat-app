@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Pressable, View, Text } from 'react-native';
 import { Menu, MenuItem } from 'react-native-material-menu';
+import { useNavigation } from '@react-navigation/native';
 
 import tw from 'twrnc';
 
 import { useAuth } from 'src/contexts/AuthCtx';
-import { useAppSelector } from '../../app/hooks';
 import Avatar from '../common/Avatar';
 import Badge from '../common/Badge';
 
 const UserAvatarMenu = () => {
+    const navigation = useNavigation();
+
     const [visible, setVisible] = useState(false);
 
     const { logout } = useAuth(0);
-    const notifications = useAppSelector(
-        (state) => state.users.newFriendshipRequests
-    );
 
     const showMenuHandler = () => {
         setVisible(true);
@@ -26,7 +25,7 @@ const UserAvatarMenu = () => {
     };
 
     return (
-        <View>
+        <View style={tw`-mr-2`}>
             <Menu
                 style={tw`top-13`}
                 visible={visible}
@@ -50,7 +49,7 @@ const UserAvatarMenu = () => {
                 onRequestClose={closeMenuHandler}
             >
                 <MenuItem>Profile</MenuItem>
-                <MenuItem>
+                <MenuItem onPress={() => navigation.navigate('Notifications')}>
                     <View style={tw`relative`}>
                         <Badge
                             negativeTop={4}
