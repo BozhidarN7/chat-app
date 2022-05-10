@@ -7,12 +7,11 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from 'src/screens/LoginScreen';
 import RegisterScreen from 'src/screens/RegisterScreen';
 import { useAuth } from 'src/contexts/AuthCtx';
-import ChatScreen from '../screens/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigation = () => {
-    const { isSignIn, currentUser } = useAuth();
+    const { isSignIn } = useAuth();
 
     return (
         <NavigationContainer>

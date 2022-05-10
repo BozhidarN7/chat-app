@@ -79,7 +79,7 @@ const UsersList = ({ userSearchQuery }: Props) => {
     };
 
     return (
-        <ScrollView style={tw`pl-2`}>
+        <ScrollView>
             {users.map((user) => (
                 <Ripple
                     onPress={openConfirmModalHandler.bind(

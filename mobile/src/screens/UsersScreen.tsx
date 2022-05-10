@@ -1,5 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import tw from 'twrnc';
 
 import UserAvatarMenu from '../components/menus/UserAvatarMenu';
 import SearchField from '../components/common/SearchField';
@@ -18,6 +20,15 @@ const UsersScreen = ({ navigation }: Props) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
+            headerLeft: () => (
+                <Ionicons
+                    onPress={() => navigation.goBack()}
+                    name="arrow-back-outline"
+                    size={24}
+                    color="black"
+                    style={tw`-ml-1`}
+                />
+            ),
             headerRight: () => <UserAvatarMenu />,
             headerTitle: () => (
                 <SearchField
