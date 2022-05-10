@@ -17,3 +17,7 @@ export const getChats = async (id: string) => {
 export const getUserProfileImage = async (id: string) => {
     return await crud.get(routes.saveUserProfileImageURL(id));
 };
+
+export const getNewFriendShipRequests = async (id: string) => {
+    return await crud.get(routes.getNewFriendShipRequestsURL(id));
+};

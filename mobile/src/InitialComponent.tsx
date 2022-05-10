@@ -6,7 +6,10 @@ import { useAuth } from './contexts/AuthCtx';
 import { useChat } from './contexts/ChatCtx';
 import { getUserProfileImage } from './services/userService';
 import { fetchChats } from './features/chatsSlice';
-import { profileImageChanged } from './features/usersSlice';
+import {
+    profileImageChanged,
+    fetchNewFriendRequests,
+} from './features/usersSlice';
 import AppNavigation from './navigations/AppNavigation';
 import { baseUrl } from './api/apiRoutes';
 import * as SecureStroe from 'expo-secure-store';
@@ -39,6 +42,7 @@ const InitialComponent = () => {
     //             const res = await getUserProfileImage(currentUser.id);
     //             const data = res.data;
 
+    //             dispatch(fetchNewFriendRequests(currentUser.id));
     //             dispatch(fetchChats(currentUser.id));
 
     //             if (data.success) {

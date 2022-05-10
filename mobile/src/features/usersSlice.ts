@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { User, FriendshipRequest } from '../interfaces/userInterfaces';
-import { getAllUsers } from '../services/userService';
+import { getAllUsers, getNewFriendShipRequests } from '../services/userService';
 
 interface UsersSliceInterface {
     users: User[];
@@ -23,6 +23,16 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
 
     return data.data.users;
 });
+
+export const fetchNewFriendRequests = createAsyncThunk(
+    '/users/fetchNewFriendRequests',
+    async (id: string) => {
+        const res = await getNewFriendShipRequests(id);
+        const data = res.data;
+
+        return data.data.friendShipRequests;
+    }
+);
 
 const usersSlice = createSlice({
     name: 'users',
@@ -50,6 +60,13 @@ const usersSlice = createSlice({
                 }
                 return 0;
             });
+        });
+        builder.addCase(fetchNewFriendRequests.pending, (state, action) => {
+            state.status = 'loading';
+        });
+        builder.addCase(fetchNewFriendRequests.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.newFriendshipRequests = action.payload;
         });
     },
 });
