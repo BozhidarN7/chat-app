@@ -14,6 +14,7 @@ import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
 import SearchField from '../components/common/SearchField';
 import ChatsList from 'src/components/chat/ChatsList';
 import Message from '../components/chat/Message';
+import MessageInput from '../components/inputs/MessageInput';
 import { useChat } from '../contexts/ChatCtx';
 import { useAppSelector } from '../app/hooks';
 import { FileMessage, TextMessage } from '../interfaces/chatInterfaces';
@@ -146,6 +147,8 @@ const ChatScreen = ({ navigation }: Props) => {
                     }
                 })}
             </ScrollView>
+            {roomId ? <MessageInput /> : null}
+            <MessageInput />
         </DrawerLayoutAndroid>
     );
 };
