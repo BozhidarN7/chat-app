@@ -6,13 +6,15 @@ import { getChats } from '../services/userService';
 interface ChatInterface {
     chats: Chat[];
     status: string;
-    areChatsShown: boolean;
+    isChatDrawerOpen: boolean;
+    isTabScreen: boolean;
 }
 
 const initialState: ChatInterface = {
     chats: [],
     status: 'idle',
-    areChatsShown: true,
+    isChatDrawerOpen: false,
+    isTabScreen: false,
 };
 
 export const fetchChats = createAsyncThunk(
@@ -36,6 +38,12 @@ const chatsSlice = createSlice({
                 (chat) => chat.roomId === action.payload.roomId
             )!.messages = action.payload.messages;
         },
+        isChatDrawerOpenChanged(state, action) {
+            state.isChatDrawerOpen = action.payload;
+        },
+        isTabScreenChanged(state, action) {
+            state.isTabScreen = action.payload;
+        },
     },
     extraReducers(builder) {
         builder.addCase(fetchChats.pending, (state, action) => {
@@ -48,6 +56,11 @@ const chatsSlice = createSlice({
     },
 });
 
-export const { newChatAdded, previousMessagesAdded } = chatsSlice.actions;
+export const {
+    newChatAdded,
+    previousMessagesAdded,
+    isChatDrawerOpenChanged,
+    isTabScreenChanged,
+} = chatsSlice.actions;
 
 export default chatsSlice.reducer;

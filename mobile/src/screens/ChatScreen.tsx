@@ -17,28 +17,38 @@ import Message from '../components/chat/Message';
 import { useChat } from '../contexts/ChatCtx';
 import { useAppSelector } from '../app/hooks';
 import { FileMessage, TextMessage } from '../interfaces/chatInterfaces';
+import {
+    isChatDrawerOpenChanged,
+    isTabScreenChanged,
+} from '../features/chatsSlice';
+import { useAppDispatch } from '../app/hooks';
 
 type Props = {
     navigation: NavigationScreenProp<any, any>;
 };
 
 const ChatScreen = ({ navigation }: Props) => {
+    const dispatch = useAppDispatch();
+
     const drawer = useRef(null);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [roomId, setRoomId] = useState<string>();
     const [chatSearchQuery, setChatSearchQuery] = useState('');
 
     const { openChatRoom, loadingChat } = useChat();
+    const isChatDrawerOpen = useAppSelector(
+        (state) => state.chats.isChatDrawerOpen
+    );
+
     const messages = useAppSelector((state) =>
         state.chats.chats.find((chat) => chat.roomId === roomId)
     )?.messages;
 
     const openChatSpaceHandler = async (roomId: string) => {
-        // setRoomId(roomId);
-        // await openChatRoom(roomId);
-        // if (drawer.current) {
-        //     drawer.current.closeDrawer();
-        // }
+        setRoomId(roomId);
+        await openChatRoom(roomId);
+        if (drawer.current) {
+            drawer.current.closeDrawer();
+        }
     };
 
     const setChatSearchQueryHandler = (query: string) => {
@@ -46,19 +56,21 @@ const ChatScreen = ({ navigation }: Props) => {
     };
 
     useEffect(() => {
+        dispatch(isTabScreenChanged(false));
         if (!drawer.current) return;
 
-        if (isDrawerOpen) {
+        if (isChatDrawerOpen) {
             drawer.current.openDrawer();
         } else {
             if (!loadingChat) {
                 drawer.current.closeDrawer();
             }
         }
-    }, [isDrawerOpen]);
+    }, []);
 
     useLayoutEffect(() => {
         navigation.setOptions({
+            tabBarStyle: { display: 'none' },
             headerRight: () => <UserAvatarMenu />,
             headerTitle: () => (
                 <SearchField
@@ -69,7 +81,9 @@ const ChatScreen = ({ navigation }: Props) => {
             ),
             headerLeft: () => (
                 <Ionicons
-                    onPress={() => setIsDrawerOpen((prev) => !prev)}
+                    onPress={() => {
+                        dispatch(isChatDrawerOpenChanged(!isChatDrawerOpen));
+                    }}
                     name="menu-outline"
                     size={36}
                     color="black"
@@ -92,6 +106,8 @@ const ChatScreen = ({ navigation }: Props) => {
             drawerWidth={Dimensions.get('window').width}
             drawerPosition="left"
             renderNavigationView={chatsView}
+            onDrawerOpen={() => dispatch(isChatDrawerOpenChanged(true))}
+            onDrawerClose={() => dispatch(isChatDrawerOpenChanged(false))}
         >
             <ScrollView style={tw`flex-1 mx-1 my-2`}>
                 {!roomId ? (

@@ -20,61 +20,62 @@ const InitialComponent = () => {
     const { currentUser, token } = useAuth();
     const { saveConnection } = useChat();
 
-    useEffect(() => {
-        (async () => {
-            if (token) {
-                const connection = new HubConnectionBuilder()
-                    .withUrl(`${baseUrl}/chat`, {
-                        accessTokenFactory: () => token,
-                    })
-                    .withAutomaticReconnect()
-                    .configureLogging(LogLevel.Information)
-                    .build();
+    // useEffect(() => {
+    //     (async () => {
+    //         if (token) {
+    //             const connection = new HubConnectionBuilder()
+    //                 .withUrl(`${baseUrl}/chat`, {
+    //                     accessTokenFactory: () => token,
+    //                 })
+    //                 .withAutomaticReconnect()
+    //                 .configureLogging(LogLevel.Information)
+    //                 .build();
 
-                connection?.on('AcceptFriendship', (data) => {
-                    if (currentUser?.fullName !== data.senderFullName) {
-                        dispatch(
-                            newChatAdded({
-                                friendFullName: data.senderFullName,
-                                friendId: data.senderId,
-                                roomId: data.roomId,
-                            })
-                        );
-                    } else {
-                        dispatch(
-                            newChatAdded({
-                                friendFullName: data.receiverFullName,
-                                friendId: data.receiverId,
-                                roomId: data.roomId,
-                            })
-                        );
-                    }
-                });
+    //             connection?.on('AcceptFriendship', (data) => {
+    //                 if (currentUser?.fullName !== data.senderFullName) {
+    //                     dispatch(
+    //                         newChatAdded({
+    //                             friendFullName: data.senderFullName,
+    //                             friendId: data.senderId,
+    //                             roomId: data.roomId,
+    //                         })
+    //                     );
+    //                 } else {
+    //                     dispatch(
+    //                         newChatAdded({
+    //                             friendFullName: data.receiverFullName,
+    //                             friendId: data.receiverId,
+    //                             roomId: data.roomId,
+    //                         })
+    //                     );
+    //                 }
+    //             });
 
-                connection?.on('ReceiveInvitation', (friendshipId) => {
-                    dispatch(fetchNewFriendRequest(friendshipId));
-                });
-                await connection.start();
-                saveConnection(connection);
-            }
-        })();
-    }, []);
+    //             connection?.on('ReceiveInvitation', (friendshipId) => {
+    //                 dispatch(fetchNewFriendRequest(friendshipId));
+    //             });
 
-    useEffect(() => {
-        (async () => {
-            if (currentUser) {
-                const res = await getUserProfileImage(currentUser.id);
-                const data = res.data;
+    //             await connection.start();
+    //             saveConnection(connection);
+    //         }
+    //     })();
+    // }, []);
 
-                dispatch(fetchNewFriendRequests(currentUser.id));
-                dispatch(fetchChats(currentUser.id));
+    // useEffect(() => {
+    //     (async () => {
+    //         if (currentUser) {
+    //             const res = await getUserProfileImage(currentUser.id);
+    //             const data = res.data;
 
-                if (data.success) {
-                    dispatch(profileImageChanged(data.data.profileImage));
-                }
-            }
-        })();
-    }, []);
+    //             dispatch(fetchNewFriendRequests(currentUser.id));
+    //             dispatch(fetchChats(currentUser.id));
+
+    //             if (data.success) {
+    //                 dispatch(profileImageChanged(data.data.profileImage));
+    //             }
+    //         }
+    //     })();
+    // }, []);
 
     return <AppNavigation />;
 };
