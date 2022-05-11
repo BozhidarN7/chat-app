@@ -33,6 +33,11 @@ const chatsSlice = createSlice({
         newChatAdded(state, action) {
             state.chats = [...state.chats, action.payload];
         },
+        newMessageAdded(state, action) {
+            state.chats
+                .find((chat) => chat.roomId === action.payload.roomId)
+                ?.messages.push(action.payload.message);
+        },
         previousMessagesAdded(state, action) {
             state.chats.find(
                 (chat) => chat.roomId === action.payload.roomId
@@ -61,6 +66,7 @@ export const {
     previousMessagesAdded,
     isChatDrawerOpenChanged,
     isTabScreenChanged,
+    newMessageAdded,
 } = chatsSlice.actions;
 
 export default chatsSlice.reducer;

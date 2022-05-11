@@ -147,8 +147,8 @@ const ChatScreen = ({ navigation }: Props) => {
                     }
                 })}
             </ScrollView>
-            {roomId ? <MessageInput /> : null}
-            <MessageInput />
+            {roomId ? <MessageInput roomId={roomId} /> : null}
+            {/* <MessageInput roomId={roomId} /> */}
         </DrawerLayoutAndroid>
     );
 };

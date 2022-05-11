@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { HubConnection } from '@microsoft/signalr';
 import { useAppDispatch } from '../app/hooks';
-import { previousMessagesAdded } from '../features/chatsSlice';
+import { previousMessagesAdded, newMessageAdded } from '../features/chatsSlice';
 import { useAuth } from './AuthCtx';
 
 interface ChatCtxInterface {
@@ -11,6 +11,7 @@ interface ChatCtxInterface {
     openChatRoom: any;
     sendFriendRequest: any;
     acceptFriendship: any;
+    sendMessage: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -48,6 +49,10 @@ const ChatProvider = ({ children }: Props) => {
             roomId,
             fullName: `${currentUser?.id}`,
         });
+
+        connection?.on('ReceiveMessage', (roomId: string, message) => {
+            dispatch(newMessageAdded({ roomId, message }));
+        });
     };
 
     const sendFriendRequest = async (userId: string) => {
@@ -58,6 +63,17 @@ const ChatProvider = ({ children }: Props) => {
         await connection?.invoke('AcceptFriendship', friendshipId);
     };
 
+    const sendMessage = async (roomId: string, message: string) => {
+        await connection?.invoke(
+            'SendMessage',
+            {
+                roomId,
+                userId: `${currentUser?.id}`,
+            },
+            message
+        );
+    };
+
     const value = {
         connection,
         loadingChat,
@@ -65,6 +81,7 @@ const ChatProvider = ({ children }: Props) => {
         openChatRoom,
         sendFriendRequest,
         acceptFriendship,
+        sendMessage,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;
