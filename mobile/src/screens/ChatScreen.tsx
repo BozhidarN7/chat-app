@@ -2,9 +2,10 @@ import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import {
     DrawerLayoutAndroid,
     Dimensions,
-    View,
     Text,
     ScrollView,
+    NativeSyntheticEvent,
+    NativeScrollEvent,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationScreenProp } from 'react-navigation';
@@ -15,6 +16,7 @@ import SearchField from '../components/common/SearchField';
 import ChatsList from 'src/components/chat/ChatsList';
 import Message from '../components/chat/Message';
 import MessageInput from '../components/inputs/MessageInput';
+import ScrollToBottomButton from '../components/buttons/ScrollToBottomButton';
 import { useChat } from '../contexts/ChatCtx';
 import { useAppSelector } from '../app/hooks';
 import { FileMessage, TextMessage } from '../interfaces/chatInterfaces';
@@ -32,6 +34,10 @@ const ChatScreen = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
 
     const drawer = useRef(null);
+    const messageBoxRef = useRef(null);
+    const lastMessageElRef = useRef(null);
+    const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] =
+        useState(false);
     const [roomId, setRoomId] = useState<string>();
     const [chatSearchQuery, setChatSearchQuery] = useState('');
 
@@ -54,6 +60,18 @@ const ChatScreen = ({ navigation }: Props) => {
 
     const setChatSearchQueryHandler = (query: string) => {
         setChatSearchQuery(query);
+    };
+
+    const handleScrollEvent = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const { height: scrollHeight } = e.nativeEvent.contentSize;
+        const { height: clientHeight } = e.nativeEvent.layoutMeasurement;
+        const { y: scrollTop } = e.nativeEvent.contentOffset;
+
+        if (scrollHeight - scrollTop > clientHeight + 100) {
+            setScrollToBottomButtonVisibility(true);
+        } else {
+            setScrollToBottomButtonVisibility(false);
+        }
     };
 
     useEffect(() => {
@@ -110,31 +128,65 @@ const ChatScreen = ({ navigation }: Props) => {
             onDrawerOpen={() => dispatch(isChatDrawerOpenChanged(true))}
             onDrawerClose={() => dispatch(isChatDrawerOpenChanged(false))}
         >
-            <ScrollView style={tw`flex-1 mx-1 my-2`}>
+            <ScrollView
+                ref={messageBoxRef}
+                style={tw`flex-1 mx-1 my-2`}
+                onScroll={handleScrollEvent}
+            >
                 {!roomId ? (
                     <Text style={tw`text-base`}>Open a chat from the menu</Text>
                 ) : null}
-                {messages?.map((message) => {
+                {messages?.map((message, index) => {
                     const type = message.messageType;
 
                     if (type === 'file') {
                         message = message as FileMessage;
-                        return (
-                            <Message
-                                senderFullName={message.senderFullName}
-                                message={message.file}
-                                messageId={message.id}
-                                senderId={message.senderId}
-                                dateAndTime={message.messageDateAndTime}
-                                type={type}
-                                key={message.id}
-                            />
-                        );
+                        if (index === messages.length - 1) {
+                            return (
+                                <Message
+                                    lastMessageElRef={lastMessageElRef}
+                                    senderFullName={message.senderFullName}
+                                    message={message.file}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        } else {
+                            return (
+                                <Message
+                                    lastMessageElRef={null}
+                                    senderFullName={message.senderFullName}
+                                    message={message.file}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        }
                     } else {
                         message = message as TextMessage;
-
+                        if (index === messages.length - 1) {
+                            return (
+                                <Message
+                                    lastMessageElRef={lastMessageElRef}
+                                    senderFullName={message.senderFullName}
+                                    message={message.message}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        }
                         return (
                             <Message
+                                lastMessageElRef={null}
                                 senderFullName={message.senderFullName}
                                 message={message.message}
                                 messageId={message.id}
@@ -147,8 +199,12 @@ const ChatScreen = ({ navigation }: Props) => {
                     }
                 })}
             </ScrollView>
+            <ScrollToBottomButton
+                messageBoxRef={messageBoxRef}
+                scrollToBottomButtonVisibility={scrollToBottomButtonVisibility}
+            />
             {roomId ? <MessageInput roomId={roomId} /> : null}
-            {/* <MessageInput roomId={roomId} /> */}
+            {/* <MessageInput roomId={roomId!} /> */}
         </DrawerLayoutAndroid>
     );
 };

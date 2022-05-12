@@ -12,6 +12,7 @@ type Props = {
     senderFullName: string;
     dateAndTime: string;
     type: string;
+    lastMessageElRef: any;
 };
 
 const Message = ({
@@ -21,6 +22,7 @@ const Message = ({
     senderFullName,
     dateAndTime,
     type,
+    lastMessageElRef,
 }: Props) => {
     const { currentUser } = useAuth();
 
@@ -29,6 +31,12 @@ const Message = ({
     return type === 'text' ? (
         <View
             style={tw.style(`flex-1 flex-row my-2`, isLocalUser && 'self-end')}
+            ref={lastMessageElRef}
+            onLayout={(e) => {
+                const layout = e.nativeEvent.layout;
+                console.log(layout.y);
+                console.log(layout.x);
+            }}
         >
             <View style={tw`self-start mr-2`}>
                 <Avatar size={7} />
