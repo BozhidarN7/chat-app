@@ -33,9 +33,9 @@ type Props = {
 const ChatScreen = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
 
-    const drawer = useRef(null);
-    const messageBoxRef = useRef(null);
-    const lastMessageElRef = useRef(null);
+    const drawer = useRef<DrawerLayoutAndroid>(null);
+    const messageBoxRef = useRef<ScrollView>(null);
+
     const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] =
         useState(false);
     const [roomId, setRoomId] = useState<string>();
@@ -73,6 +73,12 @@ const ChatScreen = ({ navigation }: Props) => {
             setScrollToBottomButtonVisibility(false);
         }
     };
+
+    useEffect(() => {
+        if (messageBoxRef && messageBoxRef.current) {
+            messageBoxRef.current.scrollToEnd();
+        }
+    }, [messages]);
 
     useEffect(() => {
         dispatch(isTabScreenChanged(false));
@@ -141,52 +147,23 @@ const ChatScreen = ({ navigation }: Props) => {
 
                     if (type === 'file') {
                         message = message as FileMessage;
-                        if (index === messages.length - 1) {
-                            return (
-                                <Message
-                                    lastMessageElRef={lastMessageElRef}
-                                    senderFullName={message.senderFullName}
-                                    message={message.file}
-                                    messageId={message.id}
-                                    senderId={message.senderId}
-                                    dateAndTime={message.messageDateAndTime}
-                                    type={type}
-                                    key={message.id}
-                                />
-                            );
-                        } else {
-                            return (
-                                <Message
-                                    lastMessageElRef={null}
-                                    senderFullName={message.senderFullName}
-                                    message={message.file}
-                                    messageId={message.id}
-                                    senderId={message.senderId}
-                                    dateAndTime={message.messageDateAndTime}
-                                    type={type}
-                                    key={message.id}
-                                />
-                            );
-                        }
-                    } else {
-                        message = message as TextMessage;
-                        if (index === messages.length - 1) {
-                            return (
-                                <Message
-                                    lastMessageElRef={lastMessageElRef}
-                                    senderFullName={message.senderFullName}
-                                    message={message.message}
-                                    messageId={message.id}
-                                    senderId={message.senderId}
-                                    dateAndTime={message.messageDateAndTime}
-                                    type={type}
-                                    key={message.id}
-                                />
-                            );
-                        }
+
                         return (
                             <Message
-                                lastMessageElRef={null}
+                                senderFullName={message.senderFullName}
+                                message={message.file}
+                                messageId={message.id}
+                                senderId={message.senderId}
+                                dateAndTime={message.messageDateAndTime}
+                                type={type}
+                                key={message.id}
+                            />
+                        );
+                    } else {
+                        message = message as TextMessage;
+
+                        return (
+                            <Message
                                 senderFullName={message.senderFullName}
                                 message={message.message}
                                 messageId={message.id}

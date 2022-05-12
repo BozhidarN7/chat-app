@@ -1,10 +1,10 @@
-import React, { ReactElement, RefObject } from 'react';
-import { View, Pressable, Text } from 'react-native';
+import React, { RefObject } from 'react';
+import { View, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
 type Props = {
-    messageBoxRef: RefObject<ReactElement>;
+    messageBoxRef: RefObject<ScrollView>;
     scrollToBottomButtonVisibility: boolean;
 };
 
