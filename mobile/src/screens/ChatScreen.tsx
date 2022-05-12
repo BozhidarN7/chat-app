@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationScreenProp } from 'react-navigation';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import tw from 'twrnc';
 
 import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
@@ -34,7 +35,7 @@ const ChatScreen = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
 
     const drawer = useRef<DrawerLayoutAndroid>(null);
-    const messageBoxRef = useRef<ScrollView>(null);
+    const messageBoxRef = useRef<KeyboardAwareScrollView>(null);
 
     const [scrollToBottomButtonVisibility, setScrollToBottomButtonVisibility] =
         useState(false);
@@ -76,7 +77,7 @@ const ChatScreen = ({ navigation }: Props) => {
 
     useEffect(() => {
         if (messageBoxRef && messageBoxRef.current) {
-            messageBoxRef.current.scrollToEnd();
+            messageBoxRef.current.scrollToEnd(true);
         }
     }, [messages]);
 
@@ -134,54 +135,57 @@ const ChatScreen = ({ navigation }: Props) => {
             onDrawerOpen={() => dispatch(isChatDrawerOpenChanged(true))}
             onDrawerClose={() => dispatch(isChatDrawerOpenChanged(false))}
         >
-            <ScrollView
+            <KeyboardAwareScrollView
+                style={tw`flex-1`}
                 ref={messageBoxRef}
-                style={tw`flex-1 mx-1 my-2`}
                 onScroll={handleScrollEvent}
             >
-                {!roomId ? (
-                    <Text style={tw`text-base`}>Open a chat from the menu</Text>
-                ) : null}
-                {messages?.map((message, index) => {
-                    const type = message.messageType;
+                <ScrollView style={tw`mx-1 my-2`}>
+                    {!roomId ? (
+                        <Text style={tw`text-base`}>
+                            Open a chat from the menu
+                        </Text>
+                    ) : null}
+                    {messages?.map((message) => {
+                        const type = message.messageType;
 
-                    if (type === 'file') {
-                        message = message as FileMessage;
+                        if (type === 'file') {
+                            message = message as FileMessage;
 
-                        return (
-                            <Message
-                                senderFullName={message.senderFullName}
-                                message={message.file}
-                                messageId={message.id}
-                                senderId={message.senderId}
-                                dateAndTime={message.messageDateAndTime}
-                                type={type}
-                                key={message.id}
-                            />
-                        );
-                    } else {
-                        message = message as TextMessage;
+                            return (
+                                <Message
+                                    senderFullName={message.senderFullName}
+                                    message={message.file}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        } else {
+                            message = message as TextMessage;
 
-                        return (
-                            <Message
-                                senderFullName={message.senderFullName}
-                                message={message.message}
-                                messageId={message.id}
-                                senderId={message.senderId}
-                                dateAndTime={message.messageDateAndTime}
-                                type={type}
-                                key={message.id}
-                            />
-                        );
-                    }
-                })}
-            </ScrollView>
+                            return (
+                                <Message
+                                    senderFullName={message.senderFullName}
+                                    message={message.message}
+                                    messageId={message.id}
+                                    senderId={message.senderId}
+                                    dateAndTime={message.messageDateAndTime}
+                                    type={type}
+                                    key={message.id}
+                                />
+                            );
+                        }
+                    })}
+                </ScrollView>
+            </KeyboardAwareScrollView>
             <ScrollToBottomButton
                 messageBoxRef={messageBoxRef}
                 scrollToBottomButtonVisibility={scrollToBottomButtonVisibility}
             />
             {roomId ? <MessageInput roomId={roomId} /> : null}
-            {/* <MessageInput roomId={roomId!} /> */}
         </DrawerLayoutAndroid>
     );
 };

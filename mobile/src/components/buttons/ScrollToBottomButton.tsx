@@ -1,10 +1,11 @@
 import React, { RefObject } from 'react';
-import { View, Pressable, ScrollView } from 'react-native';
+import { View, Pressable } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
 type Props = {
-    messageBoxRef: RefObject<ScrollView>;
+    messageBoxRef: RefObject<KeyboardAwareScrollView>;
     scrollToBottomButtonVisibility: boolean;
 };
 
@@ -14,7 +15,7 @@ const ScrollToBottomButton = ({
 }: Props) => {
     const scrollToBottomHandler = () => {
         if (messageBoxRef && messageBoxRef.current) {
-            messageBoxRef.current.scrollToEnd({ animated: true });
+            messageBoxRef.current.scrollToEnd(true);
         }
     };
     return scrollToBottomButtonVisibility ? (

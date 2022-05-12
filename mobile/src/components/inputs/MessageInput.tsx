@@ -24,7 +24,7 @@ const MessageInput = ({ roomId }: Props) => {
     };
     return (
         <View>
-            <View style={tw`relative border-t`}>
+            <View style={tw`w-full absolute bottom-0 relative border-t`}>
                 <TextInput
                     value={message}
                     onChangeText={setMessage}
