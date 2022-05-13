@@ -49,6 +49,16 @@ const chatsSlice = createSlice({
         isTabScreenChanged(state, action) {
             state.isTabScreen = action.payload;
         },
+        messageDeleted(state, action) {
+            const chat = state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            );
+            if (chat) {
+                chat.messages = chat?.messages.filter(
+                    (m) => m.id !== action.payload.messageId
+                );
+            }
+        },
     },
     extraReducers(builder) {
         builder.addCase(fetchChats.pending, (state, action) => {
@@ -67,6 +77,7 @@ export const {
     isChatDrawerOpenChanged,
     isTabScreenChanged,
     newMessageAdded,
+    messageDeleted,
 } = chatsSlice.actions;
 
 export default chatsSlice.reducer;

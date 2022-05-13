@@ -1,8 +1,13 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { HubConnection } from '@microsoft/signalr';
 import { useAppDispatch } from '../app/hooks';
-import { previousMessagesAdded, newMessageAdded } from '../features/chatsSlice';
+import {
+    previousMessagesAdded,
+    newMessageAdded,
+    messageDeleted,
+} from '../features/chatsSlice';
 import { useAuth } from './AuthCtx';
+import { deleteMessage as deleteMessageApi } from '../services/messageService';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
@@ -12,6 +17,7 @@ interface ChatCtxInterface {
     sendFriendRequest: any;
     acceptFriendship: any;
     sendMessage: any;
+    deleteMessage: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -53,6 +59,10 @@ const ChatProvider = ({ children }: Props) => {
         connection?.on('ReceiveMessage', (roomId: string, message) => {
             dispatch(newMessageAdded({ roomId, message }));
         });
+
+        connection?.on('DeleteMessage', (messageId, roomId) => {
+            dispatch(messageDeleted({ messageId, roomId }));
+        });
     };
 
     const sendFriendRequest = async (userId: string) => {
@@ -74,6 +84,14 @@ const ChatProvider = ({ children }: Props) => {
         );
     };
 
+    const deleteMessage = async (
+        messageId: string,
+        userId: string,
+        type: string
+    ) => {
+        await deleteMessageApi(messageId, userId, type);
+    };
+
     const value = {
         connection,
         loadingChat,
@@ -82,6 +100,7 @@ const ChatProvider = ({ children }: Props) => {
         sendFriendRequest,
         acceptFriendship,
         sendMessage,
+        deleteMessage,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

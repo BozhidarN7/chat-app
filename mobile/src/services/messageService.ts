@@ -16,3 +16,11 @@ export const sendFile = async (roomId: string, formData: FormData) => {
     const res = await fetch(routes.sendFileURL(roomId), options);
     return await res.json();
 };
+
+export const deleteMessage = async (
+    messageId: string,
+    userId: string,
+    type: string
+) => {
+    return await crud.del(routes.deleteMessageURL(messageId, userId, type));
+};

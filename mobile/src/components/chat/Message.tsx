@@ -6,6 +6,7 @@ import tw from 'twrnc';
 
 import Avatar from '../common/Avatar';
 import { useAuth } from '../../contexts/AuthCtx';
+import { useChat } from '../../contexts/ChatCtx';
 
 type Props = {
     message: string;
@@ -26,7 +27,9 @@ const Message = ({
 }: Props) => {
     const [isOpenMessageOptionMenu, setIsOpenMessageOptionMenu] =
         useState(false);
+
     const { currentUser } = useAuth();
+    const { deleteMessage } = useChat();
 
     const isLocalUser = currentUser.fullName.trim() === senderFullName.trim();
 
@@ -41,6 +44,11 @@ const Message = ({
 
     const copyTextHandler = () => {
         Clipboard.setString(message);
+        setIsOpenMessageOptionMenu(false);
+    };
+
+    const deleteMessageHandler = async () => {
+        await deleteMessage(messageId, currentUser.id, type);
         setIsOpenMessageOptionMenu(false);
     };
 
@@ -73,7 +81,9 @@ const Message = ({
                     >
                         <MenuItem onPress={copyTextHandler}>Copy</MenuItem>
                         <MenuItem>Edit</MenuItem>
-                        <MenuItem>Delete</MenuItem>
+                        <MenuItem onPress={deleteMessageHandler}>
+                            Delete
+                        </MenuItem>
                     </Menu>
                 </Pressable>
             </View>
