@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TextInput, PermissionsAndroid } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, PermissionsAndroid, Text } from 'react-native';
 import {
     ImagePickerResponse,
     launchCamera,
@@ -11,23 +11,61 @@ import tw from 'twrnc';
 import { useChat } from '../../contexts/ChatCtx';
 import { useAuth } from '../../contexts/AuthCtx';
 import { sendFile } from '../../services/messageService';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { editMessageActivated } from '../../features/chatsSlice';
 
 type Props = {
     roomId: string;
 };
 
 const MessageInput = ({ roomId }: Props) => {
+    const dispatch = useAppDispatch();
+
+    const inputMessageRef = useRef<TextInput>(null);
+
     const [message, setMessage] = useState('');
 
     const { currentUser } = useAuth();
-    const { sendMessage } = useChat();
+    const { sendMessage, editMessage } = useChat();
 
-    const sendMessageHandler = () => {
+    const editMessageOptions = useAppSelector(
+        (state) => state.chats.editMessageOptions
+    );
+
+    useEffect(() => {
+        if (
+            editMessageOptions.isEditActivated &&
+            inputMessageRef &&
+            inputMessageRef.current
+        ) {
+            setTimeout(() => {
+                inputMessageRef.current!.focus();
+                setMessage(editMessageOptions.message);
+            }, 500);
+        }
+    }, [editMessageOptions]);
+
+    const sendMessageHandler = async () => {
         if (message.trim() === '') {
             return;
         }
 
-        sendMessage(roomId, message);
+        if (editMessageOptions.isEditActivated) {
+            await editMessage(
+                editMessageOptions.messageId,
+                currentUser.id,
+                message
+            );
+            dispatch(
+                editMessageActivated({
+                    isEditActivated: false,
+                    messageId: '',
+                    message: '',
+                })
+            );
+        } else {
+            sendMessage(roomId, message.trim());
+        }
         setMessage('');
     };
 
@@ -90,10 +128,42 @@ const MessageInput = ({ roomId }: Props) => {
         return null;
     };
 
+    const cancelEdittingHandler = () => {
+        dispatch(
+            editMessageActivated({
+                isEditActivated: false,
+                messageId: '',
+                message: '',
+            })
+        );
+        setMessage('');
+
+        if (inputMessageRef && inputMessageRef.current) {
+            inputMessageRef.current.blur();
+        }
+    };
+
     return (
         <View>
             <View style={tw`w-full absolute bottom-0 relative border-t`}>
+                {editMessageOptions.isEditActivated ? (
+                    <View
+                        style={tw`w-full flex flex-row justify-between px-2 pt-1`}
+                    >
+                        <Text style={tw`text-blue-500 text-xs`}>
+                            Edit message
+                        </Text>
+                        <Ionicons
+                            onPress={cancelEdittingHandler}
+                            name="close"
+                            size={20}
+                            color="black"
+                        />
+                    </View>
+                ) : null}
+
                 <TextInput
+                    ref={inputMessageRef}
                     value={message}
                     onChangeText={setMessage}
                     style={tw`w-5/6 p-2`}
@@ -117,8 +187,11 @@ const MessageInput = ({ roomId }: Props) => {
                 <Ionicons
                     onPress={sendMessageHandler}
                     name="send"
-                    size={26}
-                    style={[tw`absolute right-1 top-5 text-blue-500`]}
+                    size={24}
+                    style={[
+                        tw`absolute right-1 top-1/2 text-blue-500`,
+                        { transform: [{ translateY: -6 }] },
+                    ]}
                 />
             </View>
         </View>

@@ -7,6 +7,8 @@ import tw from 'twrnc';
 import Avatar from '../common/Avatar';
 import { useAuth } from '../../contexts/AuthCtx';
 import { useChat } from '../../contexts/ChatCtx';
+import { useAppDispatch } from '../../app/hooks';
+import { editMessageActivated } from '../../features/chatsSlice';
 
 type Props = {
     message: string;
@@ -25,6 +27,8 @@ const Message = ({
     dateAndTime,
     type,
 }: Props) => {
+    const dispatch = useAppDispatch();
+
     const [isOpenMessageOptionMenu, setIsOpenMessageOptionMenu] =
         useState(false);
 
@@ -49,6 +53,13 @@ const Message = ({
 
     const deleteMessageHandler = async () => {
         await deleteMessage(messageId, currentUser.id, type);
+        setIsOpenMessageOptionMenu(false);
+    };
+
+    const editMessageHandler = async () => {
+        dispatch(
+            editMessageActivated({ isEditActivated: true, messageId, message })
+        );
         setIsOpenMessageOptionMenu(false);
     };
 
@@ -80,7 +91,7 @@ const Message = ({
                         onRequestClose={closeMessageOptionMenuHandler}
                     >
                         <MenuItem onPress={copyTextHandler}>Copy</MenuItem>
-                        <MenuItem>Edit</MenuItem>
+                        <MenuItem onPress={editMessageHandler}>Edit</MenuItem>
                         <MenuItem onPress={deleteMessageHandler}>
                             Delete
                         </MenuItem>

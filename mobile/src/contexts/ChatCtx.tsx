@@ -5,9 +5,13 @@ import {
     previousMessagesAdded,
     newMessageAdded,
     messageDeleted,
+    messageEdited,
 } from '../features/chatsSlice';
 import { useAuth } from './AuthCtx';
-import { deleteMessage as deleteMessageApi } from '../services/messageService';
+import {
+    deleteMessage as deleteMessageApi,
+    editMessage as editMessageApi,
+} from '../services/messageService';
 
 interface ChatCtxInterface {
     connection: HubConnection | undefined;
@@ -18,6 +22,7 @@ interface ChatCtxInterface {
     acceptFriendship: any;
     sendMessage: any;
     deleteMessage: any;
+    editMessage: any;
 }
 
 const ChatCtx = React.createContext<ChatCtxInterface>({} as ChatCtxInterface);
@@ -60,6 +65,10 @@ const ChatProvider = ({ children }: Props) => {
             dispatch(newMessageAdded({ roomId, message }));
         });
 
+        connection?.on('EditMessage', (messageId, roomId, newText) => {
+            dispatch(messageEdited({ messageId, roomId, newText }));
+        });
+
         connection?.on('DeleteMessage', (messageId, roomId) => {
             dispatch(messageDeleted({ messageId, roomId }));
         });
@@ -84,6 +93,14 @@ const ChatProvider = ({ children }: Props) => {
         );
     };
 
+    const editMessage = async (
+        messageId: string,
+        userId: string,
+        newText: string
+    ) => {
+        await editMessageApi(messageId, userId, { newText });
+    };
+
     const deleteMessage = async (
         messageId: string,
         userId: string,
@@ -101,6 +118,7 @@ const ChatProvider = ({ children }: Props) => {
         acceptFriendship,
         sendMessage,
         deleteMessage,
+        editMessage,
     };
 
     return <ChatCtx.Provider value={value}>{children}</ChatCtx.Provider>;

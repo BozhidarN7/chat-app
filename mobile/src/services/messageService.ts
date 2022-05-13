@@ -24,3 +24,24 @@ export const deleteMessage = async (
 ) => {
     return await crud.del(routes.deleteMessageURL(messageId, userId, type));
 };
+
+export const editMessage = async (
+    messageId: string,
+    userId: string,
+    data: any
+) => {
+    return await crud.put(routes.editMessageURL(messageId, userId), data);
+    // const token = await SecureStroe.getItemAsync('token');
+
+    // const options = {
+    //     method: 'PUT',
+    //     headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data),
+    // };
+
+    // const res = await fetch(routes.sendFileURL(messageId, userId), options);
+    // return await res.json();
+};

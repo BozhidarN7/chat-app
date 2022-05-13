@@ -20,3 +20,9 @@ export interface TextMessage extends Message {
 export interface FileMessage extends Message {
     file: string;
 }
+
+export interface EditMessageOptions {
+    messageId: string;
+    message: string;
+    isEditActivated: boolean;
+}

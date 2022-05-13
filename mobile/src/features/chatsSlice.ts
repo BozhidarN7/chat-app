@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { Chat } from '../interfaces/chatInterfaces';
+import { Chat, EditMessageOptions } from '../interfaces/chatInterfaces';
 import { getChats } from '../services/userService';
 
 interface ChatInterface {
@@ -8,6 +8,7 @@ interface ChatInterface {
     status: string;
     isChatDrawerOpen: boolean;
     isTabScreen: boolean;
+    editMessageOptions: EditMessageOptions;
 }
 
 const initialState: ChatInterface = {
@@ -15,6 +16,11 @@ const initialState: ChatInterface = {
     status: 'idle',
     isChatDrawerOpen: false,
     isTabScreen: false,
+    editMessageOptions: {
+        messageId: '',
+        message: '',
+        isEditActivated: false,
+    },
 };
 
 export const fetchChats = createAsyncThunk(
@@ -49,6 +55,9 @@ const chatsSlice = createSlice({
         isTabScreenChanged(state, action) {
             state.isTabScreen = action.payload;
         },
+        editMessageActivated(state, action) {
+            state.editMessageOptions = action.payload;
+        },
         messageDeleted(state, action) {
             const chat = state.chats.find(
                 (chat) => chat.roomId === action.payload.roomId
@@ -57,6 +66,19 @@ const chatsSlice = createSlice({
                 chat.messages = chat?.messages.filter(
                     (m) => m.id !== action.payload.messageId
                 );
+            }
+        },
+        messageEdited(state, action) {
+            const chat = state.chats.find(
+                (chat) => chat.roomId === action.payload.roomId
+            );
+            if (chat) {
+                chat.messages = chat?.messages.map((m) => {
+                    if (m.id === action.payload.messageId) {
+                        return { ...m, message: action.payload.newText };
+                    }
+                    return m;
+                });
             }
         },
     },
@@ -78,6 +100,8 @@ export const {
     isTabScreenChanged,
     newMessageAdded,
     messageDeleted,
+    editMessageActivated,
+    messageEdited,
 } = chatsSlice.actions;
 
 export default chatsSlice.reducer;
