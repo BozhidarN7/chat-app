@@ -47,7 +47,8 @@ const MessageInput = ({ roomId }: Props) => {
                 const result = await launchCamera({ mediaType: 'photo' });
 
                 const formData = extractFile(result);
-                await sendFile(roomId, formData);
+
+                if (formData) await sendFile(roomId, formData);
             }
         } catch (err) {
             console.log(err);
