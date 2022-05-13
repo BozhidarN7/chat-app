@@ -7,6 +7,8 @@ install! 'cocoapods', :deterministic_uuids => false
 
 target 'mobile' do
   use_expo_modules!
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   post_integrate do |installer|
     begin
       expo_patch_react_imports!(installer)

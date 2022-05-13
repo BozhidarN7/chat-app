@@ -186,6 +186,7 @@ const ChatScreen = ({ navigation }: Props) => {
                 scrollToBottomButtonVisibility={scrollToBottomButtonVisibility}
             />
             {roomId ? <MessageInput roomId={roomId} /> : null}
+            {/* <MessageInput roomId={roomId!} /> */}
         </DrawerLayoutAndroid>
     );
 };
