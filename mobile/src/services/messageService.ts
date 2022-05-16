@@ -30,18 +30,18 @@ export const editMessage = async (
     userId: string,
     data: any
 ) => {
-    return await crud.put(routes.editMessageURL(messageId, userId), data);
-    // const token = await SecureStroe.getItemAsync('token');
+    // return await crud.put(routes.editMessageURL(messageId, userId), data);
+    const token = await SecureStroe.getItemAsync('token');
 
-    // const options = {
-    //     method: 'PUT',
-    //     headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    // };
+    const options = {
+        method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    };
 
-    // const res = await fetch(routes.sendFileURL(messageId, userId), options);
-    // return await res.json();
+    const res = await fetch(routes.editMessageURL(messageId, userId), options);
+    return await res.json();
 };
