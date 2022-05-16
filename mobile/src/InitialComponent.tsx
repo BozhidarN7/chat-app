@@ -5,7 +5,13 @@ import { useAppDispatch } from './app/hooks';
 import { useAuth } from './contexts/AuthCtx';
 import { useChat } from './contexts/ChatCtx';
 import { getUserProfileImage } from './services/userService';
-import { fetchChats, newChatAdded } from './features/chatsSlice';
+import {
+    fetchChats,
+    newChatAdded,
+    newMessageAdded,
+    messageEdited,
+    messageDeleted,
+} from './features/chatsSlice';
 import {
     profileImageChanged,
     fetchNewFriendRequests,
@@ -49,6 +55,18 @@ const InitialComponent = () => {
                             })
                         );
                     }
+                });
+
+                connection?.on('ReceiveMessage', (roomId: string, message) => {
+                    dispatch(newMessageAdded({ roomId, message }));
+                });
+
+                connection?.on('EditMessage', (messageId, roomId, newText) => {
+                    dispatch(messageEdited({ messageId, roomId, newText }));
+                });
+
+                connection?.on('DeleteMessage', (messageId, roomId) => {
+                    dispatch(messageDeleted({ messageId, roomId }));
                 });
 
                 connection?.on('ReceiveInvitation', (friendshipId) => {

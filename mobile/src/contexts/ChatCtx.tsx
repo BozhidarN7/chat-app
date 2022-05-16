@@ -60,18 +60,6 @@ const ChatProvider = ({ children }: Props) => {
             roomId,
             fullName: `${currentUser?.id}`,
         });
-
-        connection?.on('ReceiveMessage', (roomId: string, message) => {
-            dispatch(newMessageAdded({ roomId, message }));
-        });
-
-        connection?.on('EditMessage', (messageId, roomId, newText) => {
-            dispatch(messageEdited({ messageId, roomId, newText }));
-        });
-
-        connection?.on('DeleteMessage', (messageId, roomId) => {
-            dispatch(messageDeleted({ messageId, roomId }));
-        });
     };
 
     const sendFriendRequest = async (userId: string) => {
