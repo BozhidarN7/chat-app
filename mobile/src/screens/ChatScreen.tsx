@@ -8,7 +8,7 @@ import {
     NativeScrollEvent,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { NavigationScreenProp } from 'react-navigation';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import tw from 'twrnc';
 
@@ -26,10 +26,9 @@ import {
     isTabScreenChanged,
 } from '../features/chatsSlice';
 import { useAppDispatch } from '../app/hooks';
+import { ChatsStackParamList } from '../interfaces/RoutingInterfaces';
 
-type Props = {
-    navigation: NavigationScreenProp<any, any>;
-};
+type Props = NativeStackScreenProps<ChatsStackParamList>;
 
 const ChatScreen = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
@@ -96,7 +95,6 @@ const ChatScreen = ({ navigation }: Props) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            tabBarStyle: { display: 'none' },
             headerRight: () => <UserAvatarMenu />,
             headerTitle: () => (
                 <SearchField

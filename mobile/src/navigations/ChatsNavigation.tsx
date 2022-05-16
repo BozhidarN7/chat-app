@@ -4,9 +4,10 @@ import tw from 'twrnc';
 
 import ChatScreen from '../screens/ChatScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
+import { ChatsStackParamList } from '../interfaces/RoutingInterfaces';
 import { useAppSelector } from '../app/hooks';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<ChatsStackParamList>();
 
 const ChatsNavigation = ({ navigation }: any) => {
     const isChatDrawerOpen = useAppSelector(
