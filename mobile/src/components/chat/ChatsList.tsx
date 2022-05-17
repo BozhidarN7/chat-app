@@ -1,9 +1,7 @@
-import { User } from 'interfaces/userInterfaces';
 import React from 'react';
-import { Text, View, FlatList, Pressable, Modal } from 'react-native';
+import { Text, View, FlatList, Modal } from 'react-native';
 import tw from 'twrnc';
 import Ripple from 'react-native-material-ripple';
-import { Ionicons } from '@expo/vector-icons';
 
 import { useAppSelector } from '../../app/hooks';
 import { useChat } from '../../contexts/ChatCtx';
@@ -12,7 +10,7 @@ import Spinner from '../common/Spinner';
 
 type Props = {
     chatSearchQuery: string;
-    openChatSpaceHandler: () => void;
+    openChatSpaceHandler: (roomdId: string) => void;
 };
 
 const ChatsList = ({ openChatSpaceHandler, chatSearchQuery }: Props) => {

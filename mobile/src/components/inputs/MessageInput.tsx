@@ -144,56 +144,52 @@ const MessageInput = ({ roomId }: Props) => {
     };
 
     return (
-        <View>
-            <View style={tw`w-full absolute bottom-0 relative border-t`}>
-                {editMessageOptions.isEditActivated ? (
-                    <View
-                        style={tw`w-full flex flex-row justify-between px-2 pt-1`}
-                    >
-                        <Text style={tw`text-blue-500 text-xs`}>
-                            Edit message
-                        </Text>
-                        <Ionicons
-                            onPress={cancelEdittingHandler}
-                            name="close"
-                            size={20}
-                            color="black"
-                        />
-                    </View>
-                ) : null}
-
-                <TextInput
-                    ref={inputMessageRef}
-                    value={message}
-                    onChangeText={setMessage}
-                    style={tw`w-5/6 p-2`}
-                    placeholder="Type a message..."
-                    multiline={true}
-                />
-                <View style={tw`flex flex-row pl-2 pb-1`}>
+        <View style={tw`w-full border-t`}>
+            {editMessageOptions.isEditActivated ? (
+                <View
+                    style={tw`w-full flex flex-row justify-between px-2 pt-1`}
+                >
+                    <Text style={tw`text-blue-500 text-xs`}>Edit message</Text>
                     <Ionicons
-                        onPress={openGalleryHandler}
-                        name="images"
-                        size={22}
-                        style={[tw`text-blue-500 mr-4`]}
-                    />
-                    <Ionicons
-                        onPress={openCameraHandler}
-                        name="camera"
-                        size={22}
-                        style={[tw`text-blue-500 mr-4`]}
+                        onPress={cancelEdittingHandler}
+                        name="close"
+                        size={20}
+                        color="black"
                     />
                 </View>
+            ) : null}
+
+            <TextInput
+                ref={inputMessageRef}
+                value={message}
+                onChangeText={setMessage}
+                style={tw`w-5/6 p-2`}
+                placeholder="Type a message..."
+                multiline={true}
+            />
+            <View style={tw`flex flex-row pl-2 pb-1`}>
                 <Ionicons
-                    onPress={sendMessageHandler}
-                    name="send"
-                    size={24}
-                    style={[
-                        tw`absolute right-1 top-1/2 text-blue-500`,
-                        { transform: [{ translateY: -6 }] },
-                    ]}
+                    onPress={openGalleryHandler}
+                    name="images"
+                    size={22}
+                    style={[tw`text-blue-500 mr-4`]}
+                />
+                <Ionicons
+                    onPress={openCameraHandler}
+                    name="camera"
+                    size={22}
+                    style={[tw`text-blue-500 mr-4`]}
                 />
             </View>
+            <Ionicons
+                onPress={sendMessageHandler}
+                name="send"
+                size={24}
+                style={[
+                    tw`absolute right-1 top-1/2 text-blue-500`,
+                    { transform: [{ translateY: -6 }] },
+                ]}
+            />
         </View>
     );
 };

@@ -10,12 +10,14 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { FlatList } from 'react-native-bidirectional-infinite-scroll';
 import tw from 'twrnc';
 
-import UserAvatarMenu from 'src/components/menus/UserAvatarMenu';
+import UserAvatarMenu from '../components/menus/UserAvatarMenu';
 import SearchField from '../components/common/SearchField';
-import ChatsList from 'src/components/chat/ChatsList';
+import ChatsList from '../components/chat/ChatsList';
 import Message from '../components/chat/Message';
+import RenderMessage from '../components/chat/RenderMessage';
 import MessageInput from '../components/inputs/MessageInput';
 import ScrollToBottomButton from '../components/buttons/ScrollToBottomButton';
 import { useChat } from '../contexts/ChatCtx';
@@ -42,10 +44,10 @@ const ChatScreen = ({ navigation }: Props) => {
     const [chatSearchQuery, setChatSearchQuery] = useState('');
 
     const { openChatRoom, loadingChat } = useChat();
+
     const isChatDrawerOpen = useAppSelector(
         (state) => state.chats.isChatDrawerOpen
     );
-
     const messages = useAppSelector((state) =>
         state.chats.chats.find((chat) => chat.roomId === roomId)
     )?.messages;
@@ -80,9 +82,10 @@ const ChatScreen = ({ navigation }: Props) => {
         }
     }, [messages]);
 
-    useEffect(() => {
-        dispatch(isTabScreenChanged(false));
+    useLayoutEffect(() => {
         if (!drawer.current) return;
+
+        dispatch(isTabScreenChanged(false));
 
         if (isChatDrawerOpen) {
             drawer.current.openDrawer();
@@ -91,11 +94,21 @@ const ChatScreen = ({ navigation }: Props) => {
                 drawer.current.closeDrawer();
             }
         }
-    }, []);
+    }, [isChatDrawerOpen]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: () => <UserAvatarMenu />,
+            headerLeft: () => (
+                <Ionicons
+                    onPress={() =>
+                        dispatch(isChatDrawerOpenChanged(!isChatDrawerOpen))
+                    }
+                    name="menu-outline"
+                    size={36}
+                    color="black"
+                    style={tw`-ml-2`}
+                />
+            ),
             headerTitle: () => (
                 <SearchField
                     placeholder="Search a recent chat..."
@@ -103,17 +116,7 @@ const ChatScreen = ({ navigation }: Props) => {
                     setSearchValueHandler={setChatSearchQueryHandler}
                 />
             ),
-            headerLeft: () => (
-                <Ionicons
-                    onPress={() => {
-                        dispatch(isChatDrawerOpenChanged(!isChatDrawerOpen));
-                    }}
-                    name="menu-outline"
-                    size={36}
-                    color="black"
-                    style={tw`-ml-2`}
-                />
-            ),
+            headerRight: () => <UserAvatarMenu />,
         });
     }, [navigation, chatSearchQuery]);
 
@@ -138,7 +141,7 @@ const ChatScreen = ({ navigation }: Props) => {
                 ref={messageBoxRef}
                 onScroll={handleScrollEvent}
             >
-                <ScrollView style={tw`mx-1 my-2`}>
+                {/* <ScrollView style={tw`mx-1 my-2`}>
                     {!roomId ? (
                         <Text style={tw`text-base`}>
                             Open a chat from the menu
@@ -177,14 +180,19 @@ const ChatScreen = ({ navigation }: Props) => {
                             );
                         }
                     })}
-                </ScrollView>
+                </ScrollView> */}
+                <FlatList
+                    data={messages}
+                    renderItem={RenderMessage}
+                    onStartReached={async () => {}}
+                    onEndReached={async () => {}}
+                />
             </KeyboardAwareScrollView>
             <ScrollToBottomButton
                 messageBoxRef={messageBoxRef}
                 scrollToBottomButtonVisibility={scrollToBottomButtonVisibility}
             />
             {roomId ? <MessageInput roomId={roomId} /> : null}
-            {/* <MessageInput roomId={roomId!} /> */}
         </DrawerLayoutAndroid>
     );
 };
