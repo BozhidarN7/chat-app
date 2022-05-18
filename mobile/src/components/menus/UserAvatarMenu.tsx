@@ -5,9 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 
 import tw from 'twrnc';
 
-import { useAuth } from 'src/contexts/AuthCtx';
 import Avatar from '../common/Avatar';
 import Badge from '../common/Badge';
+import { useAuth } from 'src/contexts/AuthCtx';
+import { ChatsStackParamList } from '../../interfaces/RoutingInterfaces';
 
 const UserAvatarMenu = () => {
     const navigation = useNavigation();

@@ -4,6 +4,7 @@ import {
     Dimensions,
     Text,
     ScrollView,
+    View,
     NativeSyntheticEvent,
     NativeScrollEvent,
 } from 'react-native';
@@ -141,7 +142,7 @@ const ChatScreen = ({ navigation }: Props) => {
                 ref={messageBoxRef}
                 onScroll={handleScrollEvent}
             >
-                {/* <ScrollView style={tw`mx-1 my-2`}>
+                <ScrollView style={tw`mx-1 my-2`}>
                     {!roomId ? (
                         <Text style={tw`text-base`}>
                             Open a chat from the menu
@@ -180,14 +181,23 @@ const ChatScreen = ({ navigation }: Props) => {
                             );
                         }
                     })}
-                </ScrollView> */}
+                </ScrollView>
+            </KeyboardAwareScrollView>
+            {/* <View style={tw`flex-1`}>
+                {!roomId ? (
+                    <Text style={tw`text-base mx-1 my-2`}>
+                        Open a chat from the menu
+                    </Text>
+                ) : null}
                 <FlatList
+                    style={tw`mx-1 my-2`}
                     data={messages}
                     renderItem={RenderMessage}
+                    keyExtractor={(item) => item.id}
                     onStartReached={async () => {}}
                     onEndReached={async () => {}}
                 />
-            </KeyboardAwareScrollView>
+            </View> */}
             <ScrollToBottomButton
                 messageBoxRef={messageBoxRef}
                 scrollToBottomButtonVisibility={scrollToBottomButtonVisibility}

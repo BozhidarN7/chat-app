@@ -3,7 +3,7 @@ import React from 'react';
 import Message from './Message';
 import { FileMessage, TextMessage } from '../../interfaces/chatInterfaces';
 
-const RenderMessage = ({ message }: any) => {
+const RenderMessage = ({ item: message }: any) => {
     const type = message.messageType;
 
     if (type === 'file') {
